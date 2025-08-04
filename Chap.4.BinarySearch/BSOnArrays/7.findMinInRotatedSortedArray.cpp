@@ -19,13 +19,14 @@ int findMinOptimal(vector<int> &arr) {
         if(arr[low] <= arr[mid]) {
             // left part is sorted
             minel = min(arr[low], minel); // our possible minimum element
-            low = mid + 1; // but we look for even samller on right side
+            low = mid + 1; // but we look for even samller on right side, why do we look on right side ??, because we have already found the minel from the left side since left part was sorted, the minel was arr[low]
         } else if(arr[mid] <= arr[high]) {
             // right part is sorted
             minel = min(arr[mid], minel); // our possible minimum element 
-            high = mid - 1; // but we look for even smaller on left side
+            high = mid - 1; // but we look for even smaller on left side, why do we look on left side ??, because we have already found the minel from the right side since right part was sorted, the minel was arr[mid]
         }
     }
+    // this is O(logN) solution since any part ought to be sorted in  rotated sorted array
     return minel;
 }
 

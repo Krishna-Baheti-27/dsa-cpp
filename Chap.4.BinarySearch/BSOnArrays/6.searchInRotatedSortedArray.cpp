@@ -22,7 +22,7 @@ int searchInRotatedSortedArrayOptimal(vector<int> &arr, int key) {
     while(low <= high) {
         int mid = low + (high - low) / 2;
         if(arr[mid] == key) return mid;
-        // identify the sorted half and apply binay search there, this way we trim the array each time by half because atleast one portion ought to be sorted since a sorted array has been rotated
+        // identify the sorted half and check if the element is there, if it is there we aplly binary search else we trim the sorted half, this way we trim the array each time by half because atleast one portion ought to be sorted since a sorted array has been rotated
         if(arr[mid] >= arr[low]) {
             // when left is sorted and we can apply binary search there but first we check if key exists in the range of low to mid
             if(arr[low] <= key && arr[mid] >= key) high = mid - 1; // if key exists in range low to mid we trime our search area from right
@@ -32,6 +32,7 @@ int searchInRotatedSortedArrayOptimal(vector<int> &arr, int key) {
            if(arr[high] >= key && arr[mid] <= key) low = mid + 1;
            else high = mid - 1; 
         }
+        // How this works is pretty easy, we either trim the sorted half since element is not present in there or we apply binary search in the sorted half since the element is present there (thereby trimming the unsorted half) and hence in each iteration we are reducing the array size by half hecne time is O(logN)
     }
     return -1;
 }
@@ -43,12 +44,13 @@ bool searchInRotatedSortedArrayDuplicates(vector<int> &arr, int key) {
     while(low <= high) {
         int mid = low + (high - low) / 2;
         if(arr[mid] == key) return true;
+        // this is the only case where it fails
         if(arr[low] == arr[mid] == arr[high]) {
-            // when all three are equal we cannot tell using simple if-else that which hald is sorted
+            // when all three are equal we cannot tell using simple if-else that which half is sorted
             // to overcome this since we have already checked thar arr[mid] != target, which implies neither will be arr[low] or arr[high]
             low++;
             high--;
-            // we trim down our search space continue
+            // we trim down our search space and continue from next iteration
             continue; // it maybe possible that, due to low++ and high--, we might have arr[newmid] == key so in order to not miss that , we continue from the next iteration and skip this one
         }
         // we continue since if atleast one of them is not equal, then we can solve them easily
