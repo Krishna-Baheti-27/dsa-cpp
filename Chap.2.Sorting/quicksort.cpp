@@ -25,9 +25,35 @@ void quickSort(int arr[], int low, int high) {
 
 // Now implement quick sort using pivot as last element, middle element and random element
 
+void quickSortLast(int arr[], int low, int high) {
+    if(low >= high) return;
+    swap(arr[low], arr[high]);
+    int partitionIdx = partition(arr, low, high);
+    quickSortLast(arr, low, partitionIdx - 1);
+    quickSortLast(arr, partitionIdx + 1, high);
+}
+
+void quickSortMiddle(int arr[], int low, int high) {
+    if(low >= high) return;
+    int midIdx = low + (high - low) / 2;
+    swap(arr[low], arr[midIdx]);
+    int partitionIdx = partition(arr, low, high);
+    quickSortMiddle(arr, low, partitionIdx - 1);
+    quickSortMiddle(arr, partitionIdx + 1, high);
+}
+
+void quickSortRandom(int arr[], int low, int high) {
+    if(low >= high) return;
+    int randomIdx = low + rand() % (high - low + 1);
+    swap(arr[low], arr[randomIdx]);
+    int partitionIdx = partition(arr, low, high);
+    quickSortRandom(arr, low, partitionIdx - 1);
+    quickSortRandom(arr, partitionIdx + 1, high);
+}
+
 int main() {
     int arr[] = {5,4,1,3,2};
-    quickSort(arr,0,4);
+    quickSortRandom(arr,0,4);
     for(int num : arr) cout << num << ' ';
     return 0;
 }

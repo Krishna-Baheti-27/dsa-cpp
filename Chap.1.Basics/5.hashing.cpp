@@ -91,7 +91,7 @@ int main() {
     // pre compute
     map<int,int> mpp;
     // for finding frequency of characters use
-    map<char,int> mppChar; // char to store the key and int to store the freq. or value
+    map<char,int> mppChar; // char to store the key and int to store the freq. or value, in case of strings or array of characters
     vector<int> res;
     for(int i = 0; i < n; i++) {
         mpp[arr[i]]++;

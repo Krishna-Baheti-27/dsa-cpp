@@ -32,7 +32,7 @@ void printNTo1(int n) {
 }
 
 void print1TONBacktrack(int n) {
-    // basically print statement should be after the recursive call or function should print while returning not while calling
+    // basically print statement should be after the recursive call or function should print while returning not while calling, that is backtracking
     if(n == 0) return;
     print1TONBacktrack(n-1);
     cout << n << '\n'; // print after recursive call
@@ -89,7 +89,7 @@ int fibUsingLoop(int n) {
     if(n == 1) return 0;
     if(n == 2) return 1;
     int first = 1, second = 2;
-    for(int i = 1; i < n - 2; i++) {
+    for(int i = 0; i < n - 3; i++) {
         // we run for loop exactly that many times that we reach our desired location
         int temp = second; 
         second = second + first;

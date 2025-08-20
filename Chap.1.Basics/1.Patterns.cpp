@@ -311,26 +311,19 @@ void print21(int n) {
 }
 
 void print22(int n) {
-    // PATTERN 22 IS REMAINING
-    for(int i = 1; i <= 2*n - 1; i++) {
-        // outer loop runs 2*n - 1 times
-        int mainNum = n - i + 1; 
-        // in each line we are basically printing till our mainNum
-        int auxNum = n; // this is our number which will try to reach to mainNum
-        // if it reaches then simply repeatedly print auxNum/mainNum since they are equal or else do auxNum-- in each iteration to reach till mainNum
-        int timesToPrintauxNum = 2*n - 1 - 2*(i - 1);
-        int count = 1;
-        for(int j = 1; j <= 2*n - 1; j++) {
-            // also there 2*n - 1 columns
-            cout << auxNum << ' ';
-            if(auxNum == mainNum) {
-                if(count <= timesToPrintauxNum) {
-                    count++;
-                    continue;
-                }
-            }
-            else if(count <= timesToPrintauxNum) auxNum--;
-            else if(count > timesToPrintauxNum) auxNum++;
+    // there are total 2*n - 1 rows and 2*n - 1 columns, so we know how many times will the outer and inner loop runs
+    for(int i = 0; i < 2*n - 1; i++) {
+        for(int j = 0; j < 2*n - 1; j++) {
+            int top = i; // distance from top
+            int left = j; 
+            int right = (2*n - 1) - 1 - j;
+            int bottom = (2*n - 1) - 1 - i;
+            int value = min(min(top,bottom), min(left,right));
+            // the minimum of top, bottom, left, right would be the value which we would get if we ere to subtract the entire matrix by n
+            // n - value = newMatrix
+            // so the actual value is value = n - newMatrxi \
+            // we already have the new matrix after we took min of all
+            cout << (n - value) << ' '; 
         }
         cout << endl;
     }

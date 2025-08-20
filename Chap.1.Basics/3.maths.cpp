@@ -45,27 +45,22 @@ int gcdBrute(int a, int b) {
     return 1; // Technically unreachable, but good practice
 }
 
-int gcdOptimised(int a, int b) {
+int gcdOptimisedRecursive(int a, int b) {
     // euclid algo is gcd(a,b) = gcd(a-b,b); where a > b
     // but for better time gcd(a,b) = gcd(a % b, b) where a > b
     if(a == 0) return b;
     if(b == 0) return a;
-    if(a > b) return gcdOptimised(a % b, b);
-    else return gcdOptimised(b % a, a);
+    if(a > b) return gcdOptimisedRecursive(a % b, b);
+    else return gcdOptimisedRecursive(b % a, a);
 }    
 
-// better way to write
-int gcdOptimisedBetter(int a, int b) {
-    if (b == 0) return a;
-    return gcdOptimised(b, a % b);
-}
-// since standard euclid algo works regardless of whether a is greater or b is greater
-
 int iterativeGcdOptimised(int a, int b) {
+    // euclid algorithm stating gcd(a,b) = gcd(a%b,b) when a > b or gcd(a, b % a) when b > a
     while(a != 0 && b != 0) {
         if(a > b) a = a % b;
         else b = b % a;
     }   
+    // when this loop ends, either one of a or b is guranteed to be zero, hence, other would automatically be our answer
     if(a == 0) return b;
     else return a;
 }
@@ -80,6 +75,6 @@ int iterativeGcdOptimisedBetter(int a, int b) {
 }
 
 int main() {
-    cout << gcdOptimisedBetter(20,40) << endl;
+   
     return 0;
 }

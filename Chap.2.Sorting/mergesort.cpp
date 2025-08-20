@@ -41,7 +41,7 @@ void merge(int arr[], int low, int mid, int high) {
 }
 
 void mergeSort(int arr[], int low, int high) {
-    if(low >= high) return;
+    if(low >= high) return; // when low == high, means array now consist of single elements, so return
     int mid = low + (high - low) / 2;
     mergeSort(arr, low, mid); // sort the first hypothetical array
     mergeSort(arr, mid + 1, high); // sort the second hypothetical array

@@ -346,6 +346,7 @@ void explainAlgorithms() {
     int arr[10];
     int n = 10;
     sort(arr, arr + n); // to sort the array
+    // here similar to greater<int>() we can pass our own myWayComparator to sort in the way according to our constraints
     sort(arr, arr +n, greater<int>()); // to sort in reverse order 
     // use () because greater<int> is not a function in itself
     sort(arr + 2, arr + 4); // to sort from third to 4th element, basically arr+ 2 and arr + 3, 
