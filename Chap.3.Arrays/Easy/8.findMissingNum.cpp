@@ -37,7 +37,7 @@ int findMissingBetterPreffered(const vector<int> &arr, int n) {
 int findMissingOptimal(const vector<int> &arr) {
     int sum = 0, n = arr.size();
     for(int num : arr) sum += num;
-    return n*(n + 1) / 2 - sum;
+    return n*(n + 1) / 2 - sum; // number = sum of natural numbers from 1 to n - sum of elements of array
 }
 
 int findMissingOptimal2(const vector<int> &arr) {

@@ -9,7 +9,7 @@ void leftRotateBy1(vector<int> &arr) { // elements from left are moved to right 
         arr[i] = arr[i + 1];
     }
     arr[arr.size() - 1] = first;
-}
+} // in left rotate starting k elements move to end one by one
 
 void rightRotateBy1(vector<int> &arr) { // elements from right are moved to left is right rotation
     // {1,2,3,4,5} becomes {5,1,2,3,4} // from back to starting
@@ -18,7 +18,7 @@ void rightRotateBy1(vector<int> &arr) { // elements from right are moved to left
         arr[i] = arr[i - 1];
     }
     arr[0] = last;
-}
+} // in right rotate ending k elements move at beginning one by one
 
 void reverseArray(vector<int> &arr, int low, int high) {
     // low and high are indexes both inclusive

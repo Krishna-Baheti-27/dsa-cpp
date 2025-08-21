@@ -29,7 +29,7 @@ bool isPrimeBrute(int n) {
 
 bool isPrimeOptimised(int n) {
     // for a composite number atleast one factor must exist till O(sqrt(n))
-    // because we know the factors are i and n/ i when loop till i = 1 to i*i <= n
+    // because we know the factors are i and n/ i when loop till i = 1 to i*i <= n, so  i is the factor which has to occur before sqrt(n)
     if(n <= 1) return false;
     for(int i = 2; i*i <= n; i++) {
         if(n % i == 0) return false;

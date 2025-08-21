@@ -11,6 +11,7 @@ vector<int> intersectionOfArraysBrute(vector<int> &arr1, vector<int> &arr2) {
             if(arr1[i] == arr2[j] && (arr3.empty() || arr3.back() != arr2[j])) {
                 arr3.push_back(arr2[j]);
                 break;
+                // no point in checking arr1[i] with rest of elements in loop since we only have take one occurence which we have already found
             }
         }
     }
@@ -24,8 +25,8 @@ vector<int> intersectionOfArraysBetter(vector<int> &arr1, vector<int> &arr2) {
     for(int num : arr2) {
         if(st.count(num)) { // to check if num exists in st
             arr3.push_back(num); // if it exists then its a common element and hence intersection
-            st.erase(num); // deleted the num so that next time we dont have to check it
-            // improved time as it decrease N, indirectly O(logN)
+            st.erase(num); // deleted the num so that next time we dont insert duplicate
+            // improved time also as it decreases N, indirectly O(logN)
         }
     }
 //     The unordered_set approach’s output order depends on the traversal order of arr2 (the second array).
@@ -35,7 +36,7 @@ vector<int> intersectionOfArraysBetter(vector<int> &arr1, vector<int> &arr2) {
 }
 
 vector<int> intersectionOfArraysOptimised(vector<int> &arr1, vector<int> &arr2) {
-    // both arrays are sorted
+    // both arrays are sorted, using two pointers O(m + n) solution
     vector<int> arr3;
     int i = 0, j = 0;
     while(i < arr1.size() && j < arr2.size()) {
@@ -43,11 +44,13 @@ vector<int> intersectionOfArraysOptimised(vector<int> &arr1, vector<int> &arr2) 
             arr3.push_back(arr2[j]);
             i++;
             j++;
-        } else if(arr1[i] < arr2[j]) i++;
-        else if(arr1[i] > arr2[j]) j++;
+            // if we found the intersection then increment both
+        } else if(arr1[i] < arr2[j]) i++; // else increment, i so that we may get it equal to j
+        else if(arr1[i] > arr2[j]) j++; // else increment, j so that we may get it equal to i
     }
     return arr3;
-}
+} ///////////////////////     INCORRECT AS WE DO NOT MOVE AHEAD IF BOTH THEM ARE EQUAL BUT THE ELEMENT IS
+/////////////////////////     ALREADY PRESENT IN THE ARRAY
 
 vector<int> intersectionOfArraysOptimised2(const vector<int> &arr1, const vector<int> &arr2) {
     int i = 0, j = 0; // indexes for arr1, arr2

@@ -15,7 +15,7 @@ vector<int> unionOfArraysBruteUsingSet(vector<int> &arr1, vector<int> &arr2) {
     }
     for(auto &el : st) arr3.push_back(el); // we use &/reference operator to avoid creating copies
     return arr3;
-    // O(m + n(log(m + n)))
+    // O(m + n(log(m + n))) + O(mlogm) + O(nlogn)
 }
 
 vector<int> unionOfArraysBruteUsingMap(vector<int> &arr1, vector<int> &arr2) {
@@ -25,7 +25,7 @@ vector<int> unionOfArraysBruteUsingMap(vector<int> &arr1, vector<int> &arr2) {
     map<int,int> mp;
     for(int num : arr1) mp[num]++;
     for(int num : arr2) mp[num]++;
-    for(const auto &el : mp) arr3.push_back(el.first);
+    for(const auto &el : mp) arr3.push_back(el.first); // we only need the keys not values since we only want to store unique occurences hence keys 
     return arr3;
 }
 
@@ -35,6 +35,7 @@ vector<int> unionOfArraysBetter(vector<int> &arr1, vector<int> &arr2) {
     st.insert(arr2.begin(), arr2.end());
     for(int num : st) arr3.push_back(num);
     return arr3; // o/p is not in sorted order but only O(m + n) time
+    // but in the worst case it could be O((m + n)^2)
 }
 
 vector<int> unionOfArraysOptimal(vector<int> &arr1, vector<int> &arr2) {
@@ -76,6 +77,8 @@ vector<int> unionOfArraysOptimal(vector<int> &arr1, vector<int> &arr2) {
 
 vector<int> unionOfArraysOptimal2(const vector<int> &arr1, const vector<int> &arr2) {
     // Using the two pointer approach
+    // Approach very similar to merging two arrays but you only have to take care of whether the lats inserted element is not equal (since we dont want duplicates) and since array is sorted if the last element is not equal then it must be less than and hence we can insert without disturbing the sorted order
+    // use arr3.empty() if that were to be the first element, arr3.back() wouldn't make a lot of sense 
     vector<int> arr3;
     int i = 0, j = 0; // indexes for arr1, arr2
     while(i < arr1.size() && j < arr2.size()) {

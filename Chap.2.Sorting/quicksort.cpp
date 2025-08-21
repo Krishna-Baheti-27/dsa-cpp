@@ -12,6 +12,7 @@ int partition(int arr[], int low, int high) {
         if(i < j) swap(arr[i], arr[j]);
     }
     swap(arr[j], arr[low]); // now our pivot is placed at correct position which is j
+    // j initially was at incorrect location but after traversing the loop and when i == j, both now point to the correct location of pivot and hence swap
     return j; // we return where we placed our pivot
 }
 

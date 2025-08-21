@@ -25,8 +25,6 @@ void moveZeroesOptimised(vector<int>& nums) {
         // O(n + d) where d is number of zeroes
 }
 
-
-
 // THIS IS THE BEST SOLUTION IF YOU ALSO FOCUS ON READABILITY
 void moveZeroesMostOptimised(vector<int> &arr) {
     int j = -1;
