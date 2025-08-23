@@ -61,7 +61,7 @@ Node* deleteHead(Node *head) {
     Node *temp = head;
     head = head->next;
     delete temp;
-    return head;
+    return head; // new head
 }
 
 Node* deleteTail(Node *head) {
@@ -71,17 +71,21 @@ Node* deleteTail(Node *head) {
         return nullptr;
     }
     Node *temp = head;
+    // while(temp) terminates on nullptr (after last node)
+    // while(temp->next) terminates on last node(temp->next = nullptr)
+    // while(temp->next->next) terminates on second last node
     while(temp->next->next) {
         temp = temp->next;
     }
-    delete temp->next;
-    temp->next = nullptr;
+    delete temp->next; // from second last node we delete last node
+    temp->next = nullptr; // second last node now becomes last and points to nullptr
     return head;
 }
 
 Node *deleteKth(Node *head, int k) {
-    if(k < 1 || !head) return head;
+    if(k < 1 || !head) return head; // if first node doesnt exist or we want to delete at invalid index
     if(k == 1) {
+        // deleting the first node
         Node *temp = head;
         head = head->next;
         delete temp;
@@ -89,9 +93,9 @@ Node *deleteKth(Node *head, int k) {
     }
     Node *temp = head;
     for(int i = 1; i <= k - 2 && temp; i++) temp = temp->next; // we basically stop one node before the node we want to delete using the condition i <= k - 2  but for large k, we will break out of the loop if temp becomes null
-    if(!temp || !temp->next) return head; // if either temp or temp->nex is null we cant delete 
+    if(!temp || !temp->next) return head; // if either temp or temp->next is null we cant delete 
     Node *nodeToDelete = temp->next;
-    temp->next = temp->next->next;
+    temp->next = temp->next->next; // break the link for the node which is to be deleted
     delete nodeToDelete;
     return head;
 }
@@ -100,7 +104,7 @@ Node *deleteValue(Node *head, int value) {
     if(!head) return nullptr;
     Node *temp = head;
     if(head->data == value) { // delete head node
-        head = head->next;
+        head = head->next; 
         delete temp;
         return head;
     }
@@ -113,7 +117,7 @@ Node *deleteValue(Node *head, int value) {
         }
         temp = temp->next; // else move ahead
     }
-    return head; // if temp comes on last node we cant delete anything hence return head
+    return head; // if temp comes on last node we cant delete anything hence return head, since then temp->next would point to nullptr and we can delete null
 }
 
 Node* insertHead(Node *head, int data) {
@@ -136,7 +140,7 @@ Node* insertKth(Node *head, int k, int data) {
     if(k < 1) return head;
     Node *newNode = new Node(data);
     if(!head) return newNode;
-    if(k == 1) {
+    if(k == 1) { // insert at first position or insert at head node
         newNode->next = head;
         head = newNode;
         return head;
@@ -184,14 +188,14 @@ Node* reverseSLL(Node *head) {
         prev = current;
         current = next;
     }
-    return prev;
+    return prev; // here current would point at nullptr, hence we return prev
 }
 
-Node* recursiveReverse(Node *head, Node *prev = nullptr) {
+Node* recursiveReverse(Node *head, Node *prev = nullptr) { // here current is replaced by head
     if(!head) return prev;
-    Node *next = head->next; // the next pointer is simply next node
-    head->next = prev; // changing the link
-    return recursiveReverse(next, head); // now we set current node as next node, and prev node to be current node
+    Node *next = head->next; // the next pointer is simply next node (same as next = current->next)
+    head->next = prev; // changing the link (same as current->next = prev)
+    return recursiveReverse(next, head); // now we set current node as next node, and prev node to be current node (same as prev = current and current = next)
 }
  
 int main() {

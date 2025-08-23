@@ -66,6 +66,27 @@ Node *deleteTail(Node *head) {
     return head;
 }
 
+// here we could have also used prev pointers for more cleaner code and take advantage of dll
+// Node* deleteTail(Node* head) {
+//     if (!head) return nullptr;
+//     if (!head->next) {   // Only one node
+//         delete head;
+//         return nullptr;
+//     }
+
+//     Node* tail = head;
+//     while (tail->next) {
+//         tail = tail->next;
+//     }
+
+//     // tail is at last node now
+//     tail->prev->next = nullptr;
+//     delete tail;
+
+//     return head;
+// }
+
+
 Node *deleteKth(Node *head, int k) {
     if(k < 1 || !head) return nullptr;
     if(k == 1) {
@@ -112,7 +133,7 @@ Node *deleteValue(Node* head, int value) {
     }
     if(!temp->next) return head; // no deletion since value does not exist
     Node *toDelete = temp->next;
-    temp->next = temp->next->next;
+    temp->next = toDelete->next;
     if(toDelete->next) {
         toDelete->next->prev = temp; // if not the last node then update prev pointers
     }
@@ -193,7 +214,7 @@ Node *insertBeforeValue(Node *head, int data, int value) {
 }
 
 Node* reverseDLL(Node *head) {
-    // naive solution using stack and just swapping data not modifying the links
+    // naive solution using stack and just swapping data not modifying the links, this isnt really reversing as the links are same and we could have done this for sll also
     stack<int> st;
     Node* temp = head;
     while(temp) {
@@ -217,6 +238,7 @@ Node* reverseDLLOptimised(Node *head) {
         next = current->next;
         current->next = prev; // reversing links
         current->prev = next; // reversing links
+        // here we have to reverse two links, instead of just one as in regular sll
         prev = current;
         current = next;
     }
