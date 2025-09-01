@@ -1,6 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// Full Binary tree -> either 0 or 2 children for all nodes
+// Complete Binary Tree -> all levels are filled except possibly the last level which has nodes as left as possible
+// Perfect Binary tree -> All leaf nodes are at the same level
+// Balanced Binary tree -> Height of tree is at max logN
+// Degenerte tree -> Essentially a linked list (every node has single child in one direction)
+
 class Node {
     public:
     int data;
@@ -56,7 +62,7 @@ void preorder(Node *root) {
     cout << root->data << ' ';
     preorder(root->left);
     preorder(root->right);
-}
+} // similarly fro postorder and inorder
 // Takes O(N) time since N nodes and each node is traversed exactly N times and O(H) recursion stack space where H is height of tree and in worst case it can be O(N) since h = N in case of degenerate tree
 
 /////////// for INORDER
@@ -83,32 +89,7 @@ vector<int> postorderTraversal(Node *root) {
     return left;
 }
 
-// void levelorderHelper(Node *root, vector<vector<int>> &result,queue<Node*> &q) {
-//     if(q.empty()) return;
-//     vector<Node*> temp;
-//     vector<int> level;
-//     while(!q.empty()) {
-//         temp.push_back(q.front());
-//         level.push_back(q.front()->data);
-//         q.pop();
-//     }
-//     for(int i = 0; i < temp.size(); i++) {
-//         if(temp[i]->left) q.push(temp[i]->left);
-//         if(temp[i]->right) q.push(temp[i]->right);
-//     }
-//     result.push_back(level);
-// }
-
-// vector<vector<int>> levelorderTraversal(Node *root) {
-//     if(root == nullptr) return {};
-//     vector<vector<int>> result; // main result;
-//     queue<Node *> q;
-//     q.push(root);
-//     levelorderHelper(root,result,q);
-//     return result;
-// }
-
-// HERE WE DONT HAVE RECURSION SO NO NEED TO USE HELPER FUNCTION
+// level order
 vector<vector<int>> levelorderTraversal(Node *root) {
     if(!root) return {};
     vector<vector<int>> result;
@@ -131,23 +112,18 @@ vector<vector<int>> levelorderTraversal(Node *root) {
 }
 
 // Setting size = q.size(); at the start of each level ensures that you process only the nodes that are currently in the queue—which are exactly the nodes at the current level.
-
 // Any children you add during this iteration are pushed to the back of the queue and will be processed in the next level (i.e., in the next iteration of the while loop).
-
-// This keeps each level’s processing clean and separated, so you never accidentally process nodes from the next level too early.
-
-// so we dont need a temporary vector to keep the elements of that level since adding children changes size of queue, so we sotre size first and insertion in queue happens from back so they dont distort the order
 
 vector<int> iterativePreorder(Node *root) {
     if(!root) return {};
-    stack<Node*> st; // explicit stack
+    stack<Node*> st; // explicit stack to simulate recursion in an iterative algorithm
     // Root Left Right
     vector<int> result;
     st.push(root);
     while(!st.empty()) {
         Node *node = st.top(); st.pop();
         result.push_back(node->data); // Root
-        if(node->right) st.push(node->right); // push right first since stack is LIFO so right should be after left
+        if(node->right) st.push(node->right); // push right first since stack is LIFO so right should be after left, so we would eventually traverse the left first
         if(node->left) st.push(node->left); // then left
     }
     return result;
@@ -158,12 +134,13 @@ vector<int> iterativeInorder(Node *root) {
     stack<Node*> st;
     Node *node = root;
     vector<int> result;
-    while(node != nullptr || !st.empty()) {
+    // in the recursive version we went absolutely left and then printed and then moved right, so here we are doing that
+    while(node != nullptr || !st.empty()) { // do the iteration while either the node is not null or the stack still has elements
         if(node) {
             st.push(node);
             node = node->left;
         } else {
-            // now we cnt go anymore left then we print because left root right
+            // now we cnt go anymore left then we print because left done, by printing root, and then if right exists then make node = node->right
             node = st.top(); st.pop();
             result.push_back(node->data);
             node = node->right; // check for right
@@ -172,41 +149,96 @@ vector<int> iterativeInorder(Node *root) {
     return result;
 }
 
-vector<int> iterativeInorderUsing2Stacks(Node *root) {
-    if(!root) return {};
+vector<int> iterativePostorderUsing2Stacks(Node *root) {
     stack<Node*> st1, st2;
-    vector<int> result;
     st1.push(root);
     while(!st1.empty()) {
-        Node *node = st.top(); 
+        Node *curr = st1.top();
+        st2.push(curr);
+        st1.pop();
+        if(curr->left) st1.push(curr->left);
+        if(curr->right) st1.push(curr->right);
+    }  
+    vector<int> result; 
+    while(!st2.empty()) {
+        result.push_back(st2.top()->data);
+        st2.pop();
     }
-}
+    return result;
+} // O(N) time and O(2N) space, but we dont actually need the extra stack, single stack would suffice, just store the answer in vector in reverse fashion if you know the number of nodes or store the answer as it is and reverse the result later
 
-vector<int> iterativePostorder(Node *root) {
-    if(!root) return {};
-    stack<Node*> st;
-    st.push(root);
-    vector<int> result;
-    while(!st.empty()) {
-        Node *node = st.top(); st.pop();
-        result.push_back(node->data); 
-        if(node->left) st.push(node->left); 
-        if(node->right) st.push(node->right); 
-    }
+
+vector<int> iterativePostorderUsing1StackOptimal(Node *root) {
+    stack<Node*> st1;
+    vector<int> result; 
+    st1.push(root);
+    while(!st1.empty()) {
+        Node *curr = st1.top(); st1.pop();
+        if(curr) {
+            result.push_back(curr->data);
+            if(curr->left) st1.push(curr->left);
+            if(curr->right) st1.push(curr->right);
+        }
+    }  
     reverse(result.begin(), result.end());
     return result;
 }
 
-// How Does This Help Achieve Postorder (Left, Right, Root)?
-// Iterative postorder traversal using one stack works like this:
 
-// Traverse as Root, Right, Left (by pushing left first, then right).
+vector<int> iterativePostorderUsing1Stack(Node *root) {
+    // it says Left Right root, so what we have to do in go till absolute left, putting everything in stack, then go to right and again check for left, if no left then we add it to the answer and again check if right exists then add and so on
+    if(!root) return {};
+    stack<Node*> st;
+    vector<int> result;
+    Node *curr = root, *temp;
+    while(curr != nullptr || !st.empty()) {
+        if(curr) {
+            st.push(curr);
+            curr = curr->left;
+        } else {
+            temp = st.top()->right;
+            if(temp == nullptr) {
+                temp = st.top(); st.pop(); // we have traverse all left then right and then we pop, but we keep the parent in mind
+                result.push_back(temp->data); // finally adding root (once both left and right checked)
+                while(temp == st.top()->right && !st.empty()) {
+                    temp = st.top(); st.pop();
+                    result.push_back(temp->data);
+                } 
+            } else {
+                curr = temp; // if the right is not null then we check for left of right because it is left right root
+            }
+        }
+    }
+    return result; // O(2N) time
+}
 
-// Reverse the result at the end to get Left, Right, Root (postorder).
-
-// Why Reverse?
-// If you process nodes as Root, Right, Left and collect them in a result vector, reversing that vector gives you Left, Right, Root.
-
+vector<vector<int>> allTraversals(Node *root) {
+    if(!root) return {{}};
+    stack<pair<Node*, int>> st;
+    st.push({root, 1});
+    vector<int> preorder, inorder, postorder;
+    while(!st.empty()) {
+        // this is the algorithm created which tracks the occurence or repeatition using which we can identify whether element is 
+        auto it = st.top();
+        st.pop();
+        if(it.second == 1) {
+            preorder.push_back(it.first->data);
+            it.second++; 
+            st.push(it);
+            // this is preorder hence we push left
+            if(it.first->left) st.push({it.first->left, 1});
+        } else if(it.second == 2) {
+            inorder.push_back(it.first->data);
+            it.second++;
+            st.push(it);
+            // this is inorder and hence we push right
+            if(it.first->right) st.push({it.first->right, 1});
+        } else {
+            postorder.push_back(it.first->data); // hence at the last we have root and we dont push it anywhere
+        }
+    }
+    return {preorder, inorder, postorder};
+}
 
 
 int main() {
