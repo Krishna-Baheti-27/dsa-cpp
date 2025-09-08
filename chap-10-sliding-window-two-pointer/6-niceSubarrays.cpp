@@ -1,57 +1,34 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// a subarray is nice if there are k odd numbers in them
+// we have count the number of nice subarrays
+// A continuous subarray is called nice if there are k odd numbers on it.
 
-int countNiceSubarraysBrute(vector<int> &arr, int k) {
-    // generate all subarrays and count the number of subarrays having k odd numbers
-    int count = 0;
-    for(int i = 0; i < arr.size(); i++) {
-        for(int j = i; j < arr.size(); j++) {
-            int countOdd = 0;
-            // we know subarray is from i to j
-            for(int k = i; k <= j; k++) {
-                if(arr[k] % 2 != 0) countOdd++;
-            }
-            if(countOdd == k) count++;
-        }
-    }
-    return count;
-} // O(n^n^n) ,lets try and optimise it
+// brute is generating all subarrays
+// better uses hashing
+// the most optimal solution uses sliding window and two pointer
 
-int countNiceSubarraysBruteBetter(vector<int> &arr, int k) {
-    int count = 0;
-    for(int i = 0; i < arr.size(); i++) {
-        int countOdd = 0;
-        // we know subarray is from i to j
-        for(int j = i; j < arr.size(); j++) {
-            if(arr[j] % 2 != 0) countOdd++;
-            if(countOdd == k) {
-                // the subarray from i to j is our nice subarray
-                count++;
-            } else if(countOdd > k) {
-                // when countOdd exceeds k, we know we wont have any new subarray starting with i so we break out of the loop
-                break;
-            }
-        }
-    }
-    return count;
-} // O(N^N) slightly better solution but still TLE
+// the above problem can be broken into the previous problem involving number of binary subarrays having sum = k, 
+// here we want exactly k odd numbers, if we consider all the odd number as 1 and even numbers as zero then what we essentially want is the subarray having sum == k, (in which odd = 1 and even = 0)
 
-int countNiceSubarraysBetter(vector<int> &arr, int k) {
-    int l = 0, r = 0, count = 0, countOdd = 0;
+int numOfSubarraysWithMaxSumK(vector<int> &arr, int k) {
+    if(k < 0) return 0;
+    int sum = 0, count = 0, l = 0, r = 0;
     while(r < arr.size()) {
-        if(arr[r] % 2 != 0) countOdd++;
-        while(countOdd > k) {
-            // here we move the l to decrease the window
-            if(arr[l] % 2 != 0) countOdd--; // since we skipped the odd
-            l++; // regardless of whether we skip the odd number or not
+        // instead of if-else you can also use modulo like sum += arr[r] % 2 would give you the answer
+        if(arr[r] % 2 != 0) sum += 1; // odd as 1 and even as 0
+        while(sum > k) {
+            if(arr[l] % 2 != 0) sum -= 1; // odd to be considered as 1
+            l++;
         }
-        // now finally countOdd == k and we can count it as a nice subarray
-        if(countOdd == k) count++;
-        r++; // move ahead
+        count += (r - l + 1);
+        r++;
     }
-    return countOdd;
+    return count;
+}
+
+int numOfNiceSubArraysOptimal(vector<int> &arr, int k) {
+    return numOfSubarraysWithMaxSumK(arr, k) - numOfSubarraysWithMaxSumK(arr, k - 1);
 }
 
 int main() {
