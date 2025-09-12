@@ -4,7 +4,7 @@ using namespace std;
 // Arrays are sorted
 
 vector<int> intersectionOfArraysBrute(vector<int> &arr1, vector<int> &arr2) {
-    // brute using O(n^2) nested loops
+    // brute using O(m * n) nested loops
     vector<int> arr3;
     for(int i = 0; i < arr1.size(); i++) {
         for(int j = 0; j < arr2.size(); j++) {
@@ -41,6 +41,7 @@ vector<int> intersectionOfArraysOptimised(vector<int> &arr1, vector<int> &arr2) 
     int i = 0, j = 0;
     while(i < arr1.size() && j < arr2.size()) {
         if(arr1[i] == arr2[j] && (arr3.empty() || arr3.back() != arr2[j])) {
+            // this condition in if involving the && syntax is incorrect
             arr3.push_back(arr2[j]);
             i++;
             j++;
@@ -70,6 +71,7 @@ vector<int> intersectionOfArraysOptimised2(const vector<int> &arr1, const vector
             j++;
         }
     }
+    return arr3;
 }
 
 int main() {

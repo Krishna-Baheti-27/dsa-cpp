@@ -27,7 +27,7 @@ int isSingleOptimal(const vector<int> &arr) {
     for(int i = 0; i < arr.size(); i++) {
         xor1 = xor1 ^ arr[i];
     }
-    // pretty easy logic, a ^ a = 0, hence when we find xor of all elements, the one which is single will not get cancelled and hence it works
+    // pretty easy logic, a ^ a = 0 and a ^ 0 = 0, hence when we find xor of all elements, the one which is single will not get cancelled and hence it works
     return xor1;
 }
 

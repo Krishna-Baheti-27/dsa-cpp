@@ -24,17 +24,20 @@ vector<int> nextGreaterElOptimal(const vector<int> &arr) {
     stack<int> st;
     for(int i = arr.size() - 1; i >= 0; i--) {
         while(!st.empty() && st.top() <= arr[i]) {
-                st.pop();
+            st.pop(); // pop while stack is not empty or the top of stack is greater
         } 
         if(st.empty()) {
-            ans[i] = -1;
+            ans[i] = -1; // entire stack became empty but we didnt find anything greater
+            // no next greater element and hence -1
         } else {
-            ans[i] = st.top();
+            ans[i] = st.top(); // always handle the answer case at last
         }
-        st.push(arr[i]);
+        st.push(arr[i]); // always push into the stack regardless since  we have to keep track of next element
     }
     return ans;
     // O(2N) time is worst case since the outer loop runs for N times and the inner loop can run atmax total of N times in the whole iteration of outer loop, because from stack we are removing elements of array which cannot exceed N
+
+    // here we are using a monotonic stack because the elements are always stored in decreasing order and if the order is distorted we pop from stack
 }
 
 /////////////////////   NOW NEXT GREATER LEETCODE STYLE FOR TWO ARRAYS

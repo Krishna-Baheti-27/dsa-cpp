@@ -17,6 +17,9 @@ vector<int> rearrangeArrayBrute(vector<int> &arr) {
     return arr;
 } // O(n + n / 2) time and O(n) space
 
+// we have array of even size having equal number of positive and negative numbers
+// variety 1
+
 vector<int> rearrangeArrayOptimal(vector<int> &arr) {
     // we cant improve the space as you will have to remember the order of elements as well, but we can do this in single pass
     vector<int> ans(arr.size(), 0);
@@ -63,11 +66,11 @@ vector<int> rearrangeArrayOptimalVar2(vector<int> &arr) {
     while(j < negArr.size()) {
         arr[k++] = negArr[j++];
     }
-    return arr; // let others stay as it it 
+    return arr; // we used all of our elements in posArr and negArr and hence done
     // O(2n) time and O(n) space
 }
 
-vector<int> rearrangeArrayOptimalVar2Better(vector<int> &arr) {
+vector<int> rearrangeArrayOptimalVar2AnotherMethod(vector<int> &arr) {
     // exactly like brute force style
     vector<int> posArr;
     vector<int> negArr;
@@ -100,7 +103,7 @@ vector<int> rearrangeArrayOptimalVar2Better(vector<int> &arr) {
         }
     }
     return arr;
-}
+} // O(2N) time and O(N) space
 
 int main() {
     

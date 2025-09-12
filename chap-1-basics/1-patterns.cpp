@@ -321,7 +321,7 @@ void print22(int n) {
             int value = min(min(top,bottom), min(left,right));
             // the minimum of top, bottom, left, right would be the value which we would get if we ere to subtract the entire matrix by n
             // n - value = newMatrix
-            // so the actual value is value = n - newMatrxi \
+            // so the actual value is value = n - newMatrxi 
             // we already have the new matrix after we took min of all
             cout << (n - value) << ' '; 
         }

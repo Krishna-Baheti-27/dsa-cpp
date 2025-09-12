@@ -27,13 +27,13 @@ vector<int> spiralOrder(vector<vector<int>> &matrix) {
         }
         if(left <= right) {
             for(int i = bottom; i >= top; i--) {
-                ans.push_back(matrix[i][bottom]);
+                ans.push_back(matrix[i][left]);
             }
             left++;
         }
     }
     return ans;
-}
+} // O(n * m) time and O(n * m) space
 
 int main() {
     

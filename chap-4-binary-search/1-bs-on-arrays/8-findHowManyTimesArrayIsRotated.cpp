@@ -9,7 +9,7 @@ int noOfRotationsBrute(const vector<int> &arr) {
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] < arr[minIdx]) minIdx = i;
     }
-    return minIdx; // index of minimum element or minIndex is the number of times the array has been rotated
+    return minIdx; // index of minimum element or minIndex is the number of times the array has been rotated (right rotated)
 }
 
 int noOfRotationsOptimal(const vector<int> &arr) {
@@ -20,6 +20,7 @@ int noOfRotationsOptimal(const vector<int> &arr) {
         int mid = low + (high - low) / 2;
         // you have to introduce the case of 
         // arr[low] == arr[mid] && arr[mid] == arr[high]
+        // but here we only have unique elements
         if(arr[low] <= arr[mid]) {
             // left part is sorted
             if(arr[low] < minel) {

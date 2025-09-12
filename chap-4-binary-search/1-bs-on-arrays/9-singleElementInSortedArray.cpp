@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// we have already done single element in an unsorted array and best solution was using xor in linear time, but here we can take advantage of the fact that array is sorted and do it in logN time
+
 int singleElBrute(vector<int> &arr) {
     // when we are standing at a index, then either index - 1 or index + 1 ought to have the same element, if both dont then that element is single
     if(arr.size() == 1) return arr[0]; // only single

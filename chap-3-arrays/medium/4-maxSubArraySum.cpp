@@ -32,6 +32,7 @@ int maxSubarraySumBetter(const vector<int> &arr) {
     return maxSum;
 }
 
+// kadane algo cleverly covers all the subarrays by making sure to store the maxSum and reset sum to 0 once its not helpful
 int maxSubarraySumOptimal(const vector<int> &arr) {
     int sum = 0, maxSum = INT_MIN;
     for(int i = 0; i < arr.size(); i++) {
@@ -47,22 +48,25 @@ int maxSubarraySumOptimal(const vector<int> &arr) {
 }
 
 vector<int> printMaxSumSubarray(const vector<int> &arr) {
-    int sum = 0, maxSum = INT_MIN, start, arrStart, arrEnd;
+    int sum = 0, maxSum = INT_MIN, start = 0, arrStart, arrEnd;
     for(int i = 0; i < arr.size(); i++) {
-        if(sum == 0) start = i; // start of the new subarray
+        sum += arr[i];
         if(sum > maxSum) {
             // here if we use sum >= maxSum, it would be the max-length sub array having maxSum 
             // currently it gives us the min-length sub array having maxSum
             maxSum = sum;
-            arrStart = start; // this is where we started this subarray
-            arrEnd = i; // this is the end becuase it is where we have found the maxSum
+            arrStart = start; // this is where we started this subarray, when we reset the sum to 0
+            arrEnd = i; // this is the end becuase it is where we have found the maxSum, nd it will be updated accordingly if we find an even beeter subarray
         } 
         if(sum < 0) {
             sum = 0;
+            start = i + 1; // ditch this subarray, its of no use, i + 1 marks the start of new subarray
         }
     }
     return {arrStart, arrEnd};
-}
+} // if the array contains all negative numbers then return the max element as subarray {maxIdx,maxIdx}
+
+// IF YOU WANT TO PRINT ALL THE SUBARRAYS HAVING sum = maxSum then apply brute force method to find all the subarrays having sum == maxSum
 
 int main() {
     

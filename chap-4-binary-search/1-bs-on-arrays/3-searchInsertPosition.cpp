@@ -2,6 +2,8 @@
 #include<vector>
 using namespace std;
 
+// They are simply asking the lower bound of that element
+
 int searchInsertPositionBrute(vector<int> &arr, int key) {
     // using linear search
     int i = 0;
@@ -10,7 +12,7 @@ int searchInsertPositionBrute(vector<int> &arr, int key) {
         else i++;
     }
     return i;
-}
+} // O(N) time
 
 int searchInsertPositionOptimised(vector<int> &arr, int key) {
     int low = 0, high = arr.size() - 1, ans = arr.size();
@@ -26,7 +28,7 @@ int searchInsertPositionOptimised(vector<int> &arr, int key) {
         }
     }
     return ans;
-}
+} // O(logN) time using lower bound
 
 int usingSTLSearchInsertPos(vector<int> &arr, int key) {
     auto it = lower_bound(arr.begin(), arr.end(), key);

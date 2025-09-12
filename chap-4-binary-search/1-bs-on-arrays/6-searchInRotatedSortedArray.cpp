@@ -9,7 +9,7 @@ int searchInRotatedSortedArrayBrute(vector<int> &arr, int key) {
         if(arr[i] == key) return i;
     }
     return -1;
-}
+} // O(N) time
 
 
 // First, we identify the sorted half of the array. 

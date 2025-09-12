@@ -40,20 +40,21 @@ void moveZeroesMostOptimised(vector<int> &arr) {
         if(arr[i] != 0) {
             // we swap arr[i] with arr[j] essentially swapping so that non zero elements come before and if it is a zero we dont swap, as arr[j] is zero and arr[i] is not zero
             swap(arr[i], arr[j]);
-            j++; // we move j ahead because we also have to look for other zeroes
+            j++; // we move j ahead because since the zero has been swapped, j should point to index of last encountered zero
         }
     }
-}
+} // O(N) time
 
 void moveZeroesSwapSinglePassMostOptimal(vector<int>& nums) {
-    int lastZeroFoundAt = 0; // keeps the position of last zero found, or what is the last position to place a non zero element
+    int lastPosToPlace = 0; // keeps track of what is the last position to place a non zero element
+    // or basically keeps track of the first zero found and maintains it
     for(int i = 0; i < nums.size(); i++) {
         if(nums[i] != 0) {
-            swap(nums[i], nums[lastZeroFoundAt]);
-            lastZeroFoundAt++; // after swap index of last zero has increased by 1 and hence move the pointer
+            swap(nums[i], nums[lastPosToPlace]);
+            lastPosToPlace++; // after swap index of first zero has increased by 1 and hence move the pointer
         }
     }
-}
+} // O(N) time, more better way to write
 
 
 int main() {

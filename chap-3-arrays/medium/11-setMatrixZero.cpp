@@ -1,35 +1,23 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// void markRow(int i, vector<vector<int>> &matrix) {
-//     for(int k = 0; k < matrix[i].size(); k++) {
-//         if(matrix[i][k] != 0) matrix[i][k] = -1;
-//     }
-// }
-
-// void markColumn(int j, vector<vector<int>> &matrix) {
-//     for(int i = 0; i < matrix.size(); i++) {
-//         if(matrix[i][j] != 0) matrix[i][j] = -1;
-//     }
-// }
-
-// void setMatrixZeroesBrute(vector<vector<int>> &matrix) {
-//     for(int i = 0; i < matrix.size(); i++) {
-//         for(int j = 0; j < matrix[i].size(); j++) {
-//             if(matrix[i][j] == 0) {
-//                 markRow(i, matrix);
-//                 markColumn(j, matrix);
-//             }
-//         }
-//     }
-//     // now for all those elements who have been marked as -1 are those elements we ought to turn them into zero
-//     for(int i = 0; i < matrix.size(); i++) {
-//         for(int j = 0; j < matrix[i].size(); j++) {
-//             if(matrix[i][j] == -1) matrix[i][j] = 0;
-//         }
-//     }
-// } 
-// ////////////////////// THIS ONLY WORKS FOR A BINARY ARRAY HAVING ONLY 0/1 AS INPUT BUT NOT FOR ARRAY WHERE matrix[i][j] can be any integer
+void setZeroesBrute(vector<vector<int>> &matrix) {
+    int n = matrix.size(), m = matrix[0].size();
+    vector<vector<int>> ans;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(matrix[i][j] == 0) {
+                // mark the entire row and column as 0
+                for(int k = 0; k < m; k++) {
+                    ans[i][k] = 0; // marking the row
+                }
+                for(int k = 0; k < n; k++) {
+                    ans[k][j] = 0; // marking the column
+                }
+            }
+        }
+    }
+} // O(m * n * (n + m)) time and O(m * n) space
 
 // There are two solutions, use an external array having space O(n + m) for marking the rows and columns to be 0
 void setZeroesBetter(vector<vector<int>> &matrix) {
@@ -51,7 +39,7 @@ void setZeroesBetter(vector<vector<int>> &matrix) {
             }
         }
     }
-} // O(2nm) time and O(n + m) space
+} // O(2 * n * m) time and O(n + m) space
 
 void setZeroesOptimal(vector<vector<int>> &matrix) {
     int n = matrix.size(), m = matrix[0].size(), col0 = 1;
@@ -71,7 +59,7 @@ void setZeroesOptimal(vector<vector<int>> &matrix) {
     for(int i = n - 1; i >= 1; i--) {
         for(int j = m - 1; m >= 1; m--) {
             if(matrix[i][j] != 0) {
-                // then only convert right
+                // then only convert right else no sense in converting 0 back to 0
                 if(matrix[i][0] == 0 || matrix[0][j] == 0) {
                     matrix[i][j] = 0;
                 }

@@ -3,16 +3,16 @@
 #include<algorithm>
 using namespace std;
 
-// Only for sorted arrays
+// Defined nnly for sorted arrays
 // Lower Bound -> smallest index such that arr[index] >= given number (if doesnt exist then put = size of array)
-// Upper Bound -> smallest index such that arr[index] > given number 
+// Upper Bound -> smallest index such that arr[index] > given number (if doesnt exist then put = size of array)
 
 int lowerBoundBrute(vector<int> &arr, int target) {
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] >= target) return i;
     }
     return arr.size();
-}
+} // O(N) time
 
 int lowerBoundOptimal(vector<int> &arr, int target) { // Using binary search since its sorted array
     int low = 0, high = arr.size() - 1, ans = arr.size();
@@ -23,7 +23,7 @@ int lowerBoundOptimal(vector<int> &arr, int target) { // Using binary search sin
             // same logic for arr[mid] > target
             ans = mid;
             high = mid - 1;
-        } else low = mid + 1;
+        } else low = mid + 1; // try to reach the target
     }
     return ans;
 }
@@ -51,8 +51,8 @@ int upperBoundOptimal(vector<int> &arr, int target) {
     while(low <= high) {
         int mid = low + (high - low) / 2;
         if(arr[mid] > target) {
-            ans = mid;
-            high = mid - 1;
+            ans = mid; // we take it as a possible answer
+            high = mid - 1; // but look for an even better answer (smaller index)
         } else {
             low = mid + 1; // same even if get arr[mid] == target, we are not happy, since we need arr[idx] > target hece we trim the left side
         }
@@ -63,7 +63,6 @@ int upperBoundOptimal(vector<int> &arr, int target) {
 int upperBoundSTL(const vector<int>& arr, int target) {
     return upper_bound(arr.begin(), arr.end(), target) - arr.begin();
 }
-
 
 int main() {
     vector<int> arr = {1, 3, 5, 7, 9};

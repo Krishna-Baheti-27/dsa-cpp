@@ -12,7 +12,7 @@ vector<int> firstLastOccurenceBrute(const vector<int> &arr, int key) {
         } 
     }
     return {firstOcc, lastOcc};
-}
+} // O(N) linear time solution
 
 // vector<int> firstLastOccurenceOptimal(const vector<int> &arr, int key) {
 //     int low = 0, high = arr.size() - 1, firstOcc = -1, lastOcc = -1;
@@ -55,7 +55,7 @@ vector<int> firstLastOccurenceOptimal(vector<int> &arr, int key) {
         }
     }
     return {firstOcc, lastOcc};
-}
+} // O(2logN) time for finding first or lastOcc in sorted array and also to find frequency of an element in sorted array using lastOcc - firstOcc + 1
 
 vector<int> usingLowerUpperBound(const vector<int> &arr, int key) {
     // Lower Bound -> smallest index such that arr[index] >= given number (if doesnt exist then put = size of array)
@@ -67,11 +67,12 @@ vector<int> usingLowerUpperBound(const vector<int> &arr, int key) {
      // Check if key is present because this functions return upper and lower bound and dont guarantee if key is present or not
     if (it1 == arr.end() || *it1 != key) // this conditions check if key is present
         return {-1, -1}; // key not found
+    // because if the key is not present then there is no point of first or last occurence
 
     // if key is present then it2 would point to either arr.end() or it1 + 1 or anything after that, and in all cases it is a valid iterator and hence no need to check for it2
     
     int firstOcc = it1 - arr.begin();
-    int lastOcc = it2 - arr.begin() - 1;
+    int lastOcc = it2 - arr.begin() - 1; // -1 since upper bound actually gives us index of greater element so -1 would give us index of the key
     return {firstOcc, lastOcc};
 }
 

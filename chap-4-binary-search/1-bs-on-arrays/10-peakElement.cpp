@@ -2,6 +2,8 @@
 using namespace std;
 
 // there can be multiple peaks, we just have to return one, or we can also create an array of peak elements and return that if you feel like, here we are returning the index
+
+// this question is extremely similar to last question, because in both cases we were dealing with adjacent elements
 int peakElBrute(const vector<int> &arr) {
     // O(N) linear search solution
     if(arr.size() == 1 || arr[0] > arr[1]) return 0; 

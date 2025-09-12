@@ -28,7 +28,7 @@ int findMissingBetter(const vector<int> &arr) {
 int findMissingBetterPreffered(const vector<int> &arr, int n) {
     int hashh[n + 1] = {0}; // to store numbers from 1 to n in indexes ranging from 1 to n
     for(int num : arr) hashh[num]++;
-    for(int i = 1; i <= n; i++) {
+    for(int i = 0; i <= n; i++) {
         if(!hashh[i]) return i; // i is our missing number since its frequency in the hashh table is zero
     }
     return -1; // unreachable

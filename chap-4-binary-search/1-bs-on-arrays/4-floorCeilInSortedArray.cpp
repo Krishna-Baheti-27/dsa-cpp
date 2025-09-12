@@ -3,12 +3,12 @@
 using namespace std;
 
 int floorInSortedArrayBrute(vector<int> &arr, int key) {
-    // largest number <= key in array
+    // largest number <= key in array or an element in array equal to or just smaller than key
     for(int i = arr.size() - 1; i >= 0; i--) {
         if(arr[i] <= key) return arr[i];
     }
     return -1;
-}
+} // O(N) time
 
 int floorInSortedArrayOptimised(vector<int> &arr, int key) {
     int low = 0, high = arr.size() - 1, ans = -1; // positive only
@@ -22,15 +22,15 @@ int floorInSortedArrayOptimised(vector<int> &arr, int key) {
         }
     }
     return ans;
-}
+} // O(logN) time
 
 int ceilInSortedArrayBrute(vector<int> &arr, int key) {
-    // smallest number >= key in array
+    // smallest number >= key in array, or en element in array equal to or just greater than key
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] >= key) return arr[i];
     }
     return -1;
-}
+} // O(N) time
 
 int ceilInSortedArrayOptimised(vector<int> &arr, int key) {
     int low = 0, high = arr.size() - 1, ans = -1;
@@ -44,7 +44,7 @@ int ceilInSortedArrayOptimised(vector<int> &arr, int key) {
         }
     }
     return ans;
-}
+} // O(logN)
 
 int main() {
     

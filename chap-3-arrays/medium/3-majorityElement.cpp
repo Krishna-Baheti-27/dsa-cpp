@@ -23,18 +23,22 @@ int majorityElMoreBetter(const vector<int> &arr) {
     unordered_map<int,int> mpp;
     for(int el : arr) {
         mpp[el]++;
+        // as soon as the frequency of element increased here to be more than n/ 2 or simply n/2 + 1, we return early and are not interested in calculating its actual frequency
         if(mpp[el] == arr.size() / 2 + 1) return el;
     }
     return -1;
 } // single pass O(n)
 
+
+// the entire moore voting algo is based on the simple logic that if there exists a majority element, that is more than n/2 times it occurs, then it cannot be cancelled or there is not enough fire power to cancel that element
+
 int majorityElOptimal(const vector<int> &arr) {
-    // the intuition of the algo, is that we cosndier one elements as majority element and start counter = 1, when we find its occurence we increase the counter and we find any other we decrease the counter, if counter = 0 (means it was cancelled, means it didnt have more than n/2 occurences otherwise it was impossible to cancel it, so at the end of interation we have a el and IF THE MAJORITY ELEMENT EXISTS, IT WILL BE ELEMENT LEFT AT THE END OR ITERATION ELSE NO MAJORITY element)
+    // the intuition of the algo, is that we cosndier one elements as majority element and start counter = 1, when we find its occurence we increase the counter and we find any other we decrease the counter, if counter = 0 (means it was cancelled, means it didnt have more than n/2 occurences, otherwise it was impossible to cancel it, so at the end of interation we have a el and IF THE MAJORITY ELEMENT EXISTS, IT WILL BE ELEMENT LEFT AT THE END OF ITERATION ELSE NO MAJORITY element)
     int ans, count = 0;
     for(int i = 0; i < arr.size(); i++) {
         if(count == 0) {
-            ans = arr[i];
-            count = 1;
+            ans = arr[i]; // if count zero then pick a new element
+            count = 1; // and make its count = 1
         } else if(arr[i] == ans) {
             count++;
         } else {
@@ -42,7 +46,7 @@ int majorityElOptimal(const vector<int> &arr) {
         }
     } // at the end count basically has no significance
     // now check if ans occurs more than n/2 times, if it does then its the majority
-    // no need to do if there always exists a majority element
+    // no need to do this check if there always exists a majority element
     count = 0;
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] == ans) count++;

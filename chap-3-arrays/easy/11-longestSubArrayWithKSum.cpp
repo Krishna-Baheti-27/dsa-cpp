@@ -73,6 +73,28 @@ int longestSumOptimal(const vector<int> &arr, int k) {
     return maxLen;
 } // O(2n) in worst case, since the inner loop will run total of N times in the whole N iterations of outer loop
 
+
+// you cant remove the inner while loop for this category of two pointer and sliding window
+
+// int longestSubarrayWithGivenSumOptimal(const vector<int> &arr, int k) {
+//     int left = 0, right = 0, sum = arr[0], maxlen = 0;
+//     while(right < arr.size()) {
+//         if(sum > k) {
+//             sum -= arr[left];
+//             left++;
+//         }
+//         if(sum == k) {
+//             // found the subarray
+//             maxlen = max(maxlen, right - left + 1);
+//         }
+//         if(sum < k) {
+//             right++;
+//             sum += arr[right];
+//         }
+//     }
+//     return maxlen;
+// }
+
 int main() {
     
     return 0;
