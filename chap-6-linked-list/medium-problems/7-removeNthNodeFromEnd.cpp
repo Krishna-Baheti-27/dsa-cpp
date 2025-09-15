@@ -13,7 +13,7 @@ class Node {  // can also use struct but you miss all the OOP advantages
         this->data = data;
         next = nullptr;
     }
-};
+};                                                                                                                                                                                    
 
 Node *removeNthNodeFromEndBrute(Node *head, int n) {
     // given 1 <= n << length
@@ -33,23 +33,23 @@ Node *removeNthNodeFromEndBrute(Node *head, int n) {
     }
     // now delete length - n + 1th node from beginning
     temp = head;
-    for(int i = 1; i <= (length - n + 1) - 2 && temp->next; i++) {
+    for(int i = 1; i <= (length - n + 1) - 2 && temp; i++) {
         temp = temp->next;
     }
-    if(temp->next) {
-        Node *toDelete = temp->next;
-        temp->next = temp->next->next;
-        delete toDelete;
-    } // no need to delete if temporary is on last node since temp->next is already null
+    if(!temp || !temp->next) return head; // cant delete nullptr or nullptr->next
+    Node *toDelete = temp->next;
+    temp->next = temp->next->next;
+    delete toDelete;
+
     return head;
 } // O(2N) time, basically two passes
 
 Node *removeNthNodeFromEndOptimal(Node *head, int n) {
     // see lets assume, that we have to delete node at n = 2, from LL of length = 5, so this means the node 5 - 2 = 3 steps from start, is then node previous to the node we want to delete
-    // but wihthout knowing 5 how will know 3, answer is we initially move the 2 steps with our fast pointer and move both slow and fast till fast reaches last node, so technincally the slow pointer moved length - n steps or (5 - 2) 
+    // but wihthout knowing 5 how will know 3, answer is we initially move the 2 steps with our fast pointer and move both slow and fast till fast reaches last node, so technincally the slow pointer moved length - n steps or (5 - 2) since fast moved total of length steps and slow moved n steps lesser than that
     Node *slow = head, *fast = head;
     for(int i = 1; i <= n; i++) {
-        fast = fast->next;
+        fast = fast->next; // we initially move our n steps
     }
     if(fast == nullptr) {
         // we have to delete the head of the linked list
@@ -58,6 +58,7 @@ Node *removeNthNodeFromEndOptimal(Node *head, int n) {
         delete toDelete;
         return head;
     }
+    // sp when we move till the last node we already did n steps using fast, so in total fast moved length number of steps and hence slow moved length - n steps which is exactly what we want
     while(fast->next) {
         slow = slow->next;
         fast = fast->next;

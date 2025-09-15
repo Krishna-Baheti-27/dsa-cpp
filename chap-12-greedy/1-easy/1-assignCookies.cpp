@@ -10,7 +10,7 @@ int findContentChildren(vector<int> &greed, vector<int> &sz) {
     sort(sz.begin(), sz.end());
     int l = 0, r = 0; // r points to greed, l points to sz
     while(l < sz.size() && r < greed.size()) {
-        if(greed[r] <= sz[l]) r++;
+        if(greed[r] <= sz[l]) r++; // satisfying the child greed[r]
         l++;
     }
     return r;

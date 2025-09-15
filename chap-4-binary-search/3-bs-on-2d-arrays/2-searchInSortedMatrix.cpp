@@ -26,7 +26,7 @@ bool searchInSortedMatrixBetter(vector<vector<int>> &matrix, int target) {
         }
     }
     return false;
-} // O(n) + O(logm) only for one row we wil don binary search
+} // O(nlogm) time
 
 bool searchInSortedMatrixOptimal(vector<vector<int>> &matrix, int target) {
     // hypothetically flattening out the matrix so we have one big vector of size m + n which is sorted and we can simply search on it using binary search to get O(log(m + n)) time
@@ -42,7 +42,7 @@ bool searchInSortedMatrixOptimal(vector<vector<int>> &matrix, int target) {
         else low = mid + 1; 
     }
     return false;
-}
+} // O(log(mn))
 
 int main() {
     

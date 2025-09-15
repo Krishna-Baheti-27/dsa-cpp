@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// here we have to check all the way considering the array is circular
+
 // the most naive solution would be using a outer loop from 0 to n - 1 and then for each element, run loop from i + 1 to n - 1 and if not found then from 0 to i - 1
 
 vector<int> nextGreater2Brute(const vector<int> &arr) {
@@ -29,7 +31,8 @@ vector<int> nextGreater2Optimal(const vector<int> &arr) {
             st.pop(); // here we maintain the monotonic order of stack
         }
         if(i < arr.size()) {
-            // this are the elements for which we have to find next greater
+            // this are the elements for which we have to find next greater element or our answer
+            // not for elements for which i >= arr.size() (they are hypothetical, but we still have to maintain monotonic stack order for them)
             // same as in monotonic stack
             if(st.empty()) {
                 ans[i] = -1;

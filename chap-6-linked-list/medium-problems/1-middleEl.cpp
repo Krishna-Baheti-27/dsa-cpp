@@ -41,6 +41,7 @@ Node *middleNodeOptimal(Node *head) {
 Node *middleNodeOptimal(Node *head) {
     // to get the first middle
     Node *slow = head, *fast = head;
+    // check if list is not empty before
     while(fast->next && fast->next->next) {
         slow = slow->next;
         fast = fast->next->next;

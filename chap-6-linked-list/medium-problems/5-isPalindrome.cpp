@@ -52,7 +52,7 @@ bool isPalindromeOptimal(Node *head) {
     }
     // now slow->next points to the second half, since slow is the first middle
     Node *newHead = reverseLL(slow->next); // you reverse the second half
-    // Now keep two pointers one at start of ll and other at start of second half and compare them for palindrome since we have reversed the second half so need to start from back (its already reversed)
+    // Now keep two pointers one at start of ll and other at start of second half and compare them for palindrome since we have reversed the second half so we dont need to start from back (its already reversed)
     Node *first = head, *second = newHead;
     while(second) {
         if(first->data != second->data) {
@@ -63,8 +63,7 @@ bool isPalindromeOptimal(Node *head) {
         first = first->next;
         second = second->next;
     }
-    // same applies here
-    reverseLL(newHead);
+    reverseLL(newHead); // now again reverse so that we do not tamper the list
     return true;
 } // O(2n) time overall
 

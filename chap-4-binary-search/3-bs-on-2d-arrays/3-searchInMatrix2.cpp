@@ -26,7 +26,7 @@ vector<int> searchInMatrixBetter(vector<vector<int>> &matrix, int target) {
         }
     }
     return {-1,-1};
-} // O(n) + O(logm) time
+} // O(nlogm) time because it may happen that target falls in that range but not found
 
 vector<int> searchInMatrixOptimal(vector<vector<int>> &matrix, int target) {
     // we start from the last element of first row and start eliminating, this works because the first row combined with last column and similarly every other pair is definitely sorted

@@ -45,9 +45,26 @@ int trapWaterBetter(vector<int> &arr) {
     return waterTrapped;
 } // O(2N) time and O(N) space
 
-// Optimal remaining
+// Optimal remaining in O(1) space
 
-
+int trapWaterOptimal(vector<int> &arr) {
+    int lMax = 0, rMax = 0, waterTrapped = 0, l = 0, r = arr.size() - 1;
+    // we only have to focus on min(lMax, rMax) so if we sure that we processing smaller first so if arr[l] <= arr[r] then it is guranteed that lMax < rMax => min(lMax, rMax) = lMax
+    while(l < r) {
+        if(arr[l] <= arr[r]) {
+            // we always process the smaller element first
+            if(arr[l] < lMax) waterTrapped += lMax - arr[l]; // only in this case water will be trapped
+            else lMax = arr[l]; // new left max
+            l++; // move l ahead
+        } else {
+            // process arr[r] since its smaller
+            if(rMax > arr[r]) waterTrapped += rMax - arr[r];
+            else rMax = arr[r];
+            r--; // move r behind
+        }
+    }
+    return waterTrapped;
+} // O(N) time and O(1) space
 
 int main() {
     

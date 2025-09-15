@@ -15,7 +15,7 @@ vector<int> nextGreaterElBrute(const vector<int> &arr) {
         else ans.push_back(-1);
     }
     return ans;
-} // O(N^N) time and O(N) space
+} // O(N^2) time and O(N) space
 
 vector<int> nextGreaterElOptimal(const vector<int> &arr) {
     // using a monotonic stack
@@ -23,6 +23,7 @@ vector<int> nextGreaterElOptimal(const vector<int> &arr) {
     vector<int> ans(arr.size(), 0);
     stack<int> st;
     for(int i = arr.size() - 1; i >= 0; i--) {
+        // we do this to maintain our monotonic order
         while(!st.empty() && st.top() <= arr[i]) {
             st.pop(); // pop while stack is not empty or the top of stack is greater
         } 

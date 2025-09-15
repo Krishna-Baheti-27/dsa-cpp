@@ -92,6 +92,7 @@ Node *deleteKth(Node *head, int k) {
         return head;
     }
     Node *temp = head;
+    // why checking temp != nullptr, since at each step we are accessing next field of temp that why check temp != nullptr, if we were to access temp->next->next we would check temp->next != nullptr
     for(int i = 1; i <= k - 2 && temp; i++) temp = temp->next; // we basically stop one node before the node we want to delete using the condition i <= k - 2  but for large k, we will break out of the loop if temp becomes null
     if(!temp || !temp->next) return head; // if either temp or temp->next is null we cant delete 
     Node *nodeToDelete = temp->next;
@@ -108,7 +109,8 @@ Node *deleteValue(Node *head, int value) {
         delete temp;
         return head;
     }
-    while(temp->next) { // we have to make sure temp->next is not nullptr since we are continuously accessing it
+    while(temp->next) { 
+        // if we used temp then we would stop at the node having value but we want to stop one node before and hence temp->next
         if(temp->next->data == value) { // we basically stop one node before the node we want to delete
             Node *toDelete = temp->next;
             temp->next = temp->next->next;
@@ -147,6 +149,7 @@ Node* insertKth(Node *head, int k, int data) {
     }
     Node *temp = head;
     for(int i = 1; i <= k - 2 && temp; i++) {
+        
         temp = temp->next;
     }
      // node where you want to insert is after temp, so we stop at k-1th node or also for large k we stop when temp becomes null

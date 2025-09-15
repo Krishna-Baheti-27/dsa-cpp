@@ -35,7 +35,7 @@ bool hasLoopOptimal(Node *head) {
         if(slow == fast) return true;
     }
     return false; 
-    // they got to collide in a loop becuase slow moved by one step and fast moves by two steps so the distance between them would reduce by one and ultimately reahc 0, for no loop condition the distance will never reduce and only increase
+    // they got to collide in a loop becuase slow moved by one step and fast moves by two steps so the distance between them would reduce by one and ultimately reach 0, for no loop condition the distance will never reduce and only increase
 } // O(N)
 
 int main() {

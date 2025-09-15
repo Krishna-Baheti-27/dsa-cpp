@@ -88,7 +88,7 @@ Node *deleteTail(Node *head) {
 
 
 Node *deleteKth(Node *head, int k) {
-    if(k < 1 || !head) return nullptr;
+    if(k < 1 || !head) return head;
     if(k == 1) {
         if(!head->next) {
             delete head;
@@ -101,8 +101,8 @@ Node *deleteKth(Node *head, int k) {
         return head;
     }
     Node *temp = head;
-    for(int i = 1; i <= k - 2 && temp->next; i++) temp = temp->next;
-    if(!temp->next) return head;
+    for(int i = 1; i <= k - 2 && temp; i++) temp = temp->next;
+    if(!temp || !temp->next) return head;
     Node *toDelete = temp->next;
     temp->next = toDelete->next;
     if(toDelete->next) {

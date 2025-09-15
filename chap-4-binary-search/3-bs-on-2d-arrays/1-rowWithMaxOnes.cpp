@@ -30,14 +30,14 @@ int rowWithMaxOnesOptimal(vector<vector<int>> &matrix) {
             if(matrix[i][mid] == 1) high = mid - 1; // we look for better
             else low = mid + 1; // try to reach one
         }
-        // now low will point to the first index of 1
+        // now low will point to the first index of 1, so total number of ones will be m - low since array is sorted and has m size
         if(m - low > maxOnes) {
             maxOnes = m - low;
             maxRow = i;
         }
     }
     return maxRow;
-}
+} // O(nlogm) time
 
 int main() {
     

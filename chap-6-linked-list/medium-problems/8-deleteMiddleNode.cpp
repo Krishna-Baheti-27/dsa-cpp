@@ -15,6 +15,24 @@ class Node {  // can also use struct but you miss all the OOP advantages
     }
 };
 
+// we have to delete the second middle in case of ll with even nodes else delete middle
+// brute force is just finding the length of ll and delete the (n/2 + 1)th node from beginning
+
+// optimal solution uses tortoise and hare algo
+
+Node* deleteMiddle(Node *head) {
+    if(!head || !head->next) return nullptr;
+    Node *slow = head, *fast = head;
+    while(fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    // slow now points to first middle and hence we can easily delete second middle
+    Node *toDelete = slow->next;
+    slow->next = slow->next->next;
+    delete toDelete;
+    return head; 
+} // O(N/2) time
 
 
 int main() {

@@ -10,8 +10,7 @@ double medianOfRowWiseSortedBrute(vector<vector<int>> &matrix) {
         }
     }
     sort(oneDArr.begin(), oneDArr.end());
-    if(n * m % 2 == 0) return oneDArr[n * m / 2];
-    else return (oneDArr[n * m / 2] + oneDArr[(n * m / 2) - 1]) / 2;
+    return oneDArr[n * m / 2]; // sinnce there will always be odd number of elements since both m and n are odd and hence only value of median is straight forward
 } // O(nm) + O(nm * log(m + n)) time
 
 int main() {

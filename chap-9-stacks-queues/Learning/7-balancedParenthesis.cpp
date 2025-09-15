@@ -21,7 +21,7 @@ bool isBalanced(string s) {
             st.pop();
         }
     }
-    return st.empty();
+    return st.empty(); // st.empty() is a boolean value thats why it works
 }
 
 int main() {

@@ -58,7 +58,7 @@ int lengthOfLoopOptimal(Node *head) {
             int length = 0;
             do {
                 length++;
-                slow = slow->next;
+                slow = slow->next; // make fast wait there and let slow take a full loop again to count lengthS
             } while(slow != fast);
             return length;
         }
