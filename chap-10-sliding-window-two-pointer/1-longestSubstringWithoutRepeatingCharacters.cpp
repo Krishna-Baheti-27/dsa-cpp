@@ -12,10 +12,7 @@ int longestSubstringBrute(string s) {
             unordered_map<char,int> mpp;
             int length = 0;
             for(int k = i; k <= j; k++) {
-                if(mpp.count(s[k])) {
-                    length = 0;
-                    break;
-                } 
+                if(mpp.count(s[k])) break;
                 mpp[s[k]]++;
                 length++;
             }
@@ -24,9 +21,23 @@ int longestSubstringBrute(string s) {
         }
     }
     return maxlen;
-} // O(n^n^n) TLE
+} // O(n^3) TLE
 
-int longestSubstringBruteUsingHashing(string s) {
+int longestSubstringBetterUsingMap(string s) {
+    int maxlen = 0;
+    for(int i = 0; i < s.length(); i++) {
+        unordered_map<char,int> mpp;
+        for(int j = i; j < s.length(); j++) {
+            if(mpp.count(s[j])) break;
+            mpp[s[j]]++;
+            maxlen = max(maxlen, j - i + 1);
+            // since in each iteration we are processing a new substring hence update maxlen by computing length of each substring
+        }
+    }
+    return maxlen;
+} // O(n^2) time and O(n) space 
+
+int longestSubstringBetterUsingHashing(string s) {
     int maxlen = 0;
     for(int i = 0; i < s.length(); i++) {
         int hashh[256] = {0};
@@ -42,7 +53,7 @@ int longestSubstringBruteUsingHashing(string s) {
         }
     }   
     return maxlen;
-} // O(n^n) time and O(256) space
+} // O(n^2) time and O(256) space
 
 // for any problem involving max/min substring or any sub thingy we should start thinking of two pointer and sliding window, it is not a generic or specific algorithm but changes according to problem, but does gives us O(N) solution which is what we want by changing the window
 
@@ -63,7 +74,20 @@ int longestSubstringOptimal(string s) {
         r++;
     }
     return maxlen;
-} // O(N), O(256)
+} // O(N), O(256) 
+
+int longestSubstringOptimalBetter(string s) {
+    int l = 0, r = 0, maxlen = INT_MIN;
+    vector<int> hashh(256, -1);
+    while(r < s.length()) {
+        if(hashh[s[r]] >= l) l = hashh[s[r]] + 1;
+        // here we dont have to check if s[r] is present in map by checking hashh[s[r]] != -1, since even if its not present then it would be -1 and -1 <= l always as l starts from 0
+        maxlen = max(maxlen, r - l + 1);
+        hashh[s[r]] = r;
+        r++;
+    }
+    return maxlen;
+}
 
 int main() {
     

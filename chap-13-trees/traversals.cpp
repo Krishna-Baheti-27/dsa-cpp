@@ -4,7 +4,7 @@ using namespace std;
 // Full Binary tree -> either 0 or 2 children for all nodes
 // Complete Binary Tree -> all levels are filled except possibly the last level which has nodes as left as possible
 // Perfect Binary tree -> All leaf nodes are at the same level
-// Balanced Binary tree -> Height of tree is at max logN
+// Balanced Binary tree -> Height of tree is at max logN (min height possible)
 // Degenerte tree -> Essentially a linked list (every node has single child in one direction)
 
 class Node {
@@ -153,9 +153,8 @@ vector<int> iterativePostorderUsing2Stacks(Node *root) {
     stack<Node*> st1, st2;
     st1.push(root);
     while(!st1.empty()) {
-        Node *curr = st1.top();
+        Node *curr = st1.top(); st1.pop();
         st2.push(curr);
-        st1.pop();
         if(curr->left) st1.push(curr->left);
         if(curr->right) st1.push(curr->right);
     }  

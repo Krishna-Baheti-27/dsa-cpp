@@ -34,6 +34,7 @@ void moveZeroesMostOptimised(vector<int> &arr) {
             break; // runs O(x) times since we break out where x is the length  from 0th index to first zero
         }
     }
+    // here we are finding the first zero which is not needed, as we can simply use the approach discussed below
     // If no zero found, no need to process
     if(j == -1) return;
     for(int i = j + 1; i < arr.size(); i++) {
@@ -51,7 +52,7 @@ void moveZeroesSwapSinglePassMostOptimal(vector<int>& nums) {
     for(int i = 0; i < nums.size(); i++) {
         if(nums[i] != 0) {
             swap(nums[i], nums[lastPosToPlace]);
-            lastPosToPlace++; // after swap index of first zero has increased by 1 and hence move the pointer
+            lastPosToPlace++; // after swap index of first zero has increased by 1 since that position is now occupied by a non zero number and hence move the pointer
         }
     }
 } // O(N) time, more better way to write

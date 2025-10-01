@@ -12,7 +12,7 @@ int squareRootBrute(int n) {
 int squareRootBruteUsingAnswer(int n) {
     int ans = 1;
     for(int i = 1; i <= n; i++) { // answer cannot exceed n
-        if(i *i <= n) ans = i;
+        if(i *i <= n) ans = i; // can be answer but look for better
         else break;
     }
     return ans;

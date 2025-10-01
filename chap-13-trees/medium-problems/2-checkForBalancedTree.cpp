@@ -28,14 +28,16 @@ bool checkForBalancedTreeBrute(Node *root) {
     if(!left || !right) return false; // if any of the left or right subtrees is not balanced then our answer is false
     return true; // else true
 } // O(N) for traversal but each time we are finding height of left and right subtree and hence O(N) there
-// so total O(N*N)
+// so total O(N^2)
 
-// here we are tweaking the height function to return -1 if the tree is not balanced and return the actual height if the tree is balanced
+
+
+// here we are tweaking the height function to return -1 if the tree is not balanced and return the actual height if the tree is balanced, we are returning actual height for balanced since we want to calculate abs(lh - rh) to decide whether tree is balanced or not
 int heightTweaked(Node *root) {
     if(root == nullptr) return 0;
     int heightLeft = heightTweaked(root->left);
     int heighRight = heightTweaked(root->right);
-    if(heighRight == -1 || heightLeft == -1) return -1; // then also not balanced 
+    if(heighRight == -1 || heightLeft == -1) return -1; // then also not balanced, if any one or both from left and right subtree are returning -1
     if(abs(heighRight - heightLeft) > 1) return -1; // not balanced
     return 1 + max(heightTweaked(root->left), heightTweaked(root->right)); 
 }

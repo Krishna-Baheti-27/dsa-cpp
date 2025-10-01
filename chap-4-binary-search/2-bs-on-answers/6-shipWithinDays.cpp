@@ -5,7 +5,7 @@ using namespace std;
 
 // we have to find the minimum ship weight capacity if we have to ship total n parcels having weights, wegihts[i] in at most days days
 
-// see we can ship each parcel on the first day, but that would mean max ship capacity but rahter we should try to ship them in the order given in days days so that we minimise ship capacity
+// see we can ship each parcel on the first day, but that would mean max ship capacity but rahter we should try to ship them in the order given in days days so that we minim ise ship capacity
 // so we have to use all days, efficiently
 
 int shipWithinDaysBrute(vector<int> &weights, int days) {

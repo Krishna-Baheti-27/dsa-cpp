@@ -15,16 +15,16 @@ int minDaysBrute(vector<int> &bloomDay, int m, int k) {
         for(int i = 0; i < bloomDay.size(); i++) {
             if(bloomDay[i] <= day) counter++;
             else {
-                bouquetCount += counter / k;
+                bouquetCount += counter / k; 
                 counter = 0;
             }
         } 
         bouquetCount += counter / k;
         if(bouquetCount >= m) return day;
     }
-    return maxDays; // it is only possible when we take maxDays 
+    return maxDays; // it is only possible when we take maxDays, or any other case is not possible where we have value of day < maxDay
 } // O(max - min + 1) * O(n)
-
+ 
 int minDaysOptimal(vector<int> &bloomDay, int m, int k) {
     if((long long)m * k > bloomDay.size()) return -1;
     int low = *min_element(bloomDay.begin(), bloomDay.end()), high = *max_element(bloomDay.begin(), bloomDay.end());

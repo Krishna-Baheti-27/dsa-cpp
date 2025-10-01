@@ -20,15 +20,16 @@ string removeParenBrute(const string &s) {
 }
 
 string removeParenBetter(const string &s) {
-    int counter = 0; // to determine whether stack is empty or not
+    int counter = 0; // to determine whether stack is empty or not, counter = 0 means stack is empty
     string ans = "";
     for(int i = 0; i < s.size(); i++) {
         if(s[i] == '(') {
             if(counter != 0) ans += s[i];
+            // if counter == 0 then stack is empty and since we want to remove outer parenthesis from primitive decomposition hence we dont add it to answer
             counter++;
         } else {
             counter--;
-            if(counter != 0) ans += s[i];
+            if(counter != 0) ans += s[i]; // same logic here we dont add to answer if that is the last outer paren since we want to discard it
         }
     }
     return ans;
@@ -36,6 +37,7 @@ string removeParenBetter(const string &s) {
 
 void removeParenOptimal(string &s) {
     // using two pointers technique
+    // whenever stack is non empty or counter is non zero then only we write in the string using write_ptr counter which points to the next location on which we want to write
     int write_ptr = 0, counter = 0; // still use a counter to act like a stack
     for(int i = 0; i < s.size(); i++) {
         if(s[i] == '(') {
@@ -48,6 +50,7 @@ void removeParenOptimal(string &s) {
     }
     s.resize(write_ptr); // only take the string from 0 to writer_ptr - 1 index hence we truncate it
 }
+// but here we are actually modifying the actual data so maybe that is not encouraged
 
 int main() {
     

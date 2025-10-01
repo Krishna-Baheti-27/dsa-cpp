@@ -23,7 +23,7 @@ int minEatingSpeedBrute(vector<int> &piles, int h) {
 
 
 // whenever we have this, wherr answer lies in range, and we have to find min, max then binary search
-int minEatingSpeedOptimal(vector<int> &piles, int h) {
+int minEatingSpeedOptimal1(vector<int> &piles, int h) {
     int low = 1, high = *max_element(piles.begin(), piles.end());
     int ans = 1;
     while(low <= high) {
@@ -44,7 +44,7 @@ int minEatingSpeedOptimal(vector<int> &piles, int h) {
     return ans;
 }
 
-int minEatingSpeedMostOptimal(vector<int> &piles, int h) {
+int minEatingSpeedOptimal2(vector<int> &piles, int h) {
     int low = 1, high = *max_element(piles.begin(), piles.end());
     while(low <= high) {
         long long mid = (low + high) / 2;

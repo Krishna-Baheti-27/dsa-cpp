@@ -50,8 +50,7 @@ vector<int> intersectionOfArraysOptimised(vector<int> &arr1, vector<int> &arr2) 
         else if(arr1[i] > arr2[j]) j++; // else increment, j so that we may get it equal to i
     }
     return arr3;
-} ///////////////////////     INCORRECT AS WE DO NOT MOVE AHEAD IF BOTH THEM ARE EQUAL BUT THE ELEMENT IS
-/////////////////////////     ALREADY PRESENT IN THE ARRAY
+} ///////////////////////     INCORRECT AS WE DO NOT MOVE AHEAD IF BOTH THEM ARE EQUAL IRRESPECTIVE OF WHETHER WE PUSH IT IN THE ARRAY
 
 vector<int> intersectionOfArraysOptimised2(const vector<int> &arr1, const vector<int> &arr2) {
     int i = 0, j = 0; // indexes for arr1, arr2

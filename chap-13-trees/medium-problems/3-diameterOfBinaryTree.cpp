@@ -30,17 +30,18 @@ int diameterOfTreeBrute(Node *root) {
     diameterOfTreeBrute(root->left);
     diameterOfTreeBrute(root->right); 
     return maxDiameter;
-} // O(N^N) again since for traversing we require O(N) time and for each we are checking height so O(N) time there
+} // O(N^2) again since for traversing we require O(N) time and for each we are checking height so O(N) time there
 
 // now to do this in optimal O(N) time, we tweak the function using which we find height of tree
 // basically we can maintain a maxD variable w=in that function which when calculating the height will also set new value of max if its greater than leftHeight + rightHeight and then we simply return this maxD
 
-int heightTweaked(Node *root, int &maxDiameter) {
+int heightTweaked(Node *root, int &maxDiameter) { // take by reference
     if(root == nullptr) return 0; 
     int heightLeft = heightTweaked(root->left, maxDiameter);
     int heightRight = heightTweaked(root->right, maxDiameter);
     maxDiameter = max(maxDiameter, heightLeft + heightRight);
     return 1 + max(heightLeft, heightRight);
+    // maintaing maxDiameter accross function calls so we can traverse the tree and calculate the height while traversing hence saving crucial time
 }
 
 int diameterOfTreeOptimal(Node *root) {

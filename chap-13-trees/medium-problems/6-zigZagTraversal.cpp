@@ -19,12 +19,13 @@ vector<vector<int>> zigZagTraversal(Node *root) {
     q.push(root);
     while(!q.empty()) {
         int size = q.size();
-        vector<int> temp(size);
+        vector<int> temp(size); // to store traversal of that level
         for(int i = 0; i < size; i++) {
             Node *root = q.front(); q.pop();
             if(root->left) q.push(root->left);
             if(root->right) q.push(root->right);
             int index = flag ? size - i - 1 : i; // insert in the order according to the flag
+            // flad == 1 means insert from back and hence size - i - 1, else insert from front and hence index = i
             temp[index] = root->data;        
         }
         ans.push_back(temp);

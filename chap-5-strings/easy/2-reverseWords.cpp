@@ -103,48 +103,6 @@ string reverseCorrect1(string &s) {
     return ans.substr(1); // dont include first index since its a space 
 }
 
-#include <string>
-#include <algorithm>
-
-std::string reverseWordsAndTrim(std::string s) {
-    // 1. Reverse the whole string
-    std::reverse(s.begin(), s.end());
-
-    int n = s.length();
-    int read_ptr = 0;  // Pointer to scan the original (now reversed) string
-    int write_ptr = 0; // Pointer to place the next character of the final string
-
-    while (read_ptr < n) {
-        // Skip leading spaces for the current word
-        while (read_ptr < n && s[read_ptr] == ' ') {
-            read_ptr++;
-        }
-        if (read_ptr == n) break; // End of string
-
-        // If this isn't the first word, add a single space before it
-        if (write_ptr != 0) {
-            s[write_ptr] = ' ';
-            write_ptr++;
-        }
-
-        // Find the start and end of the word
-        int word_start = write_ptr;
-        while (read_ptr < n && s[read_ptr] != ' ') {
-            s[write_ptr] = s[read_ptr];
-            write_ptr++;
-            read_ptr++;
-        }
-
-        // 2. Reverse the individual word that we just copied
-        std::reverse(s.begin() + word_start, s.begin() + write_ptr);
-    }
-
-    // 3. Resize the string to remove the garbage characters at the end
-    s.resize(write_ptr);
-
-    return s;
-}
-
 int main() {
     
     return 0;

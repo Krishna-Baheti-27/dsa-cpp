@@ -2,9 +2,9 @@
 using namespace std;
 
 // you can flip at most k o's to be ones and then return the max streak of cons ones that can be possible
-// this is same as saying find the longest subarray with atmost k zeros and return its length, becasue we can flip exactly k times
+// this is same as saying find the longest length subarray with atmost k zeros and return its length, becasue we can flip exactly k times
 
-int maxConsOnesBrute(vector<int> &arr, int k) {
+int maxConsOnesBrute(vector<int> &arr,  int k) {
     // so brute force would be generate all subarrays, and then find maxlen of subarray having atmost k zeros
     int maxlen = 0;
     for(int i = 0; i < arr.size(); i++) {
@@ -16,30 +16,8 @@ int maxConsOnesBrute(vector<int> &arr, int k) {
         }
     }
     return maxlen;
-} // O(N^N) would be TLE
-
-// int maxConsOnesOptimalIncorrect(vector<int> &arr, int k) {
-//     // sliding window and two pointer
-//     int l = 0, r = 0, maxlen = 0, numOfZeroes = 0;
-//     while(r < arr.size()) {
-//         if(arr[r] == 0) {
-//             numOfZeroes++;
-//         }   
-//         if(numOfZeroes <= k) {
-//             maxlen = max(maxlen, r - l + 1);
-//             r++;
-//         } else {
-//             // then move l and change the window so that only k zeroes are present
-//             if(arr[l] == 0) {
-//                 numOfZeroes--; // since we skipped that zero to hence make numOfZeroes in that window to be one less
-//             }
-//             // if we skip 1, it is not to our advantage
-//             l++; // in either case we move till we make numOfZeroes in our control
-//         } // this doesnt work becuase if you delegate the task of moving l to outerloop then arr[r] == 0 will hit everytime increasing the numOfZeroes++, essentially an infinite loop
-//     }
-//     return maxlen;
-// }
-
+} // O(N^2) would be TLE
+ 
 int maxConsOnesBetter(vector<int> &arr, int k) {
     int l = 0, r = 0, maxlen = 0, numOfZeroes = 0;
     while(r < arr.size()) {

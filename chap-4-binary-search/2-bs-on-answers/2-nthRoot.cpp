@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// the problem is nth root of num
+
 int nthRootOfNumBrute(int n, int num) {
     for(int i = 1; i <= num; i++) {
         int number = pow(i,n); // better than multiplying
@@ -37,7 +39,7 @@ int nthRootOfNumOptimal(int n, int num) {
         }
     }
     return -1; // no answer possible
-} // O(logm * logn) since we are applying binary search on m elements, and in each iteration we doing pow(mid, n) hence O(logN) time for that
+} // O(log(num) * logn) since we are applying binary search on m elements, and in each iteration we doing pow(mid, n) hence O(logN) time for that
 
 // but this code fails for super large test cases since, pow(mid, n) will be huge but the trick is that we dont need to calculate exact value of pow(mid, n) since thats irrelevant, what we need is to just find out whether pow(mid, n) is lesser/equal/ greater than m, and once we find that lets say its greater, we stop our computation right there without finding its complete value
 
@@ -64,7 +66,7 @@ int nthRootOfNumMostOptimal(int n, int num) {
         }
     }
     return -1; // no nth root exists
-}
+} // O(log(num) * n) since here we cant apply binary exponentiation or perform pow() in logn time
 
 int main() {
     

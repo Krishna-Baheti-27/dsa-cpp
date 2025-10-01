@@ -39,6 +39,7 @@ void sortArrOptimal(vector<int> &arr) {
         } else {
             swap(arr[mid], arr[high]);
             high--;
+            // here we dont do mid++, since we dont know what was arr[high], if it was 0 or 2 then we again need to sort it and cant ignore it
         }
     }
     // in each case we are either moving mid ahead or high behind so essentially if every element was unosrted then we would move exactly n times

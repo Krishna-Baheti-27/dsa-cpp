@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std; 
 
-// to get the boundary traversal of a tree in anticlockwise fashion we must first get the left boundary of tree excluding the leaf, then the leaf nodes and then the right boundary of the tree excluding the leaf nodes and thus it will give us the entire boundary traversal of the tree in anticlockwise sense
+// to get the boundary traversal of a tree in anticlockwise fashion we must first get the left boundary of tree excluding the leaf, then the leaf nodes and then the right boundary of the tree in reverse fashion excluding the leaf nodes and thus it will give us the entire boundary traversal of the tree in anticlockwise sense
 
 class Node {
     public:
@@ -9,7 +9,7 @@ class Node {
     Node *left;
     Node *right;
     Node(int val) {
-        data = val;
+        data = val; 
         left = right = nullptr;
     }
 };
@@ -32,6 +32,7 @@ void addLeaves(Node *root, vector<int> &arr) {
     // preorder traversal using root left right and adding all leaves
     // do for the root only if it is a leaf
     if(isLeaf(root)) {
+        // this makes sure we add only the leaves when doing this preorder traversal of root left and right
         arr.push_back(root->data);
         return;
     }
@@ -43,10 +44,14 @@ void addLeaves(Node *root, vector<int> &arr) {
 
 void rightBoundary(Node *root, vector<int> &arr) {
     Node *rootRight = root->right;
+    vector<int> temp;
     while(rootRight) {
-        if(!isLeaf(rootRight)) arr.push_back(rootRight->data);
+        if(!isLeaf(rootRight)) temp.push_back(rootRight->data);
         if(rootRight->right) rootRight = rootRight->right;
         else rootRight = rootRight->left;
+    }
+    for(int i = temp.size() - 1; i >= 0; i--) {
+        arr.push_back(temp[i]);
     }
 }
 

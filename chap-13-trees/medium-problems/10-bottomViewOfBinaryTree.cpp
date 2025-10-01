@@ -12,9 +12,9 @@ class Node {
     }
 };
 
-// same as in vertical order traversal of binary tree, here we want to find the top view, which basically means we do not have to maintain level of each node, but instead we only store the vertical for a node and when we traverse in the map we simply get those node (each vertical will store only one node since we are talking about top view)
+// same as in vertical order traversal of binary tree, here we want to find the bottom view, which basically means we do not have to maintain level of each node, but instead we only store the vertical for a node and when we traverse in the map we simply get those node (each vertical will only store the node at the last level since we are talking about bottom view)
 
-vector<int> topView(Node *root) {
+vector<int> bottomView(Node *root) {
     if(!root) return {};
     map<int, int> mpp; // (vertical, node)
     // very important to use ordered map so we store vertical in sorted order from minimum vertical
@@ -24,8 +24,8 @@ vector<int> topView(Node *root) {
         auto p = q.front(); q.pop();
         Node *node = p.first;
         int vertical = p.second;
-        if(mpp.find(vertical) == mpp.end()) mpp[vertical] = node->data;
-        // if it doesnt exist then only insert in the map, since we only want the top or first occurences and allowing the inner occurences to overwrite the output 
+        mpp[vertical] = node->data;
+        // let new nodes at bottom levels overwrite the data for a given vertical since we actually want the last node for that level
         if(node->left) {
             q.push({node->left, vertical - 1});
         }
