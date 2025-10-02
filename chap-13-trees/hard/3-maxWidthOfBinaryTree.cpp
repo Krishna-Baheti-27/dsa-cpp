@@ -58,18 +58,19 @@ int widthOfBinaryTreeBetter(Node *root) {
         long long first = 0, last = 0;
 
         for (int i = 0; i < size; i++) {
-            long long currId = q.front().second - minIdx;  // normalize
+            long long currId = q.front().second - minIdx;  // normalize =>  i = i - minIdx  
             Node* node = q.front().first;
             q.pop();
 
             if (i == 0) first = currId;
             if (i == size - 1) last = currId;
 
-            if (node->left) q.push({node->left, 2 * currId + 1});
-            if (node->right) q.push({node->right, 2 * currId + 2});
+            if (node->left) q.push({node->left, 2 * currId + 1}); // 2*i + 1
+            if (node->right) q.push({node->right, 2 * currId + 2}); // 2*i + 2
         }
 
         width = max(width, (int)(last - first + 1));
+        // first and last are used here only to count the number of nodes in that level and they do not play any role for generating indices for nodes to be inserted below that level
     }
     return width;
 } // O(n) time and O(n) space
