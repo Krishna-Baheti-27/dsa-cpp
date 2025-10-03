@@ -1,14 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// there are various brute for solutions but no need to waste time on those, just undertand this easy to follow logical and optimal solution
+
 int maxConsOnes(vector<int> &arr) {
     int currentStreak = 0, maxStreak = 0;
     for(int num : arr) {
         if(num == 1) {
             currentStreak++;
-            maxStreak = max(maxStreak, currentStreak);
+            maxStreak = max(maxStreak, currentStreak); // update the maxstreak always
         } else {
-            currentStreak = 0;
+            currentStreak = 0; // any occurence of element other than 1, breaks the cuurentStreak
         }
     }
     return maxStreak;

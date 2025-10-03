@@ -32,7 +32,10 @@ int countSubarraysWithMaxSumK(vector<int> &arr, int k) {
             sum -= arr[l];
             l++;
         }
-        count += (r - l + 1); // this are the number of subarrays having sum <= k, basically equivalent to length of the window
+        // now we have sum <= k for the window [l,r], so how many subarrays are present in the window [l,r] the answer is exactly r - l + 1, so we add those
+        // basically we are counting number of subarrays ending at index r, and in the window [l,r]
+        // this because we added the new element arr[r], so doing this we ensure that we are not counting any subarray more than once
+        count += (r - l + 1); 
         r++;
     }
     return count;

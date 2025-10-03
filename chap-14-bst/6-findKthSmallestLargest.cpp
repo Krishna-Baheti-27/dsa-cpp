@@ -21,20 +21,27 @@ class Node {
 // here is the optimal approach
 // we use a counter and we increment it each time we visit a node when count == k we have our answer
 
-int inorderHelper(Node *root, int k, int &count) {
-    if(!root) return -1;
-    if(count == k) return root->data;
-    inorderHelper(root->left, k, count); // left
-    count++; // root
-    inorderHelper(root->right, k, count); // right
+void inorderHelper(Node *root, int k, int &count, int &result) {
+    if(!root || count >= k) return;
+    inorderHelper(root->left, k, count, result); // left
+    count++; // we came on root of this node after left so count it as a visit
+    if(count == k) {
+        result = root->data;
+        return;
+    } // we visited exactly k element, so this node is our answer
+    inorderHelper(root->right, k, count, result); // right
 }
 
-int kthSmallest(Node *root, int k) {
-    int count = 0;
-    return inorderHelper(root, k, count);
+int kthSmallestBetter(Node *root, int k) {
+    int count = 0, result = root->data;
+    inorderHelper(root, k, count, result);
+    return result;
 } // O(N) time and O(N) recursion stack space
 
-// Even more optimised is 
+// To find the kth largest, first do any traversal and count the number of nodes, let it be N
+// so kth largest is same as N- k th smallest
+
+// Even more optimised is using the morris traversal, so O(N) time and O(1) space and everything remains same just add this counter logic
 
 int main() {
     

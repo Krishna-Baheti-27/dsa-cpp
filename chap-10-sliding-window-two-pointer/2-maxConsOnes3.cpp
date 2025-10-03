@@ -47,11 +47,11 @@ int maxConsOnesOptimal(vector<int> &arr, int k) {
         if(numOfZeroes <= k) {
             maxlen = max(maxlen, r - l + 1);
         }
-        r++; // always move ahead is what i missed earlier
+        r++; // always move ahead
     }
     return maxlen;
     // this works because the size of window stays the same as maximum enocutered so far since always either r moves or l moves by 1
-}
+} // O(N) time
 
 int main() {
     

@@ -15,7 +15,7 @@ class Node {
 Node *insertInBST(Node *root, int val) {
     if(!root) {
         root = new Node(val);
-        return root; // handling the edge case
+        return root; // handling the edge case of inserting the root itself
     }
     Node *trueRoot = root; // preserve the root since it will be lost in traversal
     while(true) {
@@ -29,7 +29,7 @@ Node *insertInBST(Node *root, int val) {
             }
         } else { // (we wont have any case of root->data == val)
             if(root->left) root = root->left; // traverse further only if left exists
-            else {
+            else { 
                 root->left = new Node(val);
                 break;
             } 
@@ -37,6 +37,16 @@ Node *insertInBST(Node *root, int val) {
     }
     return trueRoot;
 } // O(logN) time and O(1) space
+
+Node* insertInBSTRecursive(Node *root, int val) {
+    if(!root) return new Node(val); // handling insertion of root
+    if(root->data > val) {
+        root->left = insertInBSTRecursive(root->left, val);
+    } else {
+        root->right = insertInBSTRecursive(root->right, val);
+    }  
+    return root;
+} // O(logn) time and O(h) space
 
 int main() {
     

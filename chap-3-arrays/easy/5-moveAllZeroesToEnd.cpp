@@ -14,7 +14,7 @@ void moveZeroesBrute(vector<int> &arr) {
     }
 }
 
-void moveZeroesOptimised(vector<int>& nums) {
+void moveZeroesBetter(vector<int>& nums) {
     int j = 0;
     for(int i = 0; i < nums.size(); i++) {
         if(nums[i] != 0) nums[j++] = nums[i]; // store all the non zero
@@ -22,32 +22,42 @@ void moveZeroesOptimised(vector<int>& nums) {
     for(int k = j; k < nums.size(); k++) {
         nums[k] = 0; // store all the zeroes later
     }  
-        // O(n + d) where d is number of zeroes
+    // O(n + d) where d is number of zeroes
 }
 
+// now is the above better code we had to again go and place the zeroes in end because thats what the question demans unlike remove duplicated which said we dont care about duplicate elements
+// now if we have to move all the zeroes in end, whenever we encounter a non zero element we must swap it with the first occuring zero, which will send the zero at the start to back in elements position and the element which is non zero in front which is exactly what we want
+
+// so we have to find the position of the first zero, and then for any other non zero element swap it with position of first zero and increment that position since that is now occupied by non zero element so that wont be the position of zero anymore
+
 // THIS IS THE BEST SOLUTION IF YOU ALSO FOCUS ON READABILITY
-void moveZeroesMostOptimised(vector<int> &arr) {
+void moveZeroesOptimal1(vector<int> &arr) {
     int j = -1;
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] == 0) {
             j = i; // here we find the first zero
-            break; // runs O(x) times since we break out where x is the length  from 0th index to first zero
+            break; 
         }
     }
-    // here we are finding the first zero which is not needed, as we can simply use the approach discussed below
-    // If no zero found, no need to process
-    if(j == -1) return;
+
+    if(j == -1) return; // if no zero found then return early as no need to process
+
     for(int i = j + 1; i < arr.size(); i++) {
         if(arr[i] != 0) {
-            // we swap arr[i] with arr[j] essentially swapping so that non zero elements come before and if it is a zero we dont swap, as arr[j] is zero and arr[i] is not zero
+            // for non zero element we swap it with first zero found 
             swap(arr[i], arr[j]);
-            j++; // we move j ahead because since the zero has been swapped, j should point to index of last encountered zero
+            j++; // since the next location now has zero value, and we can prove this
         }
     }
-} // O(N) time
+} // O(N) time and O(1) space
 
-void moveZeroesSwapSinglePassMostOptimal(vector<int>& nums) {
-    int lastPosToPlace = 0; // keeps track of what is the last position to place a non zero element
+// How to prove that after j++, j woudl always point to the zero and everything on left (< j) is non zero 
+// so we know that if there is streak of zeroes then j++ woudl certainly make it point to 0
+// if i is the immediate non zero element after j , which means i == j + 1, so when we swap them now arr[i] = 0, so when j++ , j now point to 0, HENCE PROVED
+
+void moveZeroesOptimal2(vector<int>& nums) {
+    int lastPosToPlace = 0; 
+    // keeps track of what is the last position to place a non zero element
     // or basically keeps track of the first zero found and maintains it
     for(int i = 0; i < nums.size(); i++) {
         if(nums[i] != 0) {
@@ -57,12 +67,14 @@ void moveZeroesSwapSinglePassMostOptimal(vector<int>& nums) {
     }
 } // O(N) time, more better way to write
 
+// so both solution take O(N) time but second one performs unnecessary swaps, in worst case N swap if array does not contain zero whereas the first one would simply check for no zeroes and wont waste time in performing unnecessary swaps
+
 
 int main() {
     vector<int> arr = {1,0,2,3,2,0,0,4,5,1};
     for(int num : arr) cout << num << ' ';
     cout << '\n';
-    moveZeroesSwapSinglePassMostOptimal(arr);
+    moveZeroesOptimal1(arr);
     for(int num : arr) cout << num << ' ';
     cout << '\n';
     return 0;

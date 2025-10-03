@@ -2,12 +2,13 @@
 using namespace std;
 
 // subarray is contiguous part of array
+// we have to find the longest subarray having given sum k
 
 int longestSubarrayBrute(const vector<int> &arr, int k) {
     int maxLen = 0;
     for(int i = 0; i < arr.size(); i++) {
         for(int j = i; j < arr.size(); j++) {
-            // now we know that subarray is from i to j so lets find the sum of subarray anc check if k
+            // now we know that subarray is from i to j so lets find the sum of subarray 
             int sum = 0;
             for(int k = i; k <= j; k++) {
                 sum += arr[k];
@@ -16,7 +17,7 @@ int longestSubarrayBrute(const vector<int> &arr, int k) {
         }
     }
     return maxLen;
-} //  approx O(n^n^n)
+} //  approx O(n^3) time
 
 int longestSubarrayBruteBetter(const vector<int> &arr, int k) {
     // optimising the brute force
@@ -24,13 +25,13 @@ int longestSubarrayBruteBetter(const vector<int> &arr, int k) {
     for(int i = 0; i < arr.size(); i++) {
         int sum = 0;
         for(int j = i; j < arr.size(); j++) {
-            // sub array is from i to j, so wh ydo we need a extra loop, we caculate the sum in each iteration and that would be the sum of that subaray
+            // sub array is from i to j, so why do we need a extra loop, we caculate the sum in each iteration and that would be the sum of that subaray
             sum += arr[j];
             if(sum == k) maxLen = max(maxLen, j - i + 1);
         }
     }
     return maxLen;
-} // O(n^n)
+} // O(n^2) time
 
 int longestSubarrayBetter(const vector<int> &arr, int k) {
     unordered_map<int,int> mpp;
@@ -73,27 +74,35 @@ int longestSumOptimal(const vector<int> &arr, int k) {
     return maxLen;
 } // O(2n) in worst case, since the inner loop will run total of N times in the whole N iterations of outer loop
 
+// Writing the above code in standard sliding window and two pointer style
 
-// you cant remove the inner while loop for this category of two pointer and sliding window
+int longestSumOptimalReadable(const vector<int> &arr, int k) {
+    int sum = 0, l = 0, r = 0, maxlen = 0; // our window is from [l,r]
+    while(r < arr.size()) {
+        sum += arr[r];
+        while(sum > k) { // invalid sum, no need to check l <= r, that is handled implicitly
+            sum -= arr[l];
+            l++; // shrink the window when it becomes invalid
+        }
+        if(sum == k) maxlen = max(maxlen, r - l + 1);
+        r++; // expand the window
+    }
+    return maxlen;
+} // O(2n) time
 
-// int longestSubarrayWithGivenSumOptimal(const vector<int> &arr, int k) {
-//     int left = 0, right = 0, sum = arr[0], maxlen = 0;
-//     while(right < arr.size()) {
-//         if(sum > k) {
-//             sum -= arr[left];
-//             left++;
-//         }
-//         if(sum == k) {
-//             // found the subarray
-//             maxlen = max(maxlen, right - left + 1);
-//         }
-//         if(sum < k) {
-//             right++;
-//             sum += arr[right];
-//         }
-//     }
-//     return maxlen;
-// }
+int longestSumOptimalFinal(const vector<int> &arr, int k) {
+    int sum = 0, l = 0, r = 0, maxlen = 0; // our window is from [l,r]
+    while(r < arr.size()) {
+        sum += arr[r];
+        if(sum > k) { // invalid sum, no need to check l <= r, that is handled implicitly
+            sum -= arr[l];
+            l++; // shrink the window when it becomes invalid
+        }
+        if(sum == k) maxlen = max(maxlen, r - l + 1);
+        r++; // expand the window
+    }
+    return maxlen;
+} // it is debatable whether this code is valid or not, so hold on
 
 int main() {
     

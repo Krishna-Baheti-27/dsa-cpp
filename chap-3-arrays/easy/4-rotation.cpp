@@ -14,7 +14,7 @@ void leftRotateBy1(vector<int> &arr) { // elements from left are moved to right 
 void rightRotateBy1(vector<int> &arr) { // elements from right are moved to left is right rotation
     // {1,2,3,4,5} becomes {5,1,2,3,4} // from back to starting
     int last = arr[arr.size() - 1]; // start from last element and shift it by one place
-    for(int i = arr.size() - 1; i > 0; i--) {
+    for(int i = arr.size() - 1; i >= 1; i--) {
         arr[i] = arr[i - 1];
     }
     arr[0] = last;

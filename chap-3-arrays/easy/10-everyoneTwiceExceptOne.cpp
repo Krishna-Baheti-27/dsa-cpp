@@ -18,7 +18,7 @@ int isSingleBetter(vector<int> &arr) { // using hashing
     // there is a tradeoff between size nad speed
     unordered_map<int,int> mp;
     for(int num : arr) mp[num]++;
-    for(int num : arr) if(mp[num] == 1) return num;
+    for(int num : arr) if(mp[num] == 1) return num; // others would have 2 occurences
     return -1; // no single element
 } 
 

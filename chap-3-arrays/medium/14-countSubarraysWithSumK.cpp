@@ -14,7 +14,7 @@ int subarraysWithSumKBetter(vector<int> &arr, int k) {
         }
     }
     return count;
-}
+} // O(n^2) time
 
 int subArraysWithSumKOptimal(vector<int> &arr, int k) {
     // the most optimal solution will be using prefix sum, same as in logest subarray having given sum
@@ -33,7 +33,7 @@ int subArraysWithSumKOptimal(vector<int> &arr, int k) {
         mpp[sum]++; // its very important to store all occurences of a prefix sum as we want to count total number of subarrays
     }
     return count;
-} // O(N) but worst case O(N^N), O(N) space
+} // O(N) but worst case O(N^2) time, O(N) space
 
 int main() {
     

@@ -7,7 +7,7 @@ using namespace std;
 
 // brute force using set
 
-void removeDuplicatesBrute(vector<int> &arr) {
+int removeDuplicatesBrute(vector<int> &arr) {
     set<int> st;
     for(int i = 0; i < arr.size(); i++) {
         st.insert(arr[i]);
@@ -17,46 +17,33 @@ void removeDuplicatesBrute(vector<int> &arr) {
         arr[index++] = el; 
     }
     // now the arr stores first N unique elements at N places
-}
+    return index;
+} // O(nlogn + no.ofunique) time for set or O(n) time for unordered_set (but not guaranteed) and O(n) space
+
+int removeDuplicatesBetter(vector<int> &arr) {
+    vector<int> ans;
+    ans.push_back(arr[0]); // first element would always be inserted because it ought to be unique
+    for(int i = 1; i < arr.size(); i++) {
+        if(ans.back() != arr[i]) ans.push_back(arr[i]);
+        // this only works becuase arr is sorted if ans.back() != arr[i], then it is guaranteed that arr[i] is unique (and greater) element
+    }
+    for(int i = 0; i < ans.size(); i++) arr[i] = ans[i]; // we dont care about rest of the elements
+    return ans.size(); // this are the number of unique elements
+} // O(n + no.ofunique) time and O(n) space
+
+// from here we get the intuition that we dont need the ans array since we are only interested in finding k unique elements of arr, and placing them at the start so instead of storing them in the temporary array we copy them directly into our main array arr, and we are essetially performing this check that ans.back() != arr[i] which ensures that there are no duplicates, similary we achieve it here by only comparing it with the current element since array is sorted
 
 int removeDuplicatesOptimised(vector<int> &arr) {
-    if (arr.empty()) return 0;
-
-    int j = 0; // points to the position where the next unique element should go
-    // the first element would always be unique so we start from second element, since we have to maintain the relative order of elements
-
-    for (int i = 1; i < arr.size(); i++) {
-        if (arr[i] != arr[j]) {
-            j++; // if we find unique element then increment j and store arr[i], in our array free from duplicates whose last element is currently arr[j] with which we check to verify whether its a duplicate or not
+    int j = 0; // this acts as the back pointer similar to arr.back() which maintains last inserted element and helps us from preventing duplicats
+    for(int i = 1; i < arr.size(); i++) {
+        // we start from second element since we know that the first element is always unique and woudl remain there
+        if(arr[j] != arr[i]) { // same as if arr.back() != arr[i] then only insert
+            j++;
             arr[j] = arr[i];
         }
     }
-    // now just return j + 1, since j is index and we have to return the size
-    //  Core Insight:
-
-    // You're scanning the array from left to right.
-
-    // You keep a j pointer to track where to store the next unique element.
-
-    // The first element is always unique, so we start j = 0 and loop from i = 1.
-
-//     If same:
-
-//     arr[i] == arr[j]:
-//     → This means it's a duplicate.
-//     → Just skip it and move on (i++).
-
-// 💾 If different:
-
-//     arr[i] != arr[j]:
-//     → This means a new unique element is found.
-//     → Increment j to create space, then store arr[i] at arr[j].
-    // The vector now has unique elements in the first (j+1) positions
-    return j + 1; // New size of unique part
-    // only works for a sorted array
+    return j + 1; // since j points to the last unique element starting from 0 so total j + 1
 }
-
-
 
 int main() {
     vector<int> arr = {1,1,2,2,3,3,4,5};

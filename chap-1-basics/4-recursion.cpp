@@ -98,6 +98,11 @@ int fibUsingLoop(int n) {
     return first;
 }
 
+int fibStandard(int n) {
+    if(n <= 1) return n;
+    return fibStandard(n - 1) + fibStandard(n - 2);
+}
+
 int main() {
     // printName("John", 5);
     // print1ToN(1,10);

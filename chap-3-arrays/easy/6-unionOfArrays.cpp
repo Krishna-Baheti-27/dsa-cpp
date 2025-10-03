@@ -29,56 +29,11 @@ vector<int> unionOfArraysBruteUsingMap(vector<int> &arr1, vector<int> &arr2) {
     return arr3;
 }
 
-vector<int> unionOfArraysBetter(vector<int> &arr1, vector<int> &arr2) {
-    vector<int> arr3;
-    unordered_set<int> st(arr1.begin(), arr1.end());
-    st.insert(arr2.begin(), arr2.end());
-    for(int num : st) arr3.push_back(num);
-    return arr3; // o/p is not in sorted order but only O(m + n) time
-    // but in the worst case it could be O((m + n)^2)
-}
+// Using the two pointer approach
+// Approach very similar to merging two arrays but you only have to take care of whether the lats inserted element is not equal (since we dont want duplicates) and since array is sorted if the last element is not equal then it must be less than and hence we can insert without disturbing the sorted order
+// use arr3.empty() if that were to be the first element, arr3.back() wouldn't make a lot of sense 
 
-vector<int> unionOfArraysOptimal(vector<int> &arr1, vector<int> &arr2) {
-    // Using two pointers like in merge two arrays
-    vector<int> arr3;
-    int i = 0, j = 0;
-    while(i < arr1.size() && j < arr2.size()) {
-        // using property of sroted array that if the last element is not equal then we can insert since, we are guaranteed that all the elements to its left will be smaller and hence no chance of duplicates
-
-        // dont have to use arr3.back() can simply maintain a pointer k for arr3 and can check using arr3[k] != el
-        if(arr1[i] > arr2[j]) {
-            if(arr3.empty() || arr3.back() != arr2[j]) arr3.push_back(arr2[j]);
-            j++;
-        }
-        else if(arr1[i] <= arr2[j]) {
-            if(arr3.empty() || arr3.back() != arr1[i]) arr3.push_back(arr1[i]);
-            if(arr1[i] == arr2[j]) {
-                // increment both when they are equal, this is not required since we cant insert dupplicates due to our checks, its just to avoid unecessary iteration
-                i++;
-                j++;
-            } else i++; // else only increment i;
-        }
-    }
-    while(i < arr1.size()) {
-        if(arr3.empty() || arr3.back() != arr1[i]) {
-            arr3.push_back(arr1[i]);
-        }
-        i++;
-    }
-    while(j < arr2.size()) {
-        if(arr3.empty() || arr3.back() != arr2[j]) {
-            arr3.push_back(arr2[j]);
-        }
-        j++;
-    }
-    return arr3; // takes only O(n + m) sapce where n and m are number of elemnts in arr1, arr2
-}
-
-
-vector<int> unionOfArraysOptimal2(const vector<int> &arr1, const vector<int> &arr2) {
-    // Using the two pointer approach
-    // Approach very similar to merging two arrays but you only have to take care of whether the lats inserted element is not equal (since we dont want duplicates) and since array is sorted if the last element is not equal then it must be less than and hence we can insert without disturbing the sorted order
-    // use arr3.empty() if that were to be the first element, arr3.back() wouldn't make a lot of sense 
+vector<int> unionOfArraysOptimal(const vector<int> &arr1, const vector<int> &arr2) {
     vector<int> arr3;
     int i = 0, j = 0; // indexes for arr1, arr2
     while(i < arr1.size() && j < arr2.size()) {
@@ -86,25 +41,26 @@ vector<int> unionOfArraysOptimal2(const vector<int> &arr1, const vector<int> &ar
             if(arr3.empty() || arr1[i] != arr3.back()) {
                 arr3.push_back(arr1[i]);
             }
-            i++;
+            i++; // regardless of whether you insert or not, because you didnt insert because 
+            // arr1[i] == arr3.back() which means element already taken, so move i aheaf
         } else {
             if(arr3.empty() || arr2[j] != arr3.back()) {
                 arr3.push_back(arr2[j]);
             }
-            j++;
+            j++; // move ahead regardless
         }
     }
     while(i < arr1.size()) {
         if(arr3.empty() || arr3.back() != arr1[i]) {
             arr3.push_back(arr1[i]);
         }
-        i++;
+        i++; // move ahead regardless
     }
     while(j < arr2.size()) {
         if(arr3.empty() || arr3.back() != arr2[j]) {
             arr3.push_back(arr2[j]);
         }
-        j++;
+        j++; // move ahead regardless
     }
     return arr3;
 }
@@ -113,7 +69,7 @@ int main() {
     vector<int> arr1 = {1,1,2,3,4,5,6,6,7,7};
     vector<int> arr2 = {2,3,4,4,5};
     // both arrays have to be sorted
-    vector<int> arr3 = unionOfArraysOptimal2(arr1,arr2);
+    vector<int> arr3 = unionOfArraysOptimal(arr1,arr2);
     for(int num : arr3) cout << num << ' ';
     cout << '\n';
     return 0;

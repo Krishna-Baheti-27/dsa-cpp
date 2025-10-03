@@ -23,7 +23,7 @@ int noOfSubstringsWithAll3CharBrute(string s) {
         } 
     }
     return count;
-} // O(N^N) time and O(1) space 
+} // O(N^2) time and O(1) space 
 
 // the above intuition of finding all substrings directly once we know that we have gotten atleast one occurence of each is exactly what we will use in our optimal solution but here instead we will foucs on the last character of the substring
 
@@ -34,14 +34,15 @@ int noOfSubstringsWithAll3CharOptimal(string s) {
         else if(s[i] == 'b') b = i;
         else c = i;
 
-        // now we find the minimal occurence, once we have gotten atleast one occurence of a,b,c
+    // now we find the minimal occurence, once we have gotten atleast one occurence of all of a,b,c
         if(a != -1 && b != -1 && c != -1) {
-            int minlen = min(a, min(b,c));
+            int minlen = min(a, min(b,c)) ;
+            // this basically tells the number of valid substrings that end on the character which is max(a,b,c)
             count += minlen + 1;
         }
     }
     return count;
-}
+} // O(N) time and O(1) space
 
 int noOfSubstringsWithAll3CharOptimalReadable(string s) {
     int count = 0, lastSeen[] = {-1, -1, -1};

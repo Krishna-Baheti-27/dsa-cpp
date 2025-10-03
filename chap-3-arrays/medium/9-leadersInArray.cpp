@@ -4,7 +4,7 @@ using namespace std;
 // a leader is an element in an array which is greater than all the elements present on its right, the last element is always the leader
 
 vector<int> printLeadersBrute(const vector<int> &arr) {
-    // for each element we check it is greater than every element on its right, if it is we mark it as a leader
+    // for each element we check it is greater than every element on its right, if it is we mark it as a leader, also handles the case of last element which is always a leader
     vector<int> ans;
     for(int i = 0; i < arr.size(); i++) {
         bool flag = true;
@@ -26,7 +26,7 @@ vector<int> printLeadersOptimal(const vector<int> &arr) {
         if(arr[i] > max) {
             max = arr[i];
             ans.push_back(arr[i]); 
-            // arr[i] is a leader if it is greater than the greatest element encountered so far
+            // arr[i] is a leader if it is greater than the greatest element encountered so far from the right since thats how we defined the leader to be
         }
     }   
     return ans;

@@ -359,6 +359,7 @@ void explainAlgorithms() {
     pair<int,int> a[] = {{2,1}, {1,2}, {4,1}};
     // sort it according to second element but if both same then according to first 
     // but in decreasing order
+    sort(a, a + 3, myWayComparator); // using the myWayComparator
 
     // To print all permutations of string
     string s = "123"; // should be sorted to print all else sort it sort(s.begin(), s.end())

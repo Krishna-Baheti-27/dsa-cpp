@@ -65,15 +65,6 @@ int iterativeGcdOptimised(int a, int b) {
     else return a;
 }
 
-int iterativeGcdOptimisedBetter(int a, int b) {
-    while(b != 0) {
-        int temp = b;
-        b = b % a; // shrinking b, same as in recursive version
-        a = temp; // now changing a to former b
-    }
-    return a;
-}
-
 int main() {
    
     return 0;

@@ -21,6 +21,24 @@ int maxFreqBrute(vector<int> &arr, int k) {
 } // O(N^2) solution would give TLE
 
 
+// here what they basically want is, you can perform k opertions at max, what you should do is, identify the maxfreq element, and try to make all other elements lesser than that element == to that element, so number of operations required per element = maxfreq - elvalue, so we count the number of operations per element for each subarray, and if sum of all operations is lesser than or equal to k, then that is a valid subarray and the max freq element is the only repeating element in that subarray
+
+int maxFreqBruteUsingOp(vector<int> &arr, int k) {
+    // generate all subarrays, and try to find the maxlength one obeying the property and the repeating element in that subarray is our answer
+    int maxlen = INT_MIN, maxfreqEl = arr[0];
+    for(int i = 0; i < arr.size(); i++) {
+        for(int j = i; j < arr.size(); j++) {
+            // for the subarray [i,j] we check if number of operations <= k, if yes then this is valid subarray and we try to find max length subarray
+            int noOfOperations = 0;
+            for(int k = i; k <= j; k++) {
+                maxfreqEl = max(maxfreqEl, arr[k]);
+                noOfOperations += maxfreqEl - arr[k];
+            }
+        }
+    }
+}
+
+
 int maxFreqOptimal(vector<int> &arr, int k) {
     sort(arr.begin(), arr.end());
     int maxFreq = 1, freq = 1;

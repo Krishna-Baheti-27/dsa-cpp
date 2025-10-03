@@ -11,8 +11,8 @@ vector<int> rearrangeArrayBrute(vector<int> &arr) {
         else negArr.push_back(el);
     }
     for(int i = 0; i < arr.size() / 2; i++) {
-       arr[2*i] = posArr[i];
-       arr[2*i + 1] = negArr[i];
+       arr[2*i] = posArr[i]; // positive at even indices
+       arr[2*i + 1] = negArr[i]; // negative at odd indices
     }
     return arr;
 } // O(n + n / 2) time and O(n) space
@@ -36,20 +36,23 @@ vector<int> rearrangeArrayOptimal(vector<int> &arr) {
     return ans; // O(N) time and O(N) space
 }
 
-// variety 2
+// variety 2, where no. of positive numbers != no. of negative numbers
 // if any of the positive or negative numbers are left, then we add them to the end without altering their order
 
+// here since the positives are not equal to negatives, we do not know whether positives are greater or negatives are greater or whether they are equal
+// so we fall back to our brute force solution which handles all cases
+
 vector<int> rearrangeArrayOptimalVar2(vector<int> &arr) {
-    // here since the positives are not equal to negatives, we do not know whether positives are greater or negatives are greater or whether they are equal
-    // so we fall back to our brute force solution which handles all cases
+    
     vector<int> posArr;
     vector<int> negArr;
     for(int el : arr) {
         if(el > 0) posArr.push_back(el);
         else negArr.push_back(el);
     }
+
     // two pointer style not brute force style
-    int i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0; // i points to posArr, j points to negArr and k points to our arr
     while(i < posArr.size() && j < negArr.size()) {
         if(k % 2 == 0) {
             arr[k] = posArr[i];
@@ -61,14 +64,17 @@ vector<int> rearrangeArrayOptimalVar2(vector<int> &arr) {
         k++;
     }
     while(i < posArr.size()) {
-        arr[k++] = posArr[i++];
+        arr[k++] = posArr[i++]; // insert the leftover positives if they are more in number
     }
     while(j < negArr.size()) {
-        arr[k++] = negArr[j++];
+        arr[k++] = negArr[j++]; // insert the leftoven negatives if they are more in number
     }
+
     return arr; // we used all of our elements in posArr and negArr and hence done
-    // O(2n) time and O(n) space
+    // O(n + n) time and O(n) space
 }
+
+// this next solution can be more intuitive on the basis of brute for but a little bit difficult to read and more clumsy
 
 vector<int> rearrangeArrayOptimalVar2AnotherMethod(vector<int> &arr) {
     // exactly like brute force style
