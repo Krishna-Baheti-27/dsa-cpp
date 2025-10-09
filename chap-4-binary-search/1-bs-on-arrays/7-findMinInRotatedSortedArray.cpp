@@ -8,18 +8,26 @@ int findMinBrute(vector<int> &arr) {
     return min == INT_MAX ? -1 : min;
 }
 
+// Using binary search algo
+
+// our approach is pretty simple
+// we go and identify the sorted part of array, then we compare our minel with smallest part of sorted array and then we go to other side for finding potentially smaller element
+
 int findMinOptimal(vector<int> &arr) {
-    // Using binary search algo
     int low = 0, high = arr.size() - 1, minel = INT_MAX;
     while(low <= high) {
-        if(arr[low] <= arr[high]) { // happens only when array is sorted or has been rotated by k = arr.size()
+
+        // happens only when array is sorted or has been rotated by k = arr.size() 
+        if(arr[low] <= arr[high]) { 
             return min(arr[low], minel); 
         } // to return early
+
         int mid = low + (high - low) / 2;
+
+        // left part is sorted
         if(arr[low] <= arr[mid]) {
-            // left part is sorted
             minel = min(arr[low], minel); // our possible minimum element
-            low = mid + 1; // but we look for even samller on right side, why do we look on right side ??, because we have already found the minel from the left side since left part was sorted, the minel was arr[low]
+            low = mid + 1; // but we look for even samller on right side, why do we look on right side ??, because we have already found the minel from the left side since left part was sorted, the minel was arr[low], now we have to also look on right side for finding a potentially smaller element
         } else if(arr[mid] <= arr[high]) {
             // right part is sorted
             minel = min(arr[mid], minel); // our possible minimum element 

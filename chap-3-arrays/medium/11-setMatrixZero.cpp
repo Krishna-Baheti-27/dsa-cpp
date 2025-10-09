@@ -47,9 +47,9 @@ void setZeroesOptimal(vector<vector<int>> &matrix) {
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
             if(matrix[i][j] == 0) {
-                matrix[i][0] = 0; 
+                matrix[i][0] = 0; // marker for rows
                 if(j != 0)
-                matrix[0][j] = 0;
+                matrix[0][j] = 0; // marker for columns
                 else col0 = 0;
                 // here zero is similar to marking them as true, this means when we iterate again, we will have to turn ith and jth row to 0
             }
@@ -66,12 +66,12 @@ void setZeroesOptimal(vector<vector<int>> &matrix) {
             }
         }
     }
-    if(matrix[0][0] == 0) {
+    if(matrix[0][0] == 0) { // this was for the first row
         for(int j = 0; j < m; j++) {
             matrix[0][j] = 0;
         }
     }
-    if(col0 == 0) {
+    if(col0 == 0) { // marker for the first column
         for(int i = 0; i < n; i++) {
             matrix[i][0] = 0;
         }

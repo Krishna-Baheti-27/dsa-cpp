@@ -1,7 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// matrix only consists of 0's and 1's and sorted 
+// matrix only consists of 0's and 1's and is row wise sorted
+
 int rowWithMaxOnes(vector<vector<int>> &matrix) {
     int n = matrix.size(), m = matrix[0].size();
     int maxOnes = 0, maxRow = 0;
@@ -19,6 +20,7 @@ int rowWithMaxOnes(vector<vector<int>> &matrix) {
 } // O(nm) time and O(1) space
 
 // since matrix only consists of 0's and 1's and every row of matrix is sorted we can consider each row as vector and apply binary search there to qucikly find the first one, since the array is sorted, the number of ones would be arr.size() - index of first one
+
 int rowWithMaxOnesOptimal(vector<vector<int>> &matrix) {
     int n = matrix.size(), m = matrix[0].size();
     int maxOnes = 0, maxRow = 0;
@@ -28,9 +30,9 @@ int rowWithMaxOnesOptimal(vector<vector<int>> &matrix) {
         while(low <= high) {
             int mid = (low + high) / 2;
             if(matrix[i][mid] == 1) high = mid - 1; // we look for better
-            else low = mid + 1; // try to reach one
+            else low = mid + 1; // try to reach 1
         }
-        // now low will point to the first index of 1, so total number of ones will be m - low since array is sorted and has m size
+        // high and low have switched polarity and hence low will point to the first index of 1, so total number of ones will be m - low since array is sorted and has m size
         if(m - low > maxOnes) {
             maxOnes = m - low;
             maxRow = i;

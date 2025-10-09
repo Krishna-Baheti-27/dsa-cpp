@@ -2,7 +2,7 @@
 #include<vector>
 using namespace std;
 
-// They are simply asking the lower bound of that element
+// They are simply asking the lower bound of that element, since insert position is simply the first index where arr[ind] >= key, key is the value you want to insert
 
 int searchInsertPositionBrute(vector<int> &arr, int key) {
     // using linear search

@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// here we are guranteed that there exists a single pair, but if there are multiple pairs possible and there is also a chance of duplicated so dont use this brute force method there
-
 vector<int> twoSumBrute(const vector<int> &arr, int target) {
     for(int i = 0; i < arr.size(); i++) {
         for(int j = i + 1; j < arr.size(); j++) {
@@ -29,7 +27,6 @@ bool twoSumOptimal(vector<int> &arr, int target) {
     int left = 0, right = arr.size() - 1;
     while(left < right) {
         if(arr[left] + arr[right] == target) return true;
-        // not good for returning indices since we are sorting the array and it would change those
         else if(arr[left] + arr[right] < target) {
             // so we have to increase the value and since array is sorted
             left++;
@@ -38,8 +35,8 @@ bool twoSumOptimal(vector<int> &arr, int target) {
         }
     }
     return false;
-} // O(nlogn + n) time and O(logn) space for sorting, better in space
-// we usually ignore this call stack space when accounting for sorting
+} // O(nlogn + n) time but cant be used to return the indices adding up to the target
+
 
 int main() {
     

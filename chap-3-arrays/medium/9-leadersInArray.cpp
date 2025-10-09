@@ -17,7 +17,7 @@ vector<int> printLeadersBrute(const vector<int> &arr) {
         if(flag) ans.push_back(arr[i]);
     }
     return ans;
-}
+} // O(N^2) time
 
 vector<int> printLeadersOptimal(const vector<int> &arr) {
     int max = INT_MIN;
@@ -30,7 +30,7 @@ vector<int> printLeadersOptimal(const vector<int> &arr) {
         }
     }   
     return ans;
-}
+} // O(N) time 
 
 int main() {
     vector<int> arr = {10,22,12,3,0,6};

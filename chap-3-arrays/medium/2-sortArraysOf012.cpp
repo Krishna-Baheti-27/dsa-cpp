@@ -35,9 +35,9 @@ void sortArrOptimal(vector<int> &arr) {
     // since initially entire array is unsorted hence lies in range of mid to high
 
     while(mid <= high) {
-        if(arr[mid] == 0) {
+        if(arr[mid] == 0) { // 0 to low - 1 holds 0's so what would be the next position to insert 0, that would be low and once we do that we move low ahead
             swap(arr[low], arr[mid]); // send zero to low
-            mid++;
+            mid++; // it is guaranteed we would get a 1 back since low to mid - 1 is 1's
             low++;  // and hence expand the interval 0 to low - 1 to right by low++
         } else if(arr[mid] == 1) {
             mid++; // already sorted

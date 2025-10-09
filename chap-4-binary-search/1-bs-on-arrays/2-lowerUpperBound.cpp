@@ -18,11 +18,9 @@ int lowerBoundOptimal(vector<int> &arr, int target) { // Using binary search sin
     int low = 0, high = arr.size() - 1, ans = arr.size();
     while(low <= high) {
         int mid = low + (high - low) / 2;
-        if(arr[mid] >= target) { // arr[mid] == target and arr[mid] > target is the same case
-            // why ??, i would take mid where arr[mid] == target, but i would look for even smaller, hence trim the search space high = mid - 1, and store the current answer
-            // same logic for arr[mid] > target
-            ans = mid;
-            high = mid - 1;
+        if(arr[mid] >= target) { 
+            ans = mid; // i would take it as an answer 
+            high = mid - 1; // but look for something better
         } else low = mid + 1; // try to reach the target
     }
     return ans;
@@ -44,7 +42,7 @@ int upperBoundBrute(vector<int> &arr, int target) {
         if(arr[i] > target) return i;
     }
     return arr.size();
-}
+} // O(N) time
 
 int upperBoundOptimal(vector<int> &arr, int target) {
     int low = 0, high = arr.size() - 1, ans = arr.size();
@@ -58,7 +56,7 @@ int upperBoundOptimal(vector<int> &arr, int target) {
         }
     }
     return ans;
-}
+} // O(logn) time
 
 int upperBoundSTL(const vector<int>& arr, int target) {
     return upper_bound(arr.begin(), arr.end(), target) - arr.begin();

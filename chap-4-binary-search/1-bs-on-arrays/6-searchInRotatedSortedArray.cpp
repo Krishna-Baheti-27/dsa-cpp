@@ -11,49 +11,63 @@ int searchInRotatedSortedArrayBrute(vector<int> &arr, int key) {
     return -1;
 } // O(N) time
 
+///////////////////////////////////////////////////////////////////////
+
+// For array not containing any duplicates
 
 // First, we identify the sorted half of the array. 
 // Once found, we determine if the target is located within this sorted half. 
 // If not, we eliminate that half from further consideration. 
 // Conversely, if the target does exist in the sorted half, we eliminate the other half.
+// This way we are always eliminating the array by half hence logN time
+
 int searchInRotatedSortedArrayOptimal(vector<int> &arr, int key) {
-    // no duplicates
     int low = 0, high = arr.size() - 1;
     while(low <= high) {
         int mid = low + (high - low) / 2;
         if(arr[mid] == key) return mid;
-        // identify the sorted half and check if the element is there, if it is there we aplly binary search else we trim the sorted half, this way we trim the array each time by half because atleast one portion ought to be sorted since a sorted array has been rotated
+        // check if left is sorted
         if(arr[mid] >= arr[low]) {
-            // when left is sorted and we can apply binary search there but first we check if key exists in the range of low to mid
-            if(arr[low] <= key && arr[mid] >= key) high = mid - 1; // if key exists in range low to mid we trime our search area from right
-            else low = mid + 1; // else we trime search area from left
+            if(arr[low] <= key && arr[mid] >= key) high = mid - 1; // key exists in sorted half
+            else low = mid + 1; // key doesnt exists in sorted half
         } else if(arr[mid] <= arr[high]) {
             // when right half is sorted
            if(arr[high] >= key && arr[mid] <= key) low = mid + 1;
            else high = mid - 1; 
         }
-        // How this works is pretty easy, we either trim the sorted half since element is not present in there or we apply binary search in the sorted half since the element is present there (thereby trimming the unsorted half) and hence in each iteration we are reducing the array size by half hecne time is O(logN)
     }
     return -1;
 }
 
+////////////////////////////////////////////////////////////////////////////
+
+// for duplicates
+// whenever problem for duplicates, and with very minor changes in that code you would be able to do it for duplicates
+
+// here we have to search if given key exists in the array containing duplicates
+// the only problem here is that we might have arr[low] == arr[mid] == arr[high] and in that case it is not possible to tell which half is sorted or if both are sorted then key is in whci half ??
+
+// to deal with that, we simply cut the array from both sides by one length low++ and high-- since they do not contain answer and these duplicates are causing trouble so we trim array and continue from the next iteration since new low and high woudl give new mid which we dont want to miss to chec if arr[mid] == key
+
 bool searchInRotatedSortedArrayDuplicates(vector<int> &arr, int key) {
-    // for duplicates
-    // whenever problem for duplicates, and with very minor changes in that code you would be able to do it for duplicates
+
     int low = 0, high = arr.size() - 1;
+
     while(low <= high) {
+
         int mid = low + (high - low) / 2;
-        if(arr[mid] == key) return true;
-        // this is the only case where it fails
+        if(arr[mid] == key) return true; // if found we return true
+
+        // this is the only case where it fails, we can do low++ and high-- since we know arr[low] and arr[high] and arr[mid] are equal and these 3 are not equal to key
         if(arr[low] == arr[mid] == arr[high]) {
-            // when all three are equal we cannot tell using simple if-else that which half is sorted
-            // to overcome this since we have already checked thar arr[mid] != target, which implies neither will be arr[low] or arr[high]
+            // we trim down our search space and continue from next iteration
             low++;
             high--;
-            // we trim down our search space and continue from next iteration
             continue; // it maybe possible that, due to low++ and high--, we might have arr[newmid] == key so in order to not miss that , we continue from the next iteration and skip this one
         }
+
         // we continue since if atleast one of them is not equal, then we can solve them easily
+
         if(arr[mid] >= arr[low]) {
             // when left is sorted
             if(arr[low] <= key && arr[mid] >= key) high = mid - 1;
@@ -65,7 +79,8 @@ bool searchInRotatedSortedArrayDuplicates(vector<int> &arr, int key) {
         }
     }
     return false;
-} // in worst case it can go to O(n/2) if there are lot of duplicates on the both left and right half, then we might have to shrink the array nearly half
+} 
+// in worst case it can go to O(n/2) if there are lot of duplicates on the both left and right half, then we might have to shrink the array nearly half
 // When the array contains many duplicate elements, the condition arr[low] == arr[mid] == arr[high] triggers frequently. In these cases:
 
 // The algorithm increments low and decrements high by 1 in each iteration.

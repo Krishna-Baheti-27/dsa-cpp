@@ -55,41 +55,38 @@ vector<int> firstLastOccurenceOptimal(vector<int> &arr, int key) {
         }
     }
     return {firstOcc, lastOcc};
-} // O(2logN) time for finding first or lastOcc in sorted array and also to find frequency of an element in sorted array using lastOcc - firstOcc + 1
+} // O(2logN) time for finding firstOcc and lastOcc in sorted array and also to find frequency of an element in sorted array using lastOcc - firstOcc + 1
 
 vector<int> usingLowerUpperBound(const vector<int> &arr, int key) {
-    // Lower Bound -> smallest index such that arr[index] >= given number (if doesnt exist then put = size of array)
-    // Upper Bound -> smallest index such that arr[index] > given number 
-    // so upper - 1 would be the last occurence
     auto it1 = lower_bound(arr.begin(), arr.end(), key);
     auto it2 = upper_bound(arr.begin(), arr.end(), key);
 
-     // Check if key is present because this functions return upper and lower bound and dont guarantee if key is present or not
-    if (it1 == arr.end() || *it1 != key) // this conditions check if key is present
-        return {-1, -1}; // key not found
-    // because if the key is not present then there is no point of first or last occurence
-
+    // lower and upper bound exist even if the key is not present so check that
+    if (it1 == arr.end() || *it1 != key) return {-1, -1}; // key not found
+    // use the definition of lower_bound to get this condition
+   
     // if key is present then it2 would point to either arr.end() or it1 + 1 or anything after that, and in all cases it is a valid iterator and hence no need to check for it2
     
     int firstOcc = it1 - arr.begin();
-    int lastOcc = it2 - arr.begin() - 1; // -1 since upper bound actually gives us index of greater element so -1 would give us index of the key
+    int lastOcc = it2 - arr.begin() - 1; 
+    // we would have our element at upper - 1 according to the definition of upper_bound
     return {firstOcc, lastOcc};
-}
+} // O(2logn) time
 
 int countNumberOfOccurences(vector<int> &arr, int key) {
     vector<int> occ = firstLastOccurenceOptimal(arr,key);
     return occ[1] - occ[0] + 1; // gives number of occurences since array is sorted in non decreasing order
-    // we cna also implement plain linear search but that will take O(N)
+    // we cna also implement plain linear search but that will take O(N), it only takes O(2logn)
 }
 
 int countNumberOfOccurencesUsingLowerUpperBound(vector<int> &arr, int key) {
     auto lowerb = lower_bound(arr.begin(), arr.end(), key);
     auto upperb = upper_bound(arr.begin(), arr.end(), key);
     return upperb - lowerb; // no +1 since these are iterators and not indexes
-//     Iterators in C++ STL point to elements in a container, and their difference (upper - lower) gives the number of elements between them, not their index difference.
-
-// If you have two iterators, it1 and it2, then it2 - it1 gives the count of elements in the range [it1, it2) (including it1, excluding it2).
 }
+
+// Iterators in C++ STL point to elements in a container, and their difference (upper - lower) gives the number of elements between them, not their index difference.
+// If you have two iterators, it1 and it2, then it2 - it1 gives the count of elements in the range [it1, it2) (including it1, excluding it2).
 
 
 int main() {

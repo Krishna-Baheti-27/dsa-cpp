@@ -11,21 +11,23 @@ vector<int> spiralOrder(vector<vector<int>> &matrix) {
     vector<int> ans;
 
     while(top <= bottom && left <= right) {
-        for(int i = left; i <= right; i++) {
+        // we already have left <= right enforced here due to for loop
+        for(int i = left; i <= right; i++) { 
             ans.push_back(matrix[top][i]);
         }
         top++;
+        // we already have top <= bottom enforced here due to for loop
         for(int i = top; i <= bottom; i++) {
             ans.push_back(matrix[i][right]);
         }
         right--;
-        if(top <= bottom) {
+        if(top <= bottom) { // it maybe that top > bottom in that case we have no element in that row and when top == bottom we have single row left to traversed from right to left
             for(int i = right; i >= left; i--) {
                 ans.push_back(matrix[bottom][i]);
             }
             bottom--;
         }
-        if(left <= right) {
+        if(left <= right) { // it maybe that left > right in that case we have no element in the column and when left == right we have single column left to be traversed from bottom to top
             for(int i = bottom; i >= top; i--) {
                 ans.push_back(matrix[i][left]);
             }
@@ -33,7 +35,7 @@ vector<int> spiralOrder(vector<vector<int>> &matrix) {
         }
     }
     return ans;
-} // O(n * m) time and O(n * m) space
+} // O(n * m) time 
 
 int main() {
     

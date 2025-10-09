@@ -16,21 +16,21 @@ int subarraysWithSumKBetter(vector<int> &arr, int k) {
     return count;
 } // O(n^2) time
 
-int subArraysWithSumKOptimal(vector<int> &arr, int k) {
-    // the most optimal solution will be using prefix sum, same as in logest subarray having given sum
-    // simple logic is prefixSum at point is s (cumulative sum) and we are looking for prefixSum = k, then in the map we find any x - k then it essentially gurantees that there will be a prefixSum = k
+// the most optimal solution will be using prefix sum, same as in logest subarray having given sum
+// simple logic is prefixSum at point is s (cumulative sum) and we are looking for prefixSum = k, then in the map we find any x - k then it essentially gurantees that there will be a prefixSum = k
 
+// we already used the similar logic in 4-2 for printing all the subarrays having sum k and here we just how to count the number of subarrays having sum k, so just a subset of that
+
+int subArraysWithSumKOptimal(vector<int> &arr, int k) {
     unordered_map<int,int> mpp; // our map store prefix sums
     mpp[0] = 1; 
     // This is a crucial initialization. It handles cases where a subarray that sums to k starts from index 0.
-    // For example, in [3, 2, 1] with k=5, when i=1, the sum is 5. The code will look for mpp[sum - k], which is mpp[5 - 5] = mpp[0]. By initializing mpp[0] to 1, we correctly count this subarray [3, 2]
-
     int sum = 0, count = 0;
     for(int i = 0; i < arr.size(); i++) {
         sum += arr[i];
         // if at a point we find the prefixSum = sum - k or k, then we know we have subarray
         count += mpp[sum - k];
-        mpp[sum]++; // its very important to store all occurences of a prefix sum as we want to count total number of subarrays
+        mpp[sum]++; // its very important to store all occurences of a prefix sum as we want to count total number of subarrays, we dont have to store index at which sum occured since we only want the count and not actual subarrays
     }
     return count;
 } // O(N) but worst case O(N^2) time, O(N) space

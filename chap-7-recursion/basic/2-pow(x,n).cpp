@@ -1,6 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// we have to compute x^n
+
 double powerXtoNBrute(double x, int n) {
     long range = n;
     if(range < 0) {

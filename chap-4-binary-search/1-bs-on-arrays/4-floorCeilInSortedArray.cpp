@@ -2,8 +2,8 @@
 #include<vector>
 using namespace std;
 
+// largest number <= key in array is the floor value of key in that array
 int floorInSortedArrayBrute(vector<int> &arr, int key) {
-    // largest number <= key in array or an element in array equal to or just smaller than key
     for(int i = arr.size() - 1; i >= 0; i--) {
         if(arr[i] <= key) return arr[i];
     }
@@ -24,8 +24,8 @@ int floorInSortedArrayOptimised(vector<int> &arr, int key) {
     return ans;
 } // O(logN) time
 
+// smallest number >= key in array is the ceil value of key in that array
 int ceilInSortedArrayBrute(vector<int> &arr, int key) {
-    // smallest number >= key in array, or en element in array equal to or just greater than key
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] >= key) return arr[i];
     }

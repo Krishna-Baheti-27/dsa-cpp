@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// maximum subarray sum, and the array contains negatives also so it need not be the sum of enitre array
+// return the maximum possible subarray sum for given array, and the array contains negatives also so it need not be the sum of enitre array
 
 int maxSubarraySumBrute(const vector<int> &arr) {
     // generating all subarrays, finding sum in each case and returning the maxSum
@@ -44,7 +44,17 @@ int maxSubarraySumOptimal(const vector<int> &arr) {
         // this also marks the start of new subarray starting from next iteration
     }
     return maxSum;
-} // O(n)
+} // O(n) time
+
+int minSubarraySumOptimal(vector<int> &arr) {
+    int sum = 0, minSum = INT_MAX;
+    for(int i = 0; i < arr.size(); i++) {
+        sum += arr[i];
+        minSum = min(minSum, sum);
+        if(sum > 0) sum = 0;
+    }
+    return minSum;
+}
 
 vector<int> printMaxSumSubarray(const vector<int> &arr) {
     int sum = 0, maxSum = INT_MIN, start = 0, arrStart, arrEnd;
@@ -76,8 +86,8 @@ vector<int> printMaxSumSubarray(const vector<int> &arr) {
 // ex => {5,-2,2}
 // so when we have the condition as sum >= maxSum the if block woudl be executed and arrStart would remain same but arrEnd to be updated to current i, and hence we have the max-length max subarray
 
-// Ok, if you want to print all the subarrays having max sum and not only min-legnth subarray having max sum and max-length subarray having min sum then first find the maxSum of the max sum subarray and THEN
-// WE HAVE QUESTION 14 WHICH EXPLAINS count the subarrays having given sum k, where we you would be able to identify the subarrays having given sum k, then just store them in vector or something
+// Ok, if you want to print all the subarrays having max sum and not only min-legnth subarray having max sum and max-length subarray having max sum then first find the maxSum of the max sum subarray and THEN
+// WE HAVE QUESTION 4-2 (part 2) WHICH EXPLAINS how to print all the subarrays having given sum k
 
 int main() {
     

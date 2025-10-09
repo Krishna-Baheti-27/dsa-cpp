@@ -44,7 +44,7 @@ int longestSubarrayBetter(const vector<int> &arr, int k) {
             maxLen = max(maxLen, i - mpp[sum - k]);
         }
         if(mpp.find(sum) == mpp.end()) {
-            // if the sum doesnt exist previously then only store the index becuase we do not want to overwrite the index in case of 0's and negatives, we might get the same sum again but now we would loose our original index and hence we would not get the longest or leftmost subarray
+            // if the sum doesnt exist previously then only store the index becuase we do not want to overwrite the index in case of 0's and negatives, we might get the same sum again but now we would loose our original index and hence we would not get the longest or leftmost subarray, instead we would get shortest or rightmost subarray
             mpp[sum] = i; // store the index for a particular sum
         }
     }
@@ -52,35 +52,33 @@ int longestSubarrayBetter(const vector<int> &arr, int k) {
 } // O(N) for unordered_map and O(NlogN) for map and O(N) space 
 // this solution is optimal, for array containing positives, negatives or zeroes
 
-// but for array containing only positives and zeroes, we can derive even more optimal solution using 2 pointer approach
-int longestSumOptimal(const vector<int> &arr, int k) {
-    int left = 0, right = 0, sum = arr[0], maxLen = 0;
-    while(right < arr.size()) {
-        // shrink sum
-        while(left <= right && sum > k) {
-            sum -= arr[left];
-            left++;
-        } // while sum is greater than k , we shrink from the left to make sum equivalent to k
-        // equate sum
-        if(sum == k) {
-            // now sum will be either equal to k or less than, if equal we have a subarray
-            maxLen = max(maxLen, right - left + 1);
-        }
-        // now sum is lesser than k, so we have increase the sum by increasing right
-        // increase sum
-        right++;
-        if(right < arr.size()) sum += arr[right];
-    }
-    return maxLen;
-} // O(2n) in worst case, since the inner loop will run total of N times in the whole N iterations of outer loop
+// Now understanding above point of why so we not allow to overwrite the sum, we can device a code which gives us the length pf shortest subarray having sum k
 
-// Writing the above code in standard sliding window and two pointer style
+int shortestSubarrayBetter(vector<int> &arr, int k) {
+    int sum = 0, minlen = 0;
+    unordered_map<int,int> mpp;
+    mpp[0] = -1; // this is for subarrays starting from 0, for them if sum == k then mpp[sum - k] would return -1 thus giving the length i - (-1) which is i + 1
+    for(int i = 0; i < arr.size(); i++) {
+        sum += arr[i];
+        if(mpp.find(sum - k) != mpp.end()) minlen = min(minlen, i - mpp[sum - k]); 
+        mpp[sum] = i; // let map overwrite always   
+    }
+    return minlen;
+}
+
+// so this mpp[0] = -1 can also be done for longest subarray code so we dont have to perform the explicit check for sum == k, and then the fundamental difference between longest subarray and shortest subarray just boils down to this, in one we dont overwrite in other we do
+
+//////////////////////////////////////////////////////////////
+
+// but for array containing only positives and zeroes, we can derive even more optimal solution using 2 pointer approach
+
+// Writing the code in standard sliding window and two pointer style where our task is to maitain a window always having sum k and finding max possible length from there, this is classic two pointer sliding window problem
 
 int longestSumOptimalReadable(const vector<int> &arr, int k) {
     int sum = 0, l = 0, r = 0, maxlen = 0; // our window is from [l,r]
     while(r < arr.size()) {
         sum += arr[r];
-        while(sum > k) { // invalid sum, no need to check l <= r, that is handled implicitly
+        while(sum > k) { 
             sum -= arr[l];
             l++; // shrink the window when it becomes invalid
         }
@@ -90,6 +88,10 @@ int longestSumOptimalReadable(const vector<int> &arr, int k) {
     return maxlen;
 } // O(2n) time
 
+////////////////////////////////////////////////////
+
+// THIS IS PROBABLY INCORRECT
+
 int longestSumOptimalFinal(const vector<int> &arr, int k) {
     int sum = 0, l = 0, r = 0, maxlen = 0; // our window is from [l,r]
     while(r < arr.size()) {
@@ -98,11 +100,31 @@ int longestSumOptimalFinal(const vector<int> &arr, int k) {
             sum -= arr[l];
             l++; // shrink the window when it becomes invalid
         }
-        if(sum == k) maxlen = max(maxlen, r - l + 1);
+        if(sum == k) maxlen = max(maxlen, r - l + 1); 
         r++; // expand the window
     }
     return maxlen;
-} // it is debatable whether this code is valid or not, so hold on
+} // O(N) time
+
+// we only allow to update when window becomes valid and since we are doing r++ always and l++ when window is invalid thus, the size of invalid window remains constant and cant increase and hence impossible to get maxlen unless the window becomes valid by doing r++, which will then increase length of window since no l++ would be happening
+
+//////////////////////////////////////////////////////////
+
+// for using sliding window two pointer for finding shortest subarray having given sum k, once we have the sum >= k, we start shrinking the window from left tillwe can maintain sum == k and compute the length each time does getting the min possible length while still maintaining sum == l
+
+int shortestSubarrayOptimal(vector<int> &arr, int k) {
+    int sum = 0, minlen = INT_MAX, l = 0, r = 0;
+    while(r < arr.size()) {
+        sum += arr[r];
+        while(sum >= k) { // try to shrink the window till we can to get min
+            if(sum == k) minlen = min(minlen, r - l + 1); // valid window
+            sum -= arr[l];
+            l++; // shrink from left till we can maintain atmost sum = k
+        }
+        r++; // move ahead to get valid window
+    }
+    return minlen == INT_MAX ? 0 : minlen;
+} // O(2N) time
 
 int main() {
     

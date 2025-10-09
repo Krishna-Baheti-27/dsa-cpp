@@ -28,7 +28,7 @@ int majorityElMoreBetter(const vector<int> &arr) {
         if(mpp[el] == arr.size() / 2 + 1) return el;
     }
     return -1;
-} // single pass O(n)
+} // single pass O(n) time and O(n) space
 
 
 // the entire moore voting algo is based on the simple logic that if there exists a majority element, that is more than n/2 times it occurs, then it cannot be cancelled or there is not enough fire power to cancel that element
@@ -51,7 +51,7 @@ int majorityElOptimal(const vector<int> &arr) {
 
     // in the end count basically has no significance
     // now check if ans occurs more than n/2 times, if it does then its the majority
-    // no need to do this check it it given that there always exists a majority element
+    // no need to do this check if it is given that there always exists a majority element
 
     count = 0;
     for(int i = 0; i < arr.size(); i++) {
@@ -60,7 +60,7 @@ int majorityElOptimal(const vector<int> &arr) {
 
     if(count > arr.size() / 2) return ans;
     return -1;
-}
+} // O(2N) time 
 
 
 int main() {
