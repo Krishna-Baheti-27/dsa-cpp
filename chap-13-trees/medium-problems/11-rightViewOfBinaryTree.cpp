@@ -32,12 +32,18 @@ vector<int> rightViewIterative(Node *root) {
     return ans;
 } // O(n) time and O(n) space
 
-// using the reverse preorder traversal of Root Right left in place of Root Left right
+////////////////////////////////////////////////////////////////////////////
+
+// using the reverse preorder traversal of Root Right left in place of Root Left right, because we have to traverse right most nodes first
+
 void helper(Node *root, int level, vector<int> &ds) {
+
     if(!root) return;
+
     if(level == ds.size()) ds.push_back(root->data);
     // this makes sure that you add into the vector only when that level was reach for the first time and not after backtracking or returning
-    helper(root->right, level + 1, ds);
+
+    helper(root->right, level + 1, ds); // we go right first since we want the rightmost node for a particular level in rightView and if right exhausts then we go left
     helper(root->left, level + 1, ds);
 }
 

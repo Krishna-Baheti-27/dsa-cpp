@@ -12,24 +12,34 @@ class Node {
     }
 };
 
+// literally do any traversal of your choice and if both are exactly identical then the trees are same else not, here we are doing preorder traversal, that is root, left, right
+
 bool areSameTrees(Node *root1, Node *root2) {
-    // literally do any traversal of your choice and if both are exactly identical then the trees are same else not, here we are doing preorder traversal
+    
     if(root1 == nullptr && root2 == nullptr) return true; // both are same as they are null
+
     if(root1 && root2) {
-        if(root1->data != root2->data) return false; // root
-        bool left = areSameTrees(root1->left, root2->left); // left
+        if(root1->data != root2->data) return false; // check root
+
+        bool left = areSameTrees(root1->left, root2->left); // check for left subtree
         if(!left) return false;
-        bool right = areSameTrees(root1->right, root2->right); // right
+
+        bool right = areSameTrees(root1->right, root2->right); // checl for right subtree
         if(!right) return false;
+
         return true; // if everything satisfies then they are same or identical
     } 
-    return false; // if this hits means then either root1 == nullptr and root2 != nullptr or root2 == nulltpr and root1 != nullptr but other is not so we dont have same trees, the case where both are nullptr is already handled at top
-}
 
-// if any one of them is nullptr then they are same only if both of them are nullptr else false
-bool areSameTreesBetter(Node *root1, Node *root2) {
+    return false; // this hits means either root1 == null and root2 != null and vice-versa which means they are not same
+} // O(N) time and O(N) same
+
+////////////////////////////////////////////////////////////////////////
+
+// a more elegant way to write the same above conditions
+
+bool areSameTreesReadable(Node *root1, Node *root2) {
     if(!root1 || !root2) return (root1 == root2);
-    return root1->data == root2->data && areSameTreesBetter(root1->left, root2->left) && areSameTrees(root1->right, root2->right);
+    return root1->data == root2->data && areSameTreesReadable(root1->left, root2->left) && areSameTreesReadable(root1->right, root2->right);
 }
 
 int main() {

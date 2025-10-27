@@ -7,46 +7,60 @@ using namespace std;
 // You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.
 // Return the total number of provinces
 
+// Here the cities refer to the nodes of graph and province refers to a component, so we have to count number of provinces
 
-// Here the cities refer to the nodes of graph and province refers to a component
+//////////////////////////////////////////////////////////////////////////////
 
-void dfs(int node, int vis[], vector<int> adjLs[]) {
-    vis[node] = 1; // make the node visited and then go to the depths of it
+void dfs(int node, vector<bool> &vis, vector<int> adjLs[]) {
+    vis[node] = true; // make the node visited and then go to the depths of it
     for(auto it : adjLs[node]) {
         if(!vis[it]) dfs(it, vis, adjLs);
     }
 }
 
 int numOfProvinces(vector<vector<int>> &adj) {
+
     // the question here apprantely gives us adjancency matrix and not list and hence we convert the matrix to list
+
     int v = adj.size(); // number of nodes
     vector<int> adjLs[v]; // adjacency list
+
     // to change the adjacency matrix to list
     for(int i = 0; i < v; i++) {
         for(int j = 0; j < v; j++) {
-            if(adj[i][j] == 1 && i != j) {
+            if(adj[i][j] == 1 && i != j) { // since we cant have an edge from 1 to 1
+
                 adjLs[i].push_back(j);
-                adjLs[j].push_back(i);
+                // adjLs[j].push_back(i);
+                // this alone is sufficient becuase lets say you have edge from 1 - 2 so it will be present in matrix[1][2] and also matrix[2][1] which means we only have to add to either i or j not both and complete traversal of matrix will insert both, else we will be inserting duplicates which increases space and lowers time
             }
         }
-    } // conversion done 
+    } 
+    
+    // conversion done 
 
     int count = 0; // our main variable to count number of provinces based on how many times dfs function is being called
 
-    int vis[v];
-    for(int i = 0; i < v; i++) vis[i] = 0;
+    vector<bool> vis(v, false); // visited array initially false
 
     // our main logic to calculate the number of provinces
+
+    // if this node is note visited then visit it by dfs but how many times dfs is called is exactly the number of provinces since a dfs would traverse entirety of that province and mark everyone there to be visited and hence if it were to be called again it means that a new province is encountered whose nodes have not been traversed yet
+
     for(int i = 0; i < v; i++) {
         if(!vis[i]) {
-            // if this node is note visited then visit it by dfs but how many times dfs is called is exactly the number of provinces since a dfs would traverse entirety of that province and mark everyone there to be visited and hence if it were to be called again it means that a new province is encountered whose nodes have not been traversed yet
             count++;
             dfs(i, vis, adjLs);
         }
     }
+
     return count;
-    // we ignoring time and space for adjacency matrix to list because most of the time we will have list
-} // O(N) space for visited and O(N) for recursion stack space
+
+} 
+
+// we ignoring time and space for adjacency matrix to list because most of the time we will have list, so time and space complexity will be same of that of traversal algorithm used
+
+// O(N) space for visited and O(N) for recursion stack space
 // O(N) + O(N + 2E) time, since the dfs function is actually only being called count number of times and not in every iteration but in the worst case count = N and it overall processes the entire graph so O(N + 2E) overall when it processes all provinces
 
 int main() {

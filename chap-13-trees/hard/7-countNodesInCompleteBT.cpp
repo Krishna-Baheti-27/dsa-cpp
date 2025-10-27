@@ -12,14 +12,36 @@ class Node {
     }
 };
 
-int countNodes = 0; // no need to use a globar variable we can use a helper function 
-int countNodesBrute(Node* root) {
-    if(!root) return countNodes;
-    countNodes++;
-    countNodesBrute(root->left);
-    countNodesBrute(root->right);
-    return countNodes;
-} // O(N) time and O(logn) space (since its complete tree, the space is guranteed to be logn,not n)
+// Given the root of a complete binary tree, return the number of the nodes in the tree
+// a complete binary tree has all levels filled except possibly the last level and all the nodes in last level are as left as possible
+
+/////////////////////////////////////////////////////////////////////
+
+// purely recursive solution to count all the nodes (standard recursion pattern)
+// using preorder traversal
+
+int countNodesBrute(Node *root) {
+
+    if(!root) return 0;
+
+    int leftNodes = countNodesBrute(root->left);
+    int rightNodes = countNodesBrute(root->right);
+
+    return 1 + leftNodes + rightNodes;
+
+} // O(N) time and O(logn) space since complete tree is always balanced
+
+/////////////////////////////////////////////////////////////////////
+
+// if it is a prefect tree and then we know the number of nodes = 2^h - 1, so we can return right away but if the tree is not perfect then we would have to 1 + leftNodes + rightNodes and we try to find left and right nodes recursively using the prefect tree formula
+
+// to determine if its prefect tree or not we only have to check if leftHeight == rightHeight where leftHeight and rightHeight simply means how much can you go in depth on left subtree and rightHeight means how much can you go in depth on right subtree
+
+// now why does it work is extremely logical, it only works for complete tree
+// for complete tree we know that leftHeight == actual height of tree since nodes are filled as left as possible
+// when we have leftHeight == rightHeight we are essentially having height == rightHeight, so we it means we can actually go in right side by height depth which is the max we can go which means there is node at the rightmost edge of tree on last level and since tree is complete we can have all nodesas left as possible it means all the in between nodes are guaranteed to be filled making it a prefect binary tree for which we can return early 
+
+// so kee in mind that this findLeftHeight and findRightHeight are not actual height functions but they simply calculate max possible depth you can go only on left or right but for complete tree leftHeight == actual height of tree by definition of complete tree
 
 int findLeftHeight(Node *node) {
     int height = 0;
@@ -28,7 +50,7 @@ int findLeftHeight(Node *node) {
         height++;
     }
     return height;
-}
+} // O(logn) time in worst case since the height for complete tree cannot exceed that
 
 int findRightHeight(Node *node) {
     int height = 0;
@@ -37,19 +59,26 @@ int findRightHeight(Node *node) {
         height++;
     }
     return height;
-}
+} // O(logn) time in worst case since the height for complete tree cannot exceed that
 
-// for a full binary tree, the number of nodes is 2^h - 1, so if left height of the tree == right height of the tree then it is a full binary tree with everything filled
-// so if we get such a subtree we calculate the number of nodes in it directly
 int countNodesOptimal(Node *root) {
+
     if(!root) return 0;
-    int leftHeight = findLeftHeight(root->left);
-    int rightHeight = findRightHeight(root->right);
-    if(leftHeight == rightHeight) return (1 << leftHeight) - 1;
-    // if we dont have complete BT then try to countNodes recursively 
-    return 1 + countNodesOptimal(root->left) + countNodesOptimal(root->right);
-} // O((logn) ^ 2) time as the max height of the tree is logn and in the worst case we will travel logn when we wont encounter any full binary tree and in each traversal you are finding height which again takes logn time since its a complete BT
-// O(logn) space used in recursion
+
+    int leftHeight = findLeftHeight(root); // calculate height from current root not children
+    int rightHeight = findRightHeight(root);
+
+    if(leftHeight == rightHeight) return (1 << leftHeight) - 1; 
+    // return early by returning 2^h - 1 nodes for a perfect tree of height h
+
+    // apply this normal formula for trees which are not perfect
+    return 1 + countNodesOptimal(root->left) + countNodesOptimal(root->right); 
+} 
+
+// for this tree we have total logN levels and on each level we are findining leftHeight and rightHeight which take at max logN time and since its complete binary tree on of the left or right is guranteed to be perfect so we are effectively skipping computation for one of substrees and taking logN for other
+
+// so time complexity = logN levels * (logN + logN + logN) so nearly O((logn) ^ 2) time and O(logn) space
+
 
 int main() {
     

@@ -14,7 +14,9 @@ class Node {
 
 // same as in vertical order traversal of binary tree, here we want to find the bottom view, which basically means we do not have to maintain level of each node, but instead we only store the vertical for a node and when we traverse in the map we simply get those node (each vertical will only store the node at the last level since we are talking about bottom view)
 
-vector<int> bottomView(Node *root) {
+// same as top view but allow overwriting
+
+vector<int> bottomViewBrute(Node *root) {
     if(!root) return {};
     map<int, int> mpp; // (vertical, node)
     // very important to use ordered map so we store vertical in sorted order from minimum vertical
@@ -42,6 +44,45 @@ vector<int> bottomView(Node *root) {
 } // O(nlogn) since while loop runs n times and insertion in map takes O(logn) time
 // O(2n) space for queue + map in worst case
 
+vector<int> bottomViewOptimal(Node *root) {
+
+    if(!root) return {};
+
+    unordered_map<int, int> mpp; // (vertical, node)
+
+    int minVertical = 0, maxVertical = 0;
+
+    queue<pair<Node*, int>> q; // (node, vertical) for BFS
+    q.push({root, 0});
+
+    while(!q.empty()) {
+        auto p = q.front(); q.pop();
+
+        Node *node = p.first;
+        int vertical = p.second;
+
+        minVertical = min(minVertical, vertical);
+        maxVertical = max(maxVertical, vertical);
+
+        mpp[vertical] = node->data; // allow overwriting to get last possible node as answer
+
+        if(node->left) {
+            q.push({node, vertical + 1});
+        }
+        if(node->right) {
+            q.push({node, vertical - 1});
+        }
+    }
+
+    // building the answer
+
+    vector<int> ans; 
+    for(int vertical = minVertical; vertical <= maxVertical; vertical++) {
+        ans.push_back(mpp[vertical]);
+    }
+
+    return ans; 
+} // O(N) time since O(1) for insertion in unordered_map and O(2N) space for queue + map
 
 int main() {
     

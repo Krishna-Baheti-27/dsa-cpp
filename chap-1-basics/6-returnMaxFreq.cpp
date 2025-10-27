@@ -1,10 +1,14 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// we can only make smaller elements equal to some larger oe since we can only increment, so first element really cant be the max freq element so we start from second element and try make first element as second element, remember we cant make third element as second element since we cant decrement
+
+// this is sort of a greedy approach
+
 int maxFreqBrute(vector<int> &arr, int k) {
     int maxFreq = 1;
     sort(arr.begin(), arr.end());
-    // we can only make smaller elements equal to some larger oe since we can only increment, so first element really cant be the max freq element so we start from second element and try make first element as second element, remember we cant make third element as second element since we cant decrement
+    
     for(int i = 1; i < arr.size(); i++) {
         int tempK = k;
         int freq = 1;
@@ -20,46 +24,52 @@ int maxFreqBrute(vector<int> &arr, int k) {
     return maxFreq;
 } // O(N^2) solution would give TLE
 
+// int maxFreqOptimalIncorrect(vector<int> &arr, int k) {
+//     sort(arr.begin(), arr.end());
+//     int maxFreqEl = arr[arr.size() - 1], maxFreq = 1, freq = 1, operations = k;
+//     for(int i = arr.size() - 2; i >= 0; i--) {
+//         if(arr[i] == maxFreqEl) {
+//             freq++;
+//             maxFreq = max(maxFreq, freq);
+//         } else {
+//             // since array is sorted and element is not eqal which means it ought to be lesser
+//             operations -= maxFreqEl - arr[i];
+//             if(operations >= 0) {
+//                 freq++;
+//                 maxFreq = max(maxFreq, freq);
+//             } else {
+//                 maxFreqEl = arr[i]; // new element
+//                 freq = 1;
+//                 operations = k;
+//             }
+//         }
+//     }
+//     return maxFreq;
+// }
 
-// here what they basically want is, you can perform k opertions at max, what you should do is, identify the maxfreq element, and try to make all other elements lesser than that element == to that element, so number of operations required per element = maxfreq - elvalue, so we count the number of operations per element for each subarray, and if sum of all operations is lesser than or equal to k, then that is a valid subarray and the max freq element is the only repeating element in that subarray
+// This fails for arr = [1, 5, 5, 5, 10], k = 6
 
-int maxFreqBruteUsingOp(vector<int> &arr, int k) {
-    // generate all subarrays, and try to find the maxlength one obeying the property and the repeating element in that subarray is our answer
-    int maxlen = INT_MIN, maxfreqEl = arr[0];
-    for(int i = 0; i < arr.size(); i++) {
-        for(int j = i; j < arr.size(); j++) {
-            // for the subarray [i,j] we check if number of operations <= k, if yes then this is valid subarray and we try to find max length subarray
-            int noOfOperations = 0;
-            for(int k = i; k <= j; k++) {
-                maxfreqEl = max(maxfreqEl, arr[k]);
-                noOfOperations += maxfreqEl - arr[k];
-            }
-        }
-    }
-}
+// The correct approach is using classing sliding window and two pointer
 
+// we sort the array and use two pointers left and right, where our window is arr[left..right] and we try to make every element in window to equal to largest element arr[right] and we must do this within k operations and if fail we shrink window by left++ and we expand by right++ and maxfreq is the max length window can have at any time
 
 int maxFreqOptimal(vector<int> &arr, int k) {
     sort(arr.begin(), arr.end());
-    int maxFreq = 1, freq = 1;
-    int tempK = k;
-    for(int i = arr.size() - 1; i >= 1; i--) {
-        int toBecome = arr[i];
-        if(toBecome - arr[i - 1] <= tempK) {
-            tempK -= (toBecome - arr[i - 1]);
-            freq++;
-            maxFreq = max(maxFreq, freq);
-        } else {
-            toBecome = arr[i - 1];
-            tempK = k;
-            freq = 1;
+    int l = 0, r = 0, maxFreq = 0;
+    long long operations = 0;
+    while(r < arr.size()) {
+        if(r > 0) {
+            operations += (long long)(arr[r] - arr[r - 1]) * (long long)(r - l);
         }
+        while(operations > k) { // make the subarray valid
+            operations -= arr[r] - arr[l];
+            l++;
+        }
+        maxFreq = max(maxFreq, r - l + 1);
+        r++;
     }
     return maxFreq;
-    // Uses sliding window 
 }
-
-
 
 int main() {
     

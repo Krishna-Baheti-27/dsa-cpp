@@ -15,7 +15,7 @@ class Node {  // can also use struct but you miss all the OOP advantages
         this->data = data;
         next = nullptr;
     }
-};
+}; 
 
 Node* arrayToLL(vector<int> &arr) {
     Node *head = new Node(arr[0]);
@@ -71,9 +71,11 @@ Node* deleteTail(Node *head) {
         return nullptr;
     }
     Node *temp = head;
+
     // while(temp) terminates on nullptr (after last node)
     // while(temp->next) terminates on last node(temp->next = nullptr)
     // while(temp->next->next) terminates on second last node
+
     while(temp->next->next) {
         temp = temp->next;
     }
@@ -92,8 +94,11 @@ Node *deleteKth(Node *head, int k) {
         return head;
     }
     Node *temp = head;
-    // why checking temp != nullptr, since at each step we are accessing next field of temp that why check temp != nullptr, if we were to access temp->next->next we would check temp->next != nullptr
-    for(int i = 1; i <= k - 2 && temp; i++) temp = temp->next; // we basically stop one node before the node we want to delete using the condition i <= k - 2  but for large k, we will break out of the loop if temp becomes null
+
+    for(int i = 1; i <= k - 2 && temp; i++) temp = temp->next; 
+
+    // we basically stop one node before the node we want to delete using the condition i <= k - 2  but for large k, we will break out of the loop if temp becomes null, so temp basically points to one node before the node we want to delete
+
     if(!temp || !temp->next) return head; // if either temp or temp->next is null we cant delete 
     Node *nodeToDelete = temp->next;
     temp->next = temp->next->next; // break the link for the node which is to be deleted
@@ -119,7 +124,7 @@ Node *deleteValue(Node *head, int value) {
         }
         temp = temp->next; // else move ahead
     }
-    return head; // if temp comes on last node we cant delete anything hence return head, since then temp->next would point to nullptr and we can delete null
+    return head; // if temp comes on last node we cant delete anything hence return head, since then temp->next would point to nullptr and we cant delete null
 }
 
 Node* insertHead(Node *head, int data) {

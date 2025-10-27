@@ -1,107 +1,80 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// swap O(N) and 
+// we have to reverse the order of words in a given string and also remove leading or trailing or more than one spaces between any two words
 
-string reverseWordsBrute(const string &s) {
+// the brute force i can think of is, encounter a word from beginning and from end and then swap them, for this first do cleaning of initial spaces
+
+string reverseWordsBruteIncorrect(string s) {
     string ans = "";
-    int start = 0, end = s.size() - 1;
-    while(end >= 0) {
-        if(s[end] == ' ') end--;
-        else break;
-    } // found the actual end
-    while(start <= end) {
-        if(s[start] == ' ') start++;
-        else break;
-    } // found the actual start
-    int newStart = end, newEnd = end;
-    for(int i = end; i >= start; i--) {
-        // we iterate only after trimming initial spaces
-        if(s[i] != ' ') {
-            newStart--; // to get the actual start of the word
-        } else {
-            // end the word by copying it to ans
-            if(s[newStart] == ' ' && s[newEnd] == ' ') {
-                newStart--;
-                newEnd--;
-                continue;
-            }
-            for(int j = newStart; j <= newEnd; j++) ans += s[j];
-            ans += ' ';
-            newStart = i, newEnd = i;
-        }
+    int l = 0, r = s.length() - 1;
+    while(s[l] == ' ') l++;
+    while(s[r] == ' ') r--;
+    // now l and r point to first and last word
+    int lstart = l;
+    int rend = r;
+    for(int i = l; i <= r; i++) {
+        while(s[l] != ' ') l++;
+        while(s[r] != ' ') r--;
+        // now we have to swap the string from lstart to l and r to rend, basically swapping them would mean placing the word from r to rend placing first and then after one space place lstart to l
+        ans += s.substr(r , rend - r + 1);
+        ans += " ";
+        ans += s.substr(lstart, l - lstart + 1);
+        // now make lstart to l and r to rend point to new set of words
+
     }
     return ans;
 }
 
-string reverseWordsOptimal(string &s) {
-    int i1 = 0, j1 = s.size() - 1;
-    while(s[i1] == ' ') i1++;
-    while(s[j1] == ' ') j1--;
-    int i2 = i1, j2 = j1;
-    // found the first and last actual pointers
-    while(i2 <= j1) {
-        while(s[i2] != ' ') i2++;
-        while(s[j1] != ' ') j1--;
-        // we swap the strings from i1 to i2 with j1 to j2
-        int k1 = i1, k2 = j1;
-        while(k1 <= i2 && k2 <= j2) {
-            char temp = s[k1];
-            s[k1] = s[k2];
-            s[k2] = temp;
-            k1++;
-            k2++;
+// A more straightforward "brute-force" approach is to iterate through the string from right to left, find each word, and append it to your result string.
+
+string reverseWordsBrute(string s) {
+    string ans = "";
+    int i = s.length() - 1; // Start from the very end
+
+    while (i >= 0) {
+        // 1. Skip any trailing spaces
+        while (i >= 0 && s[i] == ' ') {
+            i--;
         }
-        while(k1 <= i2) {
-            s[k2] = s[k1++];
+        if (i < 0) break; // Break if we've passed all characters
+
+        // 2. Mark the end of a word
+        int word_end = i;
+
+        // 3. Find the start of the word (the loop condition is i >= 0)
+        while (i >= 0 && s[i] != ' ') {
+            i--;
         }
-        while(k2 <= j2) {
-            s[k1] = s[k2++];
+
+        // 4. Extract the word and append it to the result
+        string word = s.substr(i + 1, word_end - i);
+        
+        // Add a space BEFORE the next word, but not for the very first word
+        if (!ans.empty()) {
+            ans += " ";
         }
-        i1 = i2;
-        j2 = j1;
+        ans += word;
+    }
+    return ans;
+} // O(N) time and O(N) space to return the answer
+
+// The most optimal solution involves reversing the entire string and then reversing each word separately to get the desired output in place by mutating original string
+
+string reverseWordsOptimal(string s) {
+    int start = 0, end = s.length() - 1;
+    while(s[start] == ' ') start++;
+    while(s[end] == ' ') end--;
+    reverse(s.begin() + start - 1, s.begin() + end);
+    while(start <= end) {
+        int wordStart = start;
+        while(s[start] != ' ' && start <= end) start++;
+        reverse(s.begin() + wordStart - 1, s.begin() + start);
+        while(s[start] == ' ' && start <= end) start++;
     }
     return s;
 }
 
-void reverseStr(string &s, int low, int high) {
-    for(int i = low, j = high; i < j; i++, j--) {
-        swap(s[i], s[j]);
-    }
-} 
-
-string reverseWords(string &s) {
-    int start = 0, end = s.size() - 1;
-    while(s[start] == ' ') start++;
-    while(s[end] == ' ') end--;
-    reverseStr(s, start, end);
-    int newStart = start, newEnd = end;
-    for(int i = start; i <= end; i++) {
-        if(s[i] != ' ') newEnd++;
-        else {
-            // reverse the word and move ahead
-            reverseStr(s, newStart, newEnd - 1);
-        }
-    }
-}
-
-string reverseCorrect1(string &s) {
-    reverse(s.begin(), s.end());
-    string ans = "";
-    for(int i = 0; i < s.size(); i++) {
-        string word = "";
-        while(i < s.size() && s[i] != ' ') {
-            word += s[i];
-            i++;
-        }
-        reverse(word.begin(), word.end());
-        if(word.size() > 0) {
-            ans += ' '; // becuase of this first index would be a space
-            ans += word;
-        }
-    }
-    return ans.substr(1); // dont include first index since its a space 
-}
 
 int main() {
     

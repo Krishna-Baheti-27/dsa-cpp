@@ -11,17 +11,19 @@ int largestRectangleAreaBrute(vector<int> &heights) {
     int maxArea = INT_MIN;
     for(int i = 0; i < heights.size(); i++) {
         int currHeight = heights[i];
-        int bars = 1;
+        int bars = 1; // counting the current bar
         for(int left = i - 1; left >= 0; left--) {
-            if(heights[left] >= currHeight) bars++; // this are the number of contiguous bars on left
+            if(heights[left] >= currHeight) bars++; 
             else break;
-        }
+            // this are the number of contiguous bars on left
+        } 
         for(int right = i + 1; right < heights.size(); right++) {
-            if(heights[right] >= currHeight) bars++; // this are the number of contiguous bars on right
+            if(heights[right] >= currHeight) bars++; 
             else break;
+            // this are the number of contiguous bars on right
         }
         maxArea = max(maxArea, bars * currHeight);
-        // Now max area = bars * currHeight since width = 1 for each
+        // Now max area = bars * currHeight since width = 1 for each rectangle
     }
     return maxArea;
 } // O(n^2) time and O(1) space
@@ -70,10 +72,29 @@ int largestRectangleAreaBetter(vector<int> &heights) {
     return maxArea;
 } // O(2N + 2N + N) time O(2N + 2N) space
 
-// what if you are not allowed to precompute and you have to do it in a single pass, like find maxArea in while traversing
+// what if you are not allowed to precompute and you have to do it in a single pass, like find maxArea in while traversing, when we are traversing from left to right we have the context of prevSmaller but how to know about nextSmaller, we do that in future when we are popping
+
 int largestRectangleAreaOptimal(vector<int> &heights) {
-    // Most optimal is remaining
-}
+    stack<int> st;
+    int maxArea = 0;
+    for(int i = 0; i < heights.size(); i++) {
+        while(!st.empty() && heights[st.top()] > heights[i]) {
+            // here the order is breaking and hence we pop and compute maxArea for that element
+            int element = st.top(); st.pop();
+            int nextSmaller = i; // the current element is nse
+            int prevSmaller = st.empty() ? -1 : st.top(); // st.top() is pse
+            maxArea = max(maxArea, heights[element] * (nextSmaller - prevSmaller - 1));
+        }
+        st.push(i);
+    }
+    while(!st.empty()) {
+        int element = st.top(); st.pop();
+        int nextSmaller = heights.size();
+        int prevSmaller = st.empty() ? -1 : st.top();
+        maxArea = max(maxArea, heights[element] * (nextSmaller - prevSmaller - 1));
+    }
+    return maxArea;
+} // O(2N) time and O(N) space
 
 int main() {
     

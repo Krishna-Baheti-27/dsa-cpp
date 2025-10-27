@@ -17,7 +17,7 @@ string removeParenBrute(const string &s) {
         }
     }
     return ans;
-}
+} // O(N) time and O(N) space
 
 string removeParenBetter(const string &s) {
     int counter = 0; // to determine whether stack is empty or not, counter = 0 means stack is empty
@@ -33,7 +33,7 @@ string removeParenBetter(const string &s) {
         }
     }
     return ans;
-}
+} // O(N) time and O(1) space (bot considering space to return the answer)
 
 void removeParenOptimal(string &s) {
     // using two pointers technique
@@ -49,7 +49,7 @@ void removeParenOptimal(string &s) {
         }
     }
     s.resize(write_ptr); // only take the string from 0 to writer_ptr - 1 index hence we truncate it
-}
+} // here we taking O(N) time and no extra space to return the answer
 // but here we are actually modifying the actual data so maybe that is not encouraged
 
 int main() {

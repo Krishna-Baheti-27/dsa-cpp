@@ -5,6 +5,11 @@ using namespace std;
 
 // Return the sum of all subarray ranges of nums.
 
+// We already know how to find the subarray minimums, extending that we can also find subaray maximums for each subarray
+
+// the summation of max - min for all subarrays is what we require
+// that is same as sum of subarrays maximum - sum of subarrays minimum
+
 long long sumSubarrayRangesBrute(vector<int> &arr) {
     // brute force is generate all subarrays and go from there
     long long sum = 0;
@@ -18,6 +23,8 @@ long long sumSubarrayRangesBrute(vector<int> &arr) {
     }
     return sum;
 } // O(N^2) time and O(1) space
+
+/////////////////////////////////////////////////////////////////////
 
 vector<int> nextSmallerIdx(vector<int> &arr) {
     vector<int> ans(arr.size());
@@ -120,7 +127,7 @@ long long sumSubarrayMin(vector<int> &arr) {
 long long sumSubarrayRangesOptimal(vector<int> &arr) {
     // right that will be the range of each subarray added together
     return sumSubarrayMax(arr) - sumSubarrayMin(arr);
-} // O(10N) time ad O(12N) space 
+} // O(10N) time and O(12N) space 
 
 int main() {
     

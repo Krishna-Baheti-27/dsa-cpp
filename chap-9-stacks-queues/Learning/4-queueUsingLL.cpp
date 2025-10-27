@@ -78,6 +78,10 @@ public:
     int size() {
         return m_size;
     }
+
+    bool isEmpty() {
+        return m_front == nullptr; // or m_size == 0
+    }
 };
 
 int main() {

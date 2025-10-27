@@ -1,71 +1,98 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// this is for finding nearest 1, not nearest 0, and then return the matrix having distances of nearest 1
+
+/////////////////////////////////////////////////////////////////////////////////
+
 // here the bfs algo will be applied because its clear that we want to calculate the distance or go level by level, first at level 0, then at level 1 and so on
 
-// this is for finding nearest 1, not nearest 0
+// here dfs cant be applied for simple reason that DFS will always go to all the depth starting from 1, but rather what we want is startinf from 1, reach all zeroes at distance = 1, then all those 0's will have the min distance 1 at 1 diatance
+
 vector<vector<int>> updateMatrix(vector<vector<int>> &mat) {
+
     int n = mat.size(), m = mat[0].size();
-    queue<pair<pair<int,int>,int>> q; // queue for bfs
-    // intialise visited matrix
-    vector<vector<int>> visited(n ,vector<int>(m));
+
+    queue<pair<pair<int,int>,int>> q; // queue for bfs {{row, col}, dis}
+    vector<vector<bool>> visited(n ,vector<bool>(m)); //  visited matrix
+
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             if(mat[i][j] == 1) {
-                visited[i][j] = 1; // mark initial ones as visited
+                visited[i][j] = true; // mark initial ones as visited
                 q.push({{i,j}, 0}); // push in the queue
             } else {
-                visited[i][j] = 0; // mark rest as unvisited
+                visited[i][j] = false; // mark rest 0's as unvisited
             }
         }
     }
+
     vector<vector<int>> distance(n, vector<int>(m)); // this is our answer matrix
 
-    // we start the traversal of queue
     int drow[] = {-1, 0, +1 , 0};
     int dcol[] = {0, 1, 0, -1};
 
+    // we start the traversal of queue
+
     while(!q.empty()) {
+
         int row = q.front().first.first;
         int col = q.front().first.second;
         int distanceOfNearestOne = q.front().second;
-        distance[row][col] = distanceOfNearestOne; // put in our answer
+
+        q.pop();
+
+        distance[row][col] = distanceOfNearestOne; // put in our answer what we stored
+
         for(int i = 0; i < 4; i++) {
+
             int nrow = row + drow[i];
             int ncol = col + dcol[i];
+
+            // we are guranteed that mat[nrow][ncol] wont be 1 since we dealt with that initially by putting in the queue so here we only check if index is valid and not visisted before
+
             if(nrow < n && nrow >= 0 && ncol < m && ncol >= 0 && !visited[nrow][ncol]) {
-                q.push({{nrow, ncol}, distanceOfNearestOne + 1});
-                visited[nrow][ncol] = 1;
-                // we are guranteed that mat[nrow][ncol] wont be 1 since we dealt with that initially by putting in the queue
+                q.push({{nrow, ncol}, distanceOfNearestOne + 1}); // push in queue
+                visited[nrow][ncol] = true; // mark as visited
             }
         }
+
     }
+
     return distance;
-}
+} // O(mn + mn * 4) time and O(2mn) space for queue + visited (not considering space to return ans)
+
+////////////////////////////////////////////////////////////////////////////////////
 
 // for finding nearest 0
+
 vector<vector<int>> updateMatrix(vector<vector<int>> &mat) {
+
     int n = mat.size(), m = mat[0].size();
-    queue<pair<pair<int,int>,int>> q; // queue for bfs
-    // intialise visited matrix
-    vector<vector<int>> visited(n ,vector<int>(m));
+
+    queue<pair<pair<int,int>,int>> q; // queue for bfs, {{row,col}, dis}
+    vector<vector<bool>> visited(n ,vector<bool>(m)); //  visited matrix
+
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             if(mat[i][j] == 0) {
-                visited[i][j] = 1; // mark initial zeroes as visited
+                visited[i][j] = true; // mark initial zeroes as visited
                 q.push({{i,j}, 0}); // push in the queue
             } else {
-                visited[i][j] = 0; // mark rest as unvisited
+                visited[i][j] = false; // mark rest as unvisited
             }
         }
     }
+
     vector<vector<int>> distance(n, vector<int>(m)); // this is our answer matrix
 
-    // we start the traversal of queue
     int drow[] = {-1, 0, +1 , 0};
     int dcol[] = {0, 1, 0, -1};
 
+    // we start the traversal of queue
+
     while(!q.empty()) {
+
         int row = q.front().first.first;
         int col = q.front().first.second;
         int distanceOfNearestOne = q.front().second;
@@ -80,12 +107,14 @@ vector<vector<int>> updateMatrix(vector<vector<int>> &mat) {
             if(nrow < n && nrow >= 0 && ncol < m && ncol >= 0 && !visited[nrow][ncol]) {
                 q.push({{nrow, ncol}, distanceOfNearestOne + 1});
                 visited[nrow][ncol] = 1;
-                // we are guranteed that mat[nrow][ncol] wont be 0 since we dealt with that initially by putting in the queue
             }
         }
     }
+
     return distance;
-} // O(nm + nm + nm * 4) time + O(nm + nm + nm) space // for queue visted and distance
+
+} // O(nm + nm * 4) time + O(nm + nm) space // for queue and visted
+
 
 int main() {
     

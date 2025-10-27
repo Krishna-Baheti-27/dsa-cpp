@@ -14,13 +14,13 @@ vector<int> nextSmallerBrute(vector<int> &arr) {
         else ans.push_back(-1);
     }
     return ans;
-} // O(N^N) time and O(1) space
+} // O(N^2) time and O(1) space
 
 vector<int> nextSmallerOptimal(vector<int> &arr) {
     stack<int> st;
     vector<int> ans(arr.size());
     for(int i = arr.size() - 1; i >= 0; i--) {
-        while(!st.empty() && st.top() >= arr[i]) {
+        while(!st.empty() && st.top() >= arr[i]) { // only this condition changes 
             st.pop();
         }
         if(st.empty()) {
@@ -31,7 +31,7 @@ vector<int> nextSmallerOptimal(vector<int> &arr) {
         st.push(arr[i]); // push the element regardless
     }
     return ans;
-}
+} // O(2N) time and O(N) space
 
 int main() {
     

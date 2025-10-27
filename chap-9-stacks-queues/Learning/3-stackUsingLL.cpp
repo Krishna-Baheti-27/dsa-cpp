@@ -23,7 +23,7 @@ class Stack {
         while (top != nullptr) {
             pop();
         }
-    } // if stack object containing nodes were to be destoryed
+    } // if stack object containing nodes were to be destoryed, we dealloc all the memory by pop
 
     void push(int x) {
         // insertion at beginning
@@ -47,6 +47,9 @@ class Stack {
             throw out_of_range("Stack is empty");
         }
         return top->data;
+    }
+    bool isEmpty() {
+        return m_size == 0;
     }
 };
 

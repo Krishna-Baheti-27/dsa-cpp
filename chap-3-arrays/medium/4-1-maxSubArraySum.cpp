@@ -38,7 +38,7 @@ int maxSubarraySumOptimal(const vector<int> &arr) {
     int sum = 0, maxSum = INT_MIN;
     for(int i = 0; i < arr.size(); i++) {
         sum += arr[i];
-        maxSum = max(sum ,maxSum); // store the maximum sum
+        maxSum = max(sum, maxSum); // store the maximum sum
         if(sum < 0) sum = 0;
         // no need to carry it forward, since negative sum would do us more harm
         // this also marks the start of new subarray starting from next iteration
