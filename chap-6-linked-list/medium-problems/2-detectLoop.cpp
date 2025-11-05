@@ -15,28 +15,61 @@ class Node {  // can also use struct but you miss all the OOP advantages
     }
 };
 
-// a minimum of one node exists where when we start from that node, we come back to the same node again
+////////////////////////////////////////////////////////////////////////////////////
+
+// a minimum of one node exists where when we start from that node, we come back to the same node again means the linked list has cycle
+
+///////////////////////////////////////////////////////////////////////////////////
+
 bool hasLoop(Node *head) {
-    unordered_map<Node*,int> mpp;
+
+    unordered_map<Node*,bool> mpp; // to keep track of visited nodes in the linked list
     Node *temp = head;
+
     while(temp) {
-        if(mpp.find(temp) != mpp.end()) return true;
-        mpp[temp]++;
+
+        // found the same nodes again means we have a cycle and hence return true
+
+        if(mpp.find(temp) != mpp.end()) {
+            return true; 
+        }
+
+        mpp[temp] = true;
         temp = temp->next;
     }
-    return false;
-}
+
+    // no cycle since we didnt encounter the same node again and our iteration was over and hence return false so state no cycle found
+
+    return false; 
+
+} // O(N) time in worst case and O(N) space for unordered map
+
+///////////////////////////////////////////////////////////////////////////////////
+
+// using the tortoise and hare method for optimal solution
+// we start with slow and fast pointer and move them accordingly and if they meet again (other than initial head node then we have a cycle)
+
+// the intuition or mathematical proof of why this works
+// they got to collide in a loop becuase slow moves by one step and fast moves by two steps so the distance between them would never reduce but reduce by 1 only when we have cycle and ultimately reach 0, for no cycle condition the distance will never reduce and only increase
 
 bool hasLoopOptimal(Node *head) {
+
     Node *slow =  head, *fast = head;
+
     while(fast && fast->next) {
         slow = slow->next;
         fast = fast->next->next;
-        if(slow == fast) return true;
+
+        // if they ever meet or point to same node we have a cycle
+
+        if(slow == fast) {
+            return true;
+        }
     }
+
     return false; 
-    // they got to collide in a loop becuase slow moved by one step and fast moves by two steps so the distance between them would reduce by one and ultimately reach 0, for no loop condition the distance will never reduce and only increase
-} // O(N)
+    
+} // O(N) time and O(1) space
 
 int main() {
     

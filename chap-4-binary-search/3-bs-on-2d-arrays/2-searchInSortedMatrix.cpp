@@ -1,48 +1,87 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// give a sorted matrix both row-wise and col-wise we have to return whether the target is present in it or not, matrix is sorted in such a way that the last element of previous row is smaller than the first element of next row
+
+// in simple words, if you elongate a matrix into a 1-d vector then that vector would be sorted
+
+//////////////////////////////////////////////////////////////////////////////////
+
+// the brute force involves going through the matrix and element by element and checking if its target or not
+
 bool searchInSortedMatrixBrute(vector<vector<int>> &matrix, int target) {
+
     int n = matrix.size(), m = matrix[0].size();
+
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             if(matrix[i][j] == target) return true;
         }
     }
-    return false;
-} // O(mn) time
 
-// here we are taking advantage of the fact that each row is sorted and first element of new row is greater than the last element of previous row
+    return false;
+
+} // O(m * n) time
+
+///////////////////////////////////////////////////////////////////////////////////
+
+// here we are taking advantage of the fact that each row is sorted in both col-wise and row-wise fashion and going left on the row decreases value and going down on the column increases the value
 // we start from top right, if el == target we return true, if el < target we move down the row to increase value of el and if el > target we move left the row for decreasing target till we reach it or reach the other corner instead which would mean element does not exist
 
 bool searchInSortedMatrixBruteBetter(vector<vector<int>> &matrix, int target) {
+
     int n = matrix.size(), m = matrix[0].size();
+
     int movLeft = m - 1, movBotm = 0;
+
     while(movLeft >= 0 && movBotm < n) {
+
         if(matrix[movBotm][movLeft] == target) return true;
         else if(matrix[movBotm][movLeft] < target) movBotm++;
         else movLeft--;
     }
+
     return false;
+
 } // O(m + n) time approach
+
+// this approach is very crucial and would help in cae where we only have row-wise  and col-wise sorted matrix but the last element of previous row is not smaller than the first element of next row
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // we search for the row having target element and perform binary search on only that row
 
 bool searchInSortedMatrixBetter(vector<vector<int>> &matrix, int target) {
+
     int n = matrix.size(), m = matrix[0].size();
+
     for(int i = 0; i < n; i++) {
-        if(matrix[i][0] <= target && matrix[i][m - 1] >= target) { // only true for one row
-            // then only we find the target inside the ith row using binary search
+
+        // we find the row that has possibility of having target element, (only true for one row)
+        // because of the properties that the matrix has
+        // then only we find the target inside the ith row using binary search
+
+        if(matrix[i][0] <= target && matrix[i][m - 1] >= target) { 
+
             int low = 0, high = m - 1;
+
             while(low <= high) {
+
                 int mid = (low + high) / 2;
+
                 if(matrix[i][mid] == target) return true;
                 else if(matrix[i][mid] > target) high = mid - 1;
                 else low = mid + 1;
+
             }
         }
     }
+
     return false;
+
 } // O(n) + O(logm) time, since binary search happens for only one row where target can be possibly present
+
+////////////////////////////////////////////////////////////////////////////////////
 
 // the optimal solution involves hypothetically flatenning the matrix with the help for indices to apply bianry search on sorted array
 // hypothetically flattening out the matrix so we have one big vector of size m + n which is sorted and we can simply search on it using binary search to get O(log(m + n)) time

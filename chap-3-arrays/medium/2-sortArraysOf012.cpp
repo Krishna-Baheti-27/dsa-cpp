@@ -45,7 +45,7 @@ void sortArrOptimal(vector<int> &arr) {
             swap(arr[mid], arr[high]); // send 2 to high
             high--; // and hence expand the interval high + 1 to n - 1 to left by high--
 
-            // here we dont do mid++, since we dont know what was arr[high], if it was 0 or 2 then we again need to sort it and cant ignore it
+            // here we dont do mid++, since we dont know what was arr[high], if it was 0 or 2 then we again need to sort it and cant ignore it 
         }
     }
 

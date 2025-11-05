@@ -5,22 +5,40 @@ using namespace std;
 
 // Note that you do not have any change in hand at first
 
-// here we have to play it greedy in a way that save 5rs coin max so that we can sell to max number of people, if someone comes with a 20, so instead of giving them 5 + 5 + 5, we instead give them 10 + 5
-
 // here we have to tell whether we would be able to serve all customers or not
 
+///////////////////////////////////////////////////////////////////////////////////////
+
+// here we have to play it greedy in a way that save 5rs coin max so that we can sell to max number of people, if someone comes with a 20, so instead of giving them 5 + 5 + 5, we instead give them 10 + 5
+
 bool lemonadeChange(vector<int> &bills) {
+
     int fives = 0, tens = 0;
+
     for(int i = 0; i < bills.size(); i++) {
-        if(bills[i] == 5) fives++;
-        else if(bills[i] == 10) {
+
+        if(bills[i] == 5) { 
+
+            // sell directly and increase your fives by one
+
+            fives++;
+
+        } else if(bills[i] == 10) {
+
+            // if somone comes up with a 10 and you dont have 5 then return false since you cant sell
+
             if(fives) {
                 fives--;
                 tens++;
             }
-            else return false;
+            else {
+                return false;
+            }
+
         } else {
-            // for 20 we have two choices as stated and we act greedy here
+
+            // for 20 we have two choices as stated and we act greedy here by first giving 10 + 5 and if not possible then 5 + 5 + 5 and if even that is not possible then return false
+
             if(fives && tens) {
                 fives--;
                 tens--;
@@ -29,11 +47,15 @@ bool lemonadeChange(vector<int> &bills) {
             } else {
                 return false;
             }
+            
         }
     }
-    // iterated through the whole array => served all customers
+
+    // iterated through the whole array => served all customers hence return true
+
     return true;
-} 
+
+} // O(N) time
 
 int main() {
     

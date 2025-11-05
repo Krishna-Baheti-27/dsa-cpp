@@ -15,6 +15,10 @@ class Node {  // can also use struct but you miss all the OOP advantages
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////
+
+// given there is a 
+
 Node *startingNodeInLoopBrute(Node *head) {
     // same approach of hashing which we used in detectLoop
     unordered_map<Node*, int> mpp;

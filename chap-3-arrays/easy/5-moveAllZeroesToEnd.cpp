@@ -14,6 +14,8 @@ void moveZeroesBrute(vector<int> &arr) {
     }
 }
 
+// first copy all non zero and then zeroes
+
 void moveZeroesBetter(vector<int>& nums) {
     int j = 0;
     for(int i = 0; i < nums.size(); i++) {
@@ -25,7 +27,7 @@ void moveZeroesBetter(vector<int>& nums) {
     // O(n + d) where d is number of zeroes
 }
 
-// now in the above better code we had to again go and place the zeroes in end because thats what the question demans unlike remove duplicated which said we dont care about duplicate elements
+// now in the above better code we had to again go and place the zeroes in end because thats what the question demands unlike remove duplicated which said we dont care about duplicate elements
 // now if we have to move all the zeroes in end, whenever we encounter a non zero element we must swap it with the first occuring zero, which will send the zero at the start to back in elements position and the element which is non zero in front which is exactly what we want
 
 // so we have to find the position of the first zero, and then for any other non zero element swap it with position of first zero and increment that position since that is now occupied by non zero element so that wont be the position of zero anymore

@@ -2,6 +2,8 @@
 using namespace std;
 
 // Brute force involves generating all permutations and then going from there, just make sure to sort all the permutations and return the next permutation
+// Time complexity : O(n!). Total possible permutations is n!.
+// Space complexity : O(n). Since an array will be used to store the permutations.
 
 // Better solution is using cpp stl's inbuilt next_permutation function 
 void nextPermutationBetter(vector<int> &nums) {

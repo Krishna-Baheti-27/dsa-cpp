@@ -30,7 +30,7 @@ vector<vector<int>> subarraysHavingSumKBetter(vector<int> &arr, int k) {
         if(mpp.find(sum - k) != mpp.end()) {
             for(int startIdx : mpp[sum - k]) {
                 ans.push_back({startIdx + 1, i});
-                // storing all possible subarrays or indices having sum as sum - k 
+                // storing all possible subarrays or indices having sum as k, and its important that the subarray having sum k actually starts from startIdx + 1 to i
             }
         }
         mpp[sum].push_back(i); // push in the vector all the indices i having sum as sum
