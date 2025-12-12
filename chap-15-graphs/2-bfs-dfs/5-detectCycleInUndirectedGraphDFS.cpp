@@ -10,10 +10,20 @@ bool detectCycle(int node, int parent, vector<bool> &visited, vector<int> adj[])
     visited[node] = true; // mark it as visited
 
     for(auto adjNode : adj[node]) {
+
         if(!visited[adjNode]) {
-            if(detectCycle(adjNode, node, visited, adj) == true) return true;
+
+            // if we found a cycle then we return early and no need to complete the entire dfs
+
+            if(detectCycle(adjNode, node, visited, adj) == true) {
+                return true; 
+            }
+
         } else if(adjNode != parent) {
-            return true; // again we have a cycle
+
+            // again we have a cycle, because of the logic which we discussed in the bfs code that if its not the parent then someone else touched it from different path and hence cycle
+
+            return true; 
         }
     }
 
@@ -27,9 +37,16 @@ bool isCycleComplete(int v, vector<int> adj[]) {
     vector<bool> visited(v, false);
 
     for(int i = 0; i < v; i++) {
+
         if(!visited[i]) {
-            if(detectCycle(i, -1, visited, adj)) return true; 
-            // return true if any of the components return true for the cycle
+
+            // for a particular component, we again have the same cycle logic so for starting node of each component pass -1 as parent
+
+            if(detectCycle(i, -1, visited, adj)) {
+                return true; 
+            }
+
+            // return true if any of the components return true as then entire graph would be cyclic
         }
     }
 
@@ -38,7 +55,7 @@ bool isCycleComplete(int v, vector<int> adj[]) {
 } 
 
 // O(N) space for visited + O(N) for recursion stack space
-// O(N) times the for loop runs in total and O(N + 2E) total time, because only when not visited then detectCycle will be called
+// in total O(N + 2E) total time, because only when not visited then detectCycle will be called
 
 int main() {
     

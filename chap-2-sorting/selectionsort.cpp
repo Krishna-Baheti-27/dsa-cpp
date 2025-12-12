@@ -10,9 +10,7 @@ void selectionSort(int arr[], int n) {
             }
         }
         // swap minimum with the starting index
-        int temp = arr[i];
-        arr[i] = arr[min_idx];
-        arr[min_idx] = temp;
+        swap(arr[i], arr[min_idx]);
     }
     // this way in each iteration we are shifting smaller elements on the left and larger elements on the right
 }

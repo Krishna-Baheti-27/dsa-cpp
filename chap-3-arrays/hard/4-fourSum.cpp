@@ -85,8 +85,8 @@ vector<vector<int>> fourSumBetter(vector<int> &arr, int target) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// here we have to get rid of st which we used to store only unique occurences and also get rid of hashh set for looking up in array
-// so first sort the array, again standart variety
+// here we have to get rid of set which we used to store only unique occurences and also get rid of hashh set for looking up in array
+// so first sort the array, again standard variety
 
 vector<vector<int>> fourSumOptimal(vector<int> &arr, int target) {
     

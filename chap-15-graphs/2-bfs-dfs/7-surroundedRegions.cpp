@@ -8,7 +8,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////
 
-// so our observations are : we start with boundary O's and form a region of connected O's and mark them that they will not converted, rest will be converted to X
+// so our observations are : we start with boundary O's and form a region of connected O's and mark them that they will not converted, rest will be converted to X, since those will be the O's which were not connected directly to any of the boundary O's
 
 // here both dfs and bfs will works but dfs is more intuitive
 
@@ -39,35 +39,47 @@ void solveDFS(vector<vector<char>> &board) {
 
     // we have to traverse all boundary O's and from there mark all O's in depth
 
-    // traverse first row and last row 
+    // so this is problem of multisource dfs
+
+    // traverse first row and last row
+
     for(int j = 0; j < m; j++) {
+
         if(!visited[0][j] && board[0][j] == 'O') {
             dfsHelper(0, j, visited, board, n, m);
         }
+
         if(!visited[n - 1][j] && board[n - 1][j] == 'O') {
             dfsHelper(n - 1, j, visited, board, n, m);
         }
     }
 
     // traverse the first and last column
+
     for(int i = 0; i < n; i++) {
+
         if(!visited[i][0] && board[i][0] == 'O') {
             dfsHelper(i, 0, visited, board, n , m);
         }
+        
         if(!visited[i][m - 1] && board[i][m - 1] == 'O') {
             dfsHelper(i , m - 1, visited, board, n , m);
         }
     }
 
-    // check and replace the O's with X's which are not marked as visited as they were not connected to any boundary O and they were surrounded by X so they will be converted
+    // check and replace the O's with X's which are not marked as visited as they were not connected to any of the boundary O's and they were surrounded by X so they will be converted
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
-            if(board[i][j] == 'O' && !visited[i][j]) board[i][j] = 'X';
+            if(board[i][j] == 'O' && !visited[i][j]) {
+                board[i][j] = 'X';
+            }
         }
     }
+
+    // successfully updates the matrix in place
 }
-// O(mn + 4 * mn) time in worst case and O(mn) space for visited
+// O(mn + 4 * mn + mn) time in worst case and O(mn) space for visited
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -81,14 +93,18 @@ void solveBFS(vector<vector<char>> &board) {
     vector<vector<bool>> visited(n, vector<bool>(m, false));
 
     // in the intial config put all the O's on boundary inside the queue and mark them visited
+
+    // so this is problem of multisource bfs
     
     // for first and last row
 
     for(int j = 0; j < m; j++) {
+
         if(!visited[0][j] && board[0][j] == 'O') {
             q.push({0, j});
             visited[0][j] = true;
         }
+
         if(!visited[n - 1][j] && board[n - 1][j] == 'O') {
             q.push({n - 1, j});
             visited[n - 1][j] = true;
@@ -98,10 +114,12 @@ void solveBFS(vector<vector<char>> &board) {
     // for first column and last column (ignoring first and last row since already touched)
 
     for(int i = 1; i < n - 1; i++) {
+
         if(!visited[i][0] && board[i][0] == 'O') {
             q.push({i, 0});
             visited[i][0] = true;
         }
+
         if(!visited[i][m - 1] && board[i][m - 1] == 'O') {
             q.push({i, m - 1});
             visited[i][m - 1] = true;
@@ -136,11 +154,13 @@ void solveBFS(vector<vector<char>> &board) {
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
-            if(board[i][j] == 'O' && !visited[i][j]) board[i][j] = 'X';
+            if(board[i][j] == 'O' && !visited[i][j]) {
+                board[i][j] = 'X';
+            }
         }
     }
 
-} // O(m + n + 4*mn + mn) time and O(2mn) for queue and visited
+} // O(m + n + 4 * mn + mn) time and O(2mn) for queue and visited
 
 int main() {
     

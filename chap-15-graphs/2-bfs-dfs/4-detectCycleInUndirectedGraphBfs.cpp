@@ -1,7 +1,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+// the graph is said to have a cycle if we start from a node and return to the same node through some path
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+// first of all if we are starting from a position and there ae two different ways to reach some end position from that start position then the graph is said to have a cycle
+
+// so what we are looking for is when we traverse all the nodes level by level using bfs and we encouter that a node has already been traversed before (marked as visited) but we didnt came from that node (not parent, as that will always be visited as we came from that), which means we have a cycle as someone else visited it from a different path which means we have two paths and hence the cycle
+
 // the intuition in bfs is that we started from two different positions but now we are colliding or reaching the same node and this will happen only if there is a cycle
+
+// note that this logic only holds for undirected graphs 
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 bool isCycle(int v, vector<int> adj[]) {
 
@@ -26,18 +38,21 @@ bool isCycle(int v, vector<int> adj[]) {
                 q.push({adjNode, node}); // set its parent
 
             } else if(adjNode != parent) {
+                
+                // the adjNode has been visited, so either the adjNode can be parent and it will be visited naturally since we came from parent and but if the adjNode is not parent but is still visited which means somenone else from different path touched it so there is a cycle
+
                 return true; 
             }
-
-            // else we visited this node, but we have make sure that adjNode is not parent then only cycle because we know parent will be visited already since we came from parent (so it would be marked as visited before) but if we found a node which has been visited before and is not the parent which means some else touched it but how can two different path touch each other, this means we have a cycle
         }
     }
+
     return false; // no one collided
-}
+
+} // O(N + 2E) time and O(N) space 
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// now this was for the given source as 0 or the first node, but what if graph was broken into multiple components, then we would go and check for the each component once and as soon as any component returns a true for cycle we return true, or else traverse all components and didnt find a cycle so we return false
+// now this was for the given source as 0 or the first node, but what if graph was broken into multiple components, then we would go and check for the each component once and as soon as any component returns a true for cycle we return true for the whole graph, or else traverse all components and didnt find a cycle so we return false
 
 bool detectCycle(int start, vector<int> adj[], vector<bool> &visited) {
 
@@ -74,11 +89,19 @@ bool isCycleComplete(int v, vector<int> adj[]) {
 
     vector<bool> visited(v, false);
 
-    for(int i = 0; i < v; i++) { // for 0 based graph
+    // for 0 based graph
+
+    for(int i = 0; i < v; i++) {
+
+        // if any of the components have a cycle then the graph is said to be cyclic
+
         if(!visited[i]) {
-            if(detectCycle(i, adj, visited) == true) return true;
+            if(detectCycle(i, adj, visited) == true) {
+                return true;
+            }
         }
     }
+    
     return false;
 
 } // since its a simple bfs so O(N + 2E) time + O(N) for components and O(N) space

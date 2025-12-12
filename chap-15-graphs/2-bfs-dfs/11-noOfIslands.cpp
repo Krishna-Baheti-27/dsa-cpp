@@ -4,7 +4,7 @@ using namespace std;
 // we are given a grid of size n * m where consisting of 0 and 1 where 0 means water and 1 means land cell, we have to find the number of islands
 // we have to find number of islands, an island is formed by connnecting adjacent lands (8 directional) and is surrounded by water from all 8 directions
 
-// this is different from number of enclaves where we were finding safe path by marking all safe starting from boundary, here we want to calculate all such islands and not only safe ones connected to boundary and more thing to note is that here we are ok if island is not covered by 0's in all 8 directions but it should be covered whereever the indices are valid 
+// this is different from number of enclaves where we were finding safe path by marking all safe starting from boundary, here we want to calculate all such islands and not only safe ones connected to boundary and more thing to note is that here we are ok if island is not covered by 0's in all 8 directions but it should be covered whereever the indices are valid. so even if there is a group of 1's in which one of the 1 is on boundary even then it can be considered as to be covered by water in all 8 directions if on other sides we either have boundary or 0's which means water
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +16,8 @@ void dfsHelper(int row, int n, int col, int m, vector<vector<bool>> &visited, ve
 
     int drow[] = {-1,-1,-1,0,0,+1,+1,+1};
     int dcol[] = {-1,0,+1,-1,+1,-1,0,+1};
+
+    // if it is possible to add any more land cell to this group then the dfs will do that and if not then it will be an island having single 1 (land cell) and surrounded on water from all 8 directions (0's) but still it is qualified to be a island thats why we count every single dfs call to be exploring a new island 
     
     for(int i = 0; i < 8; i++) {
 
@@ -40,8 +42,10 @@ int numIslands(vector<vector<int>> &grid) {
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
+            
             if(!visited[i][j] && grid[i][j] == 1) {
-                countIslands++;
+                
+                countIslands++; // mark the new group of island
                 dfsHelper(i, n, j, m, visited, grid);
             }
         }

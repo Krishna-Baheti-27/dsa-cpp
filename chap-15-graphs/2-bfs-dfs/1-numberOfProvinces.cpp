@@ -1,21 +1,25 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// a province is part of graph in which there exists a path from u to v or v to u where u,v are nodes in that province, given the graph we have to count the number of provinces, basically a province is a part of a graph where every node is connected to each other
-
 // A province is a group of directly or indirectly connected cities and no other cities outside of the group.
 // You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.
 // Return the total number of provinces
 
-// Here the cities refer to the nodes of graph and province refers to a component, so we have to count number of provinces
+// a province is part of graph in which there exists a path from u to v or v to u where u,v are nodes in that province, given the graph we have to count the number of provinces, basically a province is a part of a graph where every node is connected to each other
 
-//////////////////////////////////////////////////////////////////////////////
+// Here the cities refer to the nodes of graph and province refers to a component, so we have to count number of provinces or the number of connected components in graph
+
+////////////////////////////////////////////////////////////////////////////////
 
 void dfs(int node, vector<bool> &vis, vector<int> adjLs[]) {
+
     vis[node] = true; // make the node visited and then go to the depths of it
-    for(auto it : adjLs[node]) {
-        if(!vis[it]) dfs(it, vis, adjLs);
+    for(auto adjNode : adjLs[node]) {
+        if(!vis[adjNode]) {
+            dfs(adjNode, vis, adjLs);
+        }
     }
+
 }
 
 int numOfProvinces(vector<vector<int>> &adj) {
@@ -30,16 +34,20 @@ int numOfProvinces(vector<vector<int>> &adj) {
         for(int j = 0; j < v; j++) {
             if(adj[i][j] == 1 && i != j) { // since we cant have an edge from 1 to 1
 
-                adjLs[i].push_back(j);
-                // adjLs[j].push_back(i);
                 // this alone is sufficient becuase lets say you have edge from 1 - 2 so it will be present in matrix[1][2] and also matrix[2][1] which means we only have to add to either i or j not both and complete traversal of matrix will insert both, else we will be inserting duplicates which increases space and lowers time
+
+                adjLs[i].push_back(j);
+
+                // adjLs[j].push_back(i); // not needed as explained
             }
         }
     } 
     
     // conversion done 
 
-    int count = 0; // our main variable to count number of provinces based on how many times dfs function is being called
+    // our main variable to count number of provinces based on how many times dfs function is being called
+
+    int count = 0; 
 
     vector<bool> vis(v, false); // visited array initially false
 
@@ -49,13 +57,12 @@ int numOfProvinces(vector<vector<int>> &adj) {
 
     for(int i = 0; i < v; i++) {
         if(!vis[i]) {
-            count++;
+            count++; // count the new province
             dfs(i, vis, adjLs);
         }
     }
 
     return count;
-
 } 
 
 // we ignoring time and space for adjacency matrix to list because most of the time we will have list, so time and space complexity will be same of that of traversal algorithm used

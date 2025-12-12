@@ -59,8 +59,8 @@ vector<int> repeatingAndMissingBetter(vector<int> &arr) {
 // using simple logic and maths we will solve this problem by sum of first N natural number and we also require a second equation since we have 2 unknowns and thus sum of squreas of first N natural numbers also
 
 // let A and B be repeating and missing number then we know using math
-// A + B = sum of arr - sum of first N natural no.
-// A - B = sum of squres of arr - sum of sqaures of first N natural no. 
+// A - B = sum of arr - sum of first N natural no.
+// A + B = sum of squres of arr - sum of sqaures of first N natural no. 
 
 vector<int> repeatingAndMissingOptimal1(vector<int> &arr) {
 
@@ -70,8 +70,8 @@ vector<int> repeatingAndMissingOptimal1(vector<int> &arr) {
     long long sum1 = 0, sum2 = 0;
 
     for(int i = 0; i < arr.size(); i++) {
-        sum1 += arr[i]; // sum of first N natural numbers
-        sum2 += (long long)arr[i] * (long long)arr[i]; // sum of squares of first N natural numbers
+        sum1 += arr[i]; // sum of array elements
+        sum2 += (long long)arr[i] * (long long)arr[i]; // sum of squares of array elements
     }
 
     int repMinusMissing = sum1 - (n*(n + 1)) / 2;

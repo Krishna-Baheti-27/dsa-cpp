@@ -31,6 +31,7 @@ void reverseArray(vector<int> &arr, int low, int high) {
 // for this cpp has stl => reverse(arr,arr+d) reverses from 0th to d-1th index
 // reverse(arr+d,arr+n) reverses from dth to n-1th index
 // and for vectors use iterators
+// reverse(arr.begin(), arr.end())
 
 void leftRotateByk(vector<int> &arr, int k) {
     k = k % arr.size();

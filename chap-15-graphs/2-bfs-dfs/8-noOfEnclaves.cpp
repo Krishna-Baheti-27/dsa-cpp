@@ -9,6 +9,8 @@ using namespace std;
 
 // this question is same as previous as there we had to mark all the zeroes or their adjacent on boundary which could not be converted to X and here we also have to find the 1's or land cells which are not connected to any boundary land cell as that will be our answer
 
+// so answer is totalOnes - ones not connected to any boundary cell
+
 // so again same approach that mark all the ones that are connected and can be converted and rest which cannot be will be our answer
 
 // we will use bfs here to mark all the adjacent and the remaining umarked ones are those from which you cannot escape the grid
@@ -29,11 +31,13 @@ int numEnclavesBFS(vector<vector<int>> &nums) {
     // first and last row
 
     for(int j = 0; j < m; j++) {
+
         if(!visited[0][j] && nums[0][j] == 1) { 
             q.push({0, j});
             visited[0][j] = true;
             safeOnes++;
         }
+
         if(!visited[n - 1][j] && nums[n - 1][j] == 1) {
             q.push({n - 1, j});
             visited[n - 1][j] = true;
@@ -44,11 +48,13 @@ int numEnclavesBFS(vector<vector<int>> &nums) {
     // first and last col
 
     for(int i = 0; i < n; i++) {
+
         if(!visited[i][0] && nums[i][0] == 1) { 
             q.push({i ,0});
             visited[i][0] = true;
             safeOnes++;
         }
+
         if(!visited[i][m - 1] && nums[i][m - 1] == 1) {
             q.push({i, m - 1});
             visited[i][m - 1] = true;
@@ -82,15 +88,18 @@ int numEnclavesBFS(vector<vector<int>> &nums) {
     }
 
     int totalOnes = 0;
+
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
-            if(nums[i][j] == 1) totalOnes++;
+            if(nums[i][j] == 1) {
+                totalOnes++;
+            }
         }
     }
 
     return totalOnes - safeOnes;
-}
-// O(mn + m + n + mn + mn) time and O(2mn) space for queue and visited
+    
+} // O(mn + m + n + 4 * mn + mn) time and O(2mn) space for queue and visited
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -128,9 +137,11 @@ int numEnclavesDFS(vector<vector<int>> &grid) {
     // first and last row
 
     for(int j = 0; j < m; j++) {
+
         if(!visited[0][j] && grid[0][j] == 1) {
             dfsHelper(0, n, j, m, safeOnes, visited, grid);
         }
+
         if(!visited[n - 1][j] && grid[n - 1][j] == 1) {
             dfsHelper(n - 1, n, j, m, safeOnes, visited, grid);
         }
@@ -139,9 +150,11 @@ int numEnclavesDFS(vector<vector<int>> &grid) {
     // first and last col
 
     for(int i = 1; i < n - 1; i++) {
+
         if(!visited[i][0] && grid[i][0] == 1) {
             dfsHelper(i, n, 0, m, safeOnes, visited, grid);
         }
+
         if(!visited[i][m - 1] && grid[i][n - 1] == 1) {
             dfsHelper(i, n, m - 1, m, safeOnes, visited, grid);
         }
@@ -150,6 +163,7 @@ int numEnclavesDFS(vector<vector<int>> &grid) {
     // counting totalOnes and subtracting from safeOnes to get answer
 
     int totalOnes = 0;
+
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             if(grid[i][j] == 1) totalOnes++;
@@ -157,7 +171,65 @@ int numEnclavesDFS(vector<vector<int>> &grid) {
     }
 
     return totalOnes - safeOnes;
+
 } // same time and space as bfs
+
+////////////////////////////////////////////////////////////////////////////////
+
+// THE BEST SOLUTION HERE IS TO USE DFS BUT DO NOT PASS safeOnes by reference and also we can calculate totalOnes during our dfs traversal on the go so that is much more cleaner instead of first calculating safeOnes by only traversing boundary and what not
+
+int dfsHelperBest(int row, int n, int col, int m, vector<vector<bool>> &visited, vector<vector<int>> &grid) {
+
+    visited[row][col] = true;
+    int count = 1; // Count this current node
+
+    int drow[] = {-1, 0, +1 , 0};
+    int dcol[] = {0, 1, 0, -1};
+
+    for(int i = 0; i < 4; i++) {
+
+        int nrow = row + drow[i];
+        int ncol = col + dcol[i];
+
+        if(nrow < n && nrow >= 0 && ncol < m && ncol >= 0 && !visited[nrow][ncol] && grid[nrow][ncol] == 1) {
+            count += dfsHelperBest(nrow, n, ncol, m, visited, grid);
+        }
+    }
+
+    return count; // if no adajacent then returns 1 (means that node only)
+} 
+
+int numEnclavesDFSBest(vector<vector<int>> &grid) {
+
+    int n = grid.size(), m = grid[0].size();
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
+
+    int safeOnes = 0;
+    int totalOnes = 0;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            
+            // If it's a land cell
+            
+            if(grid[i][j] == 1) {
+                
+                // Always count it towards the total
+
+                totalOnes++;
+
+                // If it is on the boundary AND not visited yet, 
+                // it is the start of a "Safe" component.
+
+                if(!visited[i][j] && (i == 0 || j == 0 || i == n - 1 || j == m - 1)) {
+                    safeOnes += dfsHelperBest(i, n, j, m, visited, grid);
+                }
+            }
+        }
+    }
+
+    return totalOnes - safeOnes;
+}
 
 int main() {
     

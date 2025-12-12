@@ -40,8 +40,8 @@ bool isSortedRotated(int arr[], int n) { // check for sorted in non decreasing o
         // we basically wanted to check if arr[i] > arr[i + 1] so we would increase count but here array is rotated but sorted in circular wau hence we use (i + 1) % n which restricts and bounds in circular way
     }
     return count <= 1;
-    // little edge case, if array consists of a single element like [1,1,1] then count remains zero and hence cout == 0 also means sorted
-    // if count == 1 exactly one drop this means either array sorted-rotated
+    // little edge case, if array consists of a single element like [1,1,1] then count remains zero and hence count == 0 also means sorted
+    // if count == 1 exactly one drop this means either array is fully sorted or sorted-rotated
     // if count > 1 array is not sorted rotated
 }
 

@@ -20,8 +20,6 @@ int searchInsertPositionBrute(vector<int> &arr, int key) {
 
 /////////////////////////////////////////////////////////////////////
 
-// optimal using lower_bound and binary search
-
 int searchInsertPositionOptimised(vector<int> &arr, int key) {
 
     int low = 0, high = arr.size() - 1, ans = arr.size();

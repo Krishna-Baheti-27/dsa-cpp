@@ -85,7 +85,7 @@ int longestSeqBetteeReadable(vector<int> &arr) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-// but in better solution we are distorting the array 
+// but in better solution we are distorting the array by sorting it and hence maybe take duplicate of the original array and cosider telling this to interviewer
 
 // here we skip all the elements from the operation which are not at the start of the sequence since they would be found at later down the iteration in the set, and if they are the start of the sequecne then similar to brute force we start checking for next element in the sequecne, if we find we icnrease the length fo sequecne or else just move ahead
 

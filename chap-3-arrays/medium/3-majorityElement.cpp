@@ -54,6 +54,7 @@ int majorityElOptimal(const vector<int> &arr) {
     // no need to do this check if it is given that there always exists a majority element
 
     count = 0;
+    
     for(int i = 0; i < arr.size(); i++) {
         if(arr[i] == ans) count++;
     }

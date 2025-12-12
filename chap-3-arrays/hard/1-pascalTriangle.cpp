@@ -39,7 +39,7 @@ vector<int> getRowBrute(int n) {
     return ans;
 } // O(n * c) where c is avg number of columns in thw worst case it is O(n^2) time
 
-// instead of calculating for all elements one by one starting from scratch we simply, find all the values on the go starting from n - 1 C 0 to n - 1 C n - 1 by simplifying it
+// instead of calculating for all elements one by one starting from scratch we simply, find all the values on the go starting from n - 1 C 0 to n - 1 C n - 1 by simplifying it, since we would have exactly n columns in the nth row 
 
 vector<long long> getRowOptimal(int n) {
     long long prod = 1;

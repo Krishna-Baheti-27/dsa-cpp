@@ -16,17 +16,15 @@ int orangesRotting(vector<vector<int>> &grid) {
 
     int n = grid.size(), m = grid[0].size();
 
-    vector<vector<bool>> visited(n, vector<bool>(m));
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
     queue<pair<pair<int,int>,int>> q; // q will store ((row, col), time)
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
             if(grid[i][j] == 2) {
-                q.push({{i,j}, 0});
+                q.push({{i,j}, 0}); // inserted at t = 0
                 visited[i][j] = true; // mark it as rottened
-            } else {
-                visited[i][j] = false; // if empty or fresh then dont mark it as rottened
-            }
+            } 
         }
     }
 
@@ -37,6 +35,7 @@ int orangesRotting(vector<vector<int>> &grid) {
     int maxTime = INT_MIN;
 
     // we will use this for travelling in 4 directions for adjacent cells
+
     int drow[] = {-1, 0, +1 , 0};
     int dcol[] = {0, 1, 0, -1};
 
@@ -55,9 +54,10 @@ int orangesRotting(vector<vector<int>> &grid) {
             int nrow = row + drow[i]; // neighbouring row to traverse
             int ncol = col + dcol[i]; // neighbouring column to traverse
 
-            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && visited[nrow][ncol] != true && grid[nrow][ncol] == 1) {
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && visited[nrow][ncol] == false && grid[nrow][ncol] == 1) {
 
                 // if the indices are valid and they are not rottened or visited before and you are a fresh guy then
+
                 q.push({{nrow, ncol}, time + 1}); // level + 1 since we moved to new level
                 visited[nrow][ncol] = true; // mark them as visited
             }
@@ -68,22 +68,26 @@ int orangesRotting(vector<vector<int>> &grid) {
 
     for(int i = 0; i < n; i++) {
         for(int j = 0; j < m; j++) {
-            if(grid[i][j] == 1 && visited[i][j] == false) return -1;
+            if(grid[i][j] == 1 && visited[i][j] == false) {
+                return -1;
+            }
         }
     }
 
     // more elegantly you can check using, when initially traversing the grid, keep track of countfresh, and when you rotten a fresh orange decrease  countfresh by 1, in the end if countfresh == 0 then you have rottened everybody and return maxTime else -1
     // helps save last traversal of O(mn)
 
-    return maxTime == INT_MIN ? 0 : maxTime;
+    // what if we didnt have anything to rotten (everything empty or all fresh or empty + fresh, in these three cases we have to return 0 since 0 time required to rotten all fresh oranges (this is different from the case where we have fresh oranges but cant rotten all))
 
-} // O(2nm) space for visited and queue and O(nm + 4*mn) time
+    return maxTime == INT_MIN ? 0 : maxTime; 
+
+} // O(2 * n * m) space for visited and queue and O(n * m + 4 * m * n + n * m) time
 
 /////////////////////////////////////////////////////////////////
 
 // WHY USE BFS INSTEAD OF DFS :
 
-// This problem is a multi-source shortest path problem. We need to find the shortest time from any initial rotten orange to every fresh orange.
+// This problem is a multi-source shortest path problem. We need to find the shortest time from any initial rotten orange to every fresh orange and multisource since many rotten oranges
 
 // BFS is the standard algorithm for finding the shortest path in an unweighted graph. It naturally finds the minimum time.
 
