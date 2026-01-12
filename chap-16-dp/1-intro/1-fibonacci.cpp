@@ -1,9 +1,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// memoization -> top bottom dp
-// tabulation -> bottom up dp
-// space optimisation -> final solution
+// memoization -> top bottom dp (find the solutions to bigger subproblems first always recursive since recursion always goes from top to bottom that is from answer to base case)
+// tabulation -> bottom up dp (aggregate the solution of smaller subproblems using iterations of loops so we go from base case to answer )
+// space optimisation -> final solution (just remove redundant  space from tabulation)
 
 // fibonacci series -> 0 1 1 2 3 5 8 ....
 // the recurrence realtion is f(n) = f(n - 1) + f(n - 2)
@@ -22,9 +22,11 @@ int fibRecur(int n) {
 // in memoization we tend to store the value of subproblems in map/table to avoid recomputing it
 
 int fibMemo(int n, vector<int> &dp) {
+
     if(n <= 1) {
         return n;
     }
+    
     if(dp[n] != -1) {
         return dp[n]; // step 2, dont compute if value available
     }

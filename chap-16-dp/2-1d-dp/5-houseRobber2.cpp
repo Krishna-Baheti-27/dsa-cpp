@@ -5,7 +5,7 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-// so if you pay close attention here then the only thing which is different here is that the first and last house are also adjacent apart from the previous constraints so we first find max sum subsequence of non adjacent without considering the last element and then without considering the first element then return the max amongst these two as these are the only two possible cases and we cant have both first and last and if we skip both first and last then we wont get max as all elements are positive and skipping both positive elements wouldnt make a optimal solution
+// so if you pay close attention here then the only thing which is different here is that the first and last house are also adjacent apart from the previous constraints so this means we cant break into first and last house both and hence we first find max sum subsequence of non adjacent without considering the last element and then without considering the first element then return the max amongst these two as these are the only two possible cases and we cant have both first and last and if we skip both first and last then we wont get max as all elements are positive and skipping both positive elements wouldnt make a optimal solution
 
 int maxSumOptimal(vector<int> &arr) {
 
@@ -17,15 +17,9 @@ int maxSumOptimal(vector<int> &arr) {
 
     int pickSum = arr[0], notPickSum = max(arr[0], arr[1]);
 
-    // the max is necessary because dp[i] (or prev) must store the best possible result for the range 0 to i, whether that involves picking the element at i or skipping it, hence we use max.
-
-    // pickSum is prev2 or secondPrev and notPickSum is prev 
-
     for(int i = 2; i < n; i++) {
+
         int curr = max(arr[i] + pickSum, 0 + notPickSum);
-
-        // we do this to mov the timeline forward that is initiallt curr at i and notPickSum at i - 1 and pickSum at i - 2, so when we change i that is i + 1 then i - 2 becomes i - 1 and hence its value must be equal to current i - 1 and similarly i - 1 becomes i and hecne it current value must be equal to i
-
         pickSum = notPickSum;
         notPickSum = curr;
     }
@@ -55,7 +49,7 @@ int maxSum(vector<int> &arr) {
 
 } // O(3N) time and O(2N) space
 
-// and we can also optimise it a little bit more like using 0 extra space by changing our maxSumOptimal function to operate on a range of array passed and etc but still this solution remains the most optimal if we ignore constants
+// and we can also optimise it a little bit more like using 0 extra space by changing our maxSumOptimal function to operate on a range of array passed and etc but still this solution remains the most optimal if we talk about worst case analysis in which we ignore constants
 
 int main() {
     

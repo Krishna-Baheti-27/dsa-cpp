@@ -2,10 +2,12 @@
 using namespace std;
 
 // Full Binary tree -> every node has either 0 or 2 children 
-// Complete Binary Tree -> all levels are filled except possibly the last level which has nodes as left as possible
+// Complete Binary Tree -> all levels are filled except possibly the last level which has nodes as left as possible  (this also balanced and has height of logN)
 // Perfect Binary tree -> All leaf nodes are at the same level
 // Balanced Binary tree -> Height of tree is at max logN (min height possible)
 // Degenerate tree -> Essentially a singly linked list (every node has single child)
+
+////////////////////////////////////////////////////////////////////////////////////
 
 class Node {
     public:
@@ -77,9 +79,8 @@ vector<int> preorderTraversalRecursive(Node *root) {
 
     return result;
 
-} // O(N^2) time in worst case since O(2N) for insertion of left and right subtree for one node and total n nodes and O(N) recursion stack space 
+} // O(N^2) time in worst case since O(2N) for insertion of left and right subtree for one node and total N nodes and O(N) recursion stack space 
 
-// less efficient also since multiple insertions and merge
 
 // Preorder traversal like this very we only print:
 
@@ -153,7 +154,9 @@ vector<vector<int>> levelorderTraversal(Node *root) {
 
     while(!q.empty()) {
 
-        int size = q.size();
+        // size of the queue is the number of elements in queue in that level
+
+        int size = q.size(); 
 
         vector<int> levelTraversal; // traversal for that level
 
@@ -164,6 +167,8 @@ vector<vector<int>> levelorderTraversal(Node *root) {
             q.pop(); // pop the node after you have got it
 
             levelTraversal.push_back(node->data);
+
+            // we dont insert null values in our queue and insert in order from left to right and hence left first
 
             if(node->left) q.push(node->left);
             if(node->right) q.push(node->right);
@@ -208,6 +213,68 @@ vector<int> iterativePreorder(Node *root) {
 
 } // O(N) time since all nodes are processed and O(N) space for explicit stack
 
+// this can also be done in other way since we are always popping the left node as soon as its inserted rather we keeping on inserting the left node while its not null and keeping pushing right and if it becomes null then we pop from the stack and set the right node popped to be current
+
+// uses lesser space as we only push right nodes but still O(N) in worst case
+
+vector<int> iterativePreorderBetter(Node *root) {
+
+    if(!root) return {};
+
+    vector<int> result;
+    stack<Node *> st;
+
+    Node *curr = root;
+
+    while(curr != nullptr || !st.empty()) {
+
+        while(curr != nullptr) {
+            result.push_back(curr->data);
+            if(curr->right) {
+                st.push(curr->right);
+            }
+            curr = curr->left;
+        }
+
+        if(!st.empty()) {
+            curr = st.top();
+            st.pop();
+        }
+    }
+
+    return result;
+}
+
+// instead of using this inner while loop we can write it simply in the below inorder stlye of if-else
+
+vector<int> iterativePreorderUnified(Node *root) {
+    if(!root) return {};
+
+    stack<Node*> st;
+    vector<int> result;
+    Node *node = root;
+
+    while(node != nullptr || !st.empty()) {
+
+        if(node) {
+            // PREORDER: Print/Process BEFORE going left
+            result.push_back(node->data); 
+            
+            st.push(node);
+            node = node->left;
+        } else {
+            // We have explored left, now backtrack
+            node = st.top(); 
+            st.pop();
+            
+            // In Preorder, we already printed 'node', so we just move right
+            node = node->right;
+        }
+    }
+
+    return result;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 // in the recursive version we went absolutely left and then printed and then moved right, so here we are doing exactly that of moving left till node is not null and pushing into the stack, once node becomes null we pop and add to the answer then we go on right
@@ -226,6 +293,7 @@ vector<int> iterativeInorder(Node *root) {
     while(node != nullptr || !st.empty()) { 
 
         // if node is not null then push into the stack keep moving left
+
         if(node) {
             st.push(node);
             node = node->left;
@@ -234,9 +302,12 @@ vector<int> iterativeInorder(Node *root) {
             // now we cnt go anymore left sp we pop and print and now left is done, then go right by node = node->right
 
             node = st.top(); st.pop();
+
+            // we process node here at the backtracking stage and not while pushing like in preorder
+
             result.push_back(node->data);
 
-            node = node->right; // check for right
+            node = node->right; // check for right subtree
         }
     }
 

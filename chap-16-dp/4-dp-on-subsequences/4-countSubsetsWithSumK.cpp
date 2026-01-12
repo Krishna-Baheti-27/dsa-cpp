@@ -7,6 +7,8 @@ using namespace std;
 
 int countSubsetsSumKBruteHelper(int index, vector<int> &arr, int target) {
 
+    // we dont check target == 0 and return since we want to check all possible subsets
+
     if(index == arr.size()) {
         return target == 0 ? 1 : 0;
     }

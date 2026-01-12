@@ -65,7 +65,11 @@ int memoHelper(int i, int j, int m, int n, vector<vector<int>> &grid, vector<vec
 } // O(mn) time and O(mn + m + n) space
 
 int minPathSumMemo(vector<vector<int>> &grid) {
+
     int m = grid.size(), n = grid[0].size();
+
+    // here we can safely use -1 since array elements are positive and any path sum would not give -1, but if it does it can mess up our code so make sure to check constraints before directly pasting this
+
     vector<vector<int>> dp(m, vector<int>(n, -1));
     return memoHelper(0, 0, m, n, grid, dp);
 }
@@ -120,6 +124,8 @@ int minPathOptimal(vector<vector<int>> &grid) {
         sum += grid[0][j];
         dp[j] = sum;
     }
+
+    // we calculate the sum for column on the way while iterating and filling up the table
 
     sum = grid[0][0];
 

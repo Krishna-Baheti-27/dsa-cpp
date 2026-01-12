@@ -111,7 +111,50 @@ bool checkValidStringBrute(string s, int index = 0, int count = 0) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// if you do dynamic programming you can optimise this to O(N^2) time and O(N^2) space, which will be a better solution
+// if you apply dynamic programming you can optimise this to O(N^2) time and O(N^2) space, which will be a better solution
+
+// so lets apply memoization
+
+int memoHelper(int index, int count, int n, string &s, vector<vector<int>> &dp) {
+
+    if(count < 0) {
+        return 0;
+    }
+
+    if(index == n) {
+        if(count == 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    if(dp[index][count] != -1) {
+        return dp[index][count];
+    }
+
+    if(s[index] == '(') {
+        return dp[index][count] = memoHelper(index + 1, count + 1, n, s, dp);
+    } else if(s[index] == ')') {
+        return dp[index][count] = memoHelper(index + 1, count - 1, n, s, dp);
+    } 
+
+    return dp[index][count] = memoHelper(index + 1, count + 1, n, s, dp) || memoHelper(index+ 1, count, n, s, dp) || memoHelper(index + 1, count - 1, n, s, dp);
+}
+
+bool checkValidMemo(string s) {
+
+    int n = s.length();
+    vector<vector<int>> dp(n, vector<int>(n, -1));
+
+    return memoHelper(0, 0, n, s, dp);
+
+} // O(n^2) time and space + O(n) recursion stack space
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// now lets write the tabulation
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -126,6 +169,7 @@ bool checkValidStringOptimal(string s) {
     int minCount = 0, maxCount = 0;
 
     for(int i = 0; i < s.length(); i++) {
+
         if(s[i] == '(') {
             minCount++;
             maxCount++;
@@ -137,9 +181,12 @@ bool checkValidStringOptimal(string s) {
             maxCount++; // since we have to take maximum
         }
         
+        // even after taking or considering only maximum cases still we are having max < 0 then this is identical to count < 0 and hence we immediately return false
+
         if(maxCount < 0) {
             return false; // which means we had an edge case like this ()) or ) which means false
         }
+
         if(minCount < 0) {
             minCount = 0; // if min becomes lesser than 1 then restore it
         }
@@ -148,8 +195,6 @@ bool checkValidStringOptimal(string s) {
     return minCount == 0; // if 0 is possible in the range then valid
 
 } // O(N) time
-
-
 
 int main() {
     

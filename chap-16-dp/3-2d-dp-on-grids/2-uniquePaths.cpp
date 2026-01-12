@@ -9,6 +9,8 @@ using namespace std;
 
 // so we start from mat[0][0] and either we can move right or down that is from mat[i][j] we can move mat[i + 1][j] or mat[i][j + 1], and we have to return all possible ways so we solve it by summing all ways by first taking right with summing all ways by first taking left and then add the value returned by both left and right function calls
 
+// here left and right are basically implying down and right
+
 // since we have to return the total possible ways which means we have to apply recursion so how to write the recurrence for this
 
 // f(i,j) = f(i + 1, j) + f(i, j + 1) provided the indices are valid
@@ -16,9 +18,13 @@ using namespace std;
 
 int uniquePathsHelper(int i, int j, int m, int n) {
 
+    // out of grid and no path exists
+
     if(i >= m || j >= n) {
         return 0;
     }
+
+    // got to our destination and hence count it as 1 path
 
     if(i == m - 1 && j == n - 1) {
         return 1;
@@ -29,11 +35,15 @@ int uniquePathsHelper(int i, int j, int m, int n) {
 
     return rightPaths + downPaths;
 
-} // O(2^(m + n)) time since total we have m + n function states in worst case and for each we have two options and O(m + n) recursion stack space in worst case
+} 
 
 int uniquePathsBrute(int m, int n) {
+
     return uniquePathsHelper(0, 0, m, n);
-}
+
+} // O(2^(m + n)) time since total we have m - 1 + n - 1 function calls in worst case and for each we have two options and O(m + n) recursion stack space in worst case
+
+// Why: In the worst case (brute force), you are building a recursion tree.Tree Depth: To go from (0,0) to (m,n), every single path requires exactly m-1 Down moves and n-1 Right moves.Total depth of recursion = (m-1) + (n-1) approx m + n.Branching: At every step, you make 2 calls (rightPaths and downPaths).Calculation: A tree with depth d and branching factor 2 has roughly 2^d nodes
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,7 +85,7 @@ int uniquePathsTab(int m, int n) {
 
     // dp[i][j] represents the number of ways to reach from (0,0) to (i,j)
 
-    // dp[0][0] is not equal to 0 since there is one path from (0,0) to (0,0) which is sort of self loop but still counts as a path
+    // dp[0][0] is not equal to 0 since there is one path from (0,0) to (0,0) which is sort of self loop but still counts as a path as src == dest
 
     // initialising the first row and first col with 1 (our base case)
 
@@ -101,9 +111,9 @@ int uniquePathsTab(int m, int n) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-// to convert the tabulation into space optimised solutio we check where are using redundant space and what exactly in needed so
+// to convert the tabulation into space optimised solution we check where are using redundant space and what exactly is needed so
 
-// here we find that we only need the above row to build the bew solution row and not all the rows and columns
+// here we find that we only need the above row to build the new solution row and not all the rows and columns (also the first element of new columns is 1 in all cases and hence not needed to be derived from the previous row)
 
 int uniquePathsOptimal(int m, int n) {
 
@@ -127,7 +137,7 @@ int uniquePathsOptimal(int m, int n) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// but we can optimise this even further that is using a single array since overwriting here doesnt harm us
+// but we can optimise this even further that is using a single array since overwriting here doesnt harm us since we are overwriting the values of dp[j] but they we wont need it anyway for computation of new element we will need value of dp[j + 1] when do come to j + 1
 
 int uniquePathsMostOptimal(int m, int n) {
 

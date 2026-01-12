@@ -13,8 +13,6 @@ using namespace std;
 
 // but there is a problem, if s is odd then s / 2 is a decimal value but how can be sum of integers be a decimal/floating value and hence if s % 2 != 0 then we return false else we check if s / 2 is present as a target sum if yes then return true else return false
 
-
-
 int main() {
     
     return 0;

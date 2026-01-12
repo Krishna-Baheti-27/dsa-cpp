@@ -14,19 +14,20 @@ using namespace std;
 
 // Shortcut to write recurrence relation
 // 1) Try to represent the problem in terms of index
-// 2) Do all possible stuffs on that index according to problem statement
+// 2) Do all possible stuffs on that index according to problem statement (like count total possible ways or find min max)
 // 3) Sum of all stuffs => count all ways which are possible 
 //  Min or max of all stuffs => find min or max
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 // now here is the approach for this problem
-// here we at each time we can either take 1 or 2 steps, so if we are standing at nth step and f(n) represents the number of ways we can reach the nth step then we came there either from n - 1 or n - 2 since thats what allowed as a jump (1 or 2), so number of ways of reaching n is f(n) which is number of ways of reaching n - 1 + number of ways of reaching n - 2 = f(n - 1) + f(n - 2)
+// here we at each time we can either take 1 or 2 steps, so if we are standing at nth step and f(n) represents the number of ways we can reach the nth step then we came there either from n - 1 or n - 2 since thats what allowed as a jump (1 or 2), so number of ways of reaching n is f(n) which is number of ways of reaching n - 1th step + number of ways of reaching n - 2th step = f(n - 1) + f(n - 2)
 
-// now for the base cases, f(0) = 0, 0 ways to reach from 0 to 0 as you cannot move, taking 1 or 2 would result in you not reaching your target, btw question does not have (n = 0 in the range of n)
+// now for the base cases (given 1 <= n <= 45)
 // f(1) = 1, only one way that is take one step from n = 0
 // f(2) = 2, two ways that is 1 1 and 2
-// f(3) = f(1) + f(2) but f(2) != f(1) + f(0) thats why we wrote it separately as a base case
+
+// and now f(3) = f(1) + f(2), so now everything from n >= 3 can be computed from the base cases n = 1 and n = 2
 
 int climbStairsBrute(int n) {
 
@@ -41,18 +42,23 @@ int climbStairsBrute(int n) {
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 int memHelper(int n, vector<int> &dp) {
+
     if(n <= 2) {
         return n;
     }
+
     if(dp[n] != -1) {
         return dp[n];
     }
+
     return dp[n] = memHelper(n - 1, dp) + memHelper(n - 2, dp);
 }
 
 int climbStairsMemo(int n) {
+
     vector<int> dp(n + 1, -1);
     return memHelper(n, dp);
+    
 } // O(n) time and O(2n) space similar to fibonacci
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +70,7 @@ int climbStairsTab(int n) {
     }
 
     vector<int> dp(n + 1);
-    dp[0] = 0, dp[1] = 1, dp[2] = 2; // no error here since n >= 3 so no problem in accessing dp[2]
+    dp[1] = 1, dp[2] = 2; // no error here since n >= 3 so no problem in accessing dp[2]
 
     // also we dont use the value of dp[0] but its just for good measure so we are actually storing the number of ways in each corresponding entry of dp array
 
@@ -77,6 +83,8 @@ int climbStairsTab(int n) {
 } // O(n) time ans O(n) space
 
 //////////////////////////////////////////////////////////////////////////////////////////
+
+// now here in the optimal solution similar to fibonacci we maintain the last two entries that are prev and secondPrev since only they are important in determining the next output
 
 int climbStairsOptimal(int n) {
 

@@ -32,7 +32,7 @@ int helper(int index, vector<int> &nums, int jumps) {
 
 int jumpsBrute(vector<int> &nums) {
     return helper(0, nums, 0);
-} // O(n ^ n) time assuming all indexes jump to N in worst case and O(N) recursion stack space
+} // O(n ^ n) time assuming all indexes jump to n in worst case and O(n) recursion stack space
 
 // The computed minimum isn't lost because it's propagated upwards through the call stack via return statements. The parent call uses the child call's returned value to update its own local minimum. This process continues all the way up to the initial call in jumpsBrute.
 
@@ -62,7 +62,7 @@ int jumpsOptimal(vector<int> &nums) {
             farthest = max(farthest, index + nums[index]);
         }
 
-        // the new range would be [r + 1, farthest], initially it was [l,r] so we are not skipping anything
+        // the new range would be [r + 1, farthest], initially it was [l,r] so we are not skipping anything and it is continuous
 
         l = r + 1;
         r = farthest;

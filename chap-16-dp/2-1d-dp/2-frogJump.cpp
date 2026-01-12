@@ -13,7 +13,7 @@ using namespace std;
 
 // given 
 // 1 ≤ height.size() ≤ 10^5
-// 0 ≤ height[i] ≤ 104
+// 0 ≤ height[i] ≤ 10^4
 
 // the 2 ways to reach to i is from i - 1 and i - 2, then simply we have to choose the min amongst them and add that to our cost
 
@@ -69,8 +69,10 @@ int memoHelper(int index, vector<int> &height, vector<int> &dp) {
 } // O(N) time and O(2N) space
 
 int minCostMemo(vector<int> &height) {
+
     vector<int> dp(height.size(), -1);
     return memoHelper(height.size() - 1, height, dp);
+    
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +83,7 @@ int minCostTab(vector<int> &height) {
 
     int n = height.size();
 
-    if(n == 1) {
+    if(n == 1) {  // no energy to jump from first stair to first stair
         return 0;
     }
     

@@ -5,9 +5,11 @@ using namespace std;
 
 // we are given an array and we have to return true if there exists a subset or subsequence whose elements add up to given target
 
+// this code does not work for negative numbers
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
-// this can also be done using power set algo (bit manipulation) but we dont need to generate all subsets hence go with recursion
+// this can also be done using power set algo (bit manipulation) but we dont need to generate all subsets (we only want to check whether any subset does the job) hence go with recursion
 
 // so first idea that comes to mind is to generate all the subsequences, but here we have to just tell whether there is atleast one valid subsequence or not so as soon as we get our answer we just return true early and hence we dont need to generate all the subsequences, neverthless we will have to apply recursion
 
@@ -17,10 +19,14 @@ using namespace std;
 
 // so for a particular element we always the choice whether to take it or not (pick / not pick)
 
+// we dont really maitain a sum variable as we wont have overlapping subproblems and state would only increase and also it would be backtracking style which we wont be able to optimise
+
 bool subsetSumKBruteHelper(int index, int target, vector<int> &arr) {
 
     // check this first very important for arr = [5] and target = 5, but this works because we only have to tell whether there is a subset of sum k or not, but it does not explore all the subsets and fails especially when we have arr[i] == 0 (not only positives but 0 also)
-    // a more standard base case would be
+    // a more standard base case would be this where we explore all the paths
+
+    // so if you want to count the subsets then use index == n or else return early
 
     // if(index == arr.size()) {
     //     return target == 0 ? 1 : 0;
@@ -36,27 +42,25 @@ bool subsetSumKBruteHelper(int index, int target, vector<int> &arr) {
 
     // pick case
 
+    bool pick = false;
+
     if(target >= arr[index]) {
-        int ifPick = subsetSumKBruteHelper(index + 1, target - arr[index], arr);
-        if(ifPick == true) {
-            return true;
-        }
+        pick = subsetSumKBruteHelper(index + 1, target - arr[index], arr);
     }
 
     // not pick case
 
-    int ifNotPick = subsetSumKBruteHelper(index + 1, target, arr);
-    if(ifNotPick == true) {
-        return true;
-    }
+    bool notPick = subsetSumKBruteHelper(index + 1, target, arr);
+   
+    return pick || notPick;
 
-    return false;
-
-} // O(2^n) time and O(n) recursin stack space
+} // O(2^n) time and O(n) recursion stack space
 
 bool subsetSumKBrute(vector<int> &arr, int target) {
     return subsetSumKBruteHelper(0, target, arr);
 }
+
+// apply the formula of no. of levels * work done at each level for T.C if work done at each level is same
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,25 +159,35 @@ bool subsetSumKMemo(vector<int> &arr, int target) {
 // Final Answer: Located at dp[n-1][target]
 
 bool subsetSumKTab(vector<int> &arr, int target) {
+
     int n = arr.size();
     vector<vector<bool>> dp(n, vector<bool>(target + 1, false));
 
-    // for the base case, which is if target == 0 then return true for all indices
+    // for the base case, which is if target == 0 then return true for all indices since we can always form sum of 0 by not picking any element (empty subset)
 
     for(int i = 0; i < n; i++) {
         dp[i][0] = true;
     }
 
-    // for the base case it we are at i == 0, we can only form sum for that value of target which is equal to arr[0] or in simple words dp[0][arr[0]] should be true if arr[0] does not exceed the column size of target + 1 (< target + 1 or <= target), rest all should be 0 by default since they cannot make that sum
+    // for i == 0 what sums can we make, either 0 (by not picking alreayd marked true) or arr[0] but we cant straight up set dp[0][arr[0]] = true as what if it goes out of bounds and hence we check first
 
     if(arr[0] <= target) {
         dp[0][arr[0]] = true;
     }
 
+    // fill the rest of the table
+
     for(int i = 1; i < n; i++) {
+
         for(int j = 1; j < target + 1; j++) {
 
-            bool notPick = dp[i - 1][j];
+            // what if i dont pick any new element can i still make the sum == target, that we can check by looking at the last index where it was possible before or not
+
+            bool notPick = dp[i - 1][j]; 
+
+            // now what sum can we make standing at i, it is arr[i] but again we have to check since we cannot pick an element that is larger than the target sum you want to make (doesnt make sense) (in other words j - arr[i] >= 0 since array indices)
+
+            // so if we can pick the current element then we check if target - current element was possible before because if it was then we have true
 
             bool pick = false;
             if(arr[i] <= j) {
@@ -194,9 +208,10 @@ bool subsetSumKTab(vector<int> &arr, int target) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-// if we have to use single array then we cannot do dp[j] = dp[j] || dp[j - arr[i]] since if we update the value of dp[j] so in future if we calculate dp[j + something] and we might need the value of dp[j] and in that case it would return us the newly updated value for this row and not our value from i - 1th row and hence to prevent that dependency we iterate from the back, rest everything same
+// if we have to use single array then we cannot do dp[j] = dp[j] || dp[j - arr[i]] since if we update the value of dp[j] so in future if we calculate dp[j + something] and we might need the value of dp[j] and in that case it would return us the newly updated value for this row and not our value from i - 1th row and hence to prevent that dependency we iterate from the back since we have a backward dependency
 
 bool subsetSumKOptimal(vector<int> &arr, int target) {
+    
     int n = arr.size();
     vector<bool> dp(target + 1, false);
 
@@ -210,7 +225,7 @@ bool subsetSumKOptimal(vector<int> &arr, int target) {
         dp[arr[0]] = true;
     }
 
-    // now lets form the answer by iterating from the back and always checking value of pick and not pick from i - 1th row or dp[j] array
+    // now lets form the answer by iterating from the back and always checking value of pick and not pick from i - 1th row which is maintained in dp array
 
     for(int i = 1; i < n; i++) {
         for(int j = target; j >= 1; j--) {
@@ -229,6 +244,69 @@ bool subsetSumKOptimal(vector<int> &arr, int target) {
     return dp[target]; 
 
 } // O(n * target) time and O(target) space most optimal solution
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// code for array containing negative elements also
+
+bool subsetSumWithNegatives(vector<int> &arr, int target) {
+    int n = arr.size();
+    
+    // 1. Calculate the Range of Possible Sums
+    int minSum = 0;
+    int maxSum = 0;
+    for(int val : arr) {
+        if(val < 0) minSum += val;
+        else maxSum += val;
+    }
+
+    // 2. Check if target is impossible (outside the theoretical bounds)
+    if(target < minSum || target > maxSum) return false;
+
+    // 3. Define Offset and DP Size
+    // Offset is usually abs(minSum) so that minSum maps to index 0
+    int offset = abs(minSum);
+    int rangeSize = maxSum - minSum + 1;
+
+    vector<bool> dp(rangeSize, false);
+
+    // 4. Base Case: Sum 0 is always possible (empty subset)
+    dp[0 + offset] = true; 
+
+    // 5. Iterate
+    for(int num : arr) {
+        if(num >= 0) {
+            // Positive Number: Iterate Right -> Left
+            // We stop at 'num' because below that, index - num would be invalid logic for this loop
+            // But realistically we just check bounds inside.
+            for(int j = maxSum; j >= minSum; j--) {
+                // To form sum 'j', we look at 'j - num'
+                // Map logical sum to array index: (j - num) + offset
+                int prevIndex = (j - num) + offset;
+                int currIndex = j + offset;
+                
+                if(prevIndex >= 0 && prevIndex < rangeSize) {
+                   if(dp[prevIndex]) dp[currIndex] = true;
+                }
+            }
+        } else {
+            // Negative Number: Iterate Left -> Right
+            // We iterate UP because we need the value from the RIGHT (larger sum)
+            for(int j = minSum; j <= maxSum; j++) {
+                // To form sum 'j' using a negative number, we needed 'j - num' (which is larger)
+                // Example: to form -5 using -3, we needed -2 previously.
+                int prevIndex = (j - num) + offset;
+                int currIndex = j + offset;
+
+                if(prevIndex >= 0 && prevIndex < rangeSize) {
+                    if(dp[prevIndex]) dp[currIndex] = true;
+                }
+            }
+        }
+    }
+
+    return dp[target + offset];
+}
 
 int main() {
     

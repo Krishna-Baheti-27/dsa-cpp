@@ -14,7 +14,7 @@ int uniquePaths2BruteHelper(int i, int j, int m, int n, vector<vector<int>> &arr
         return 0;
     }
 
-    // check if arr[i][j] == 1 then on that path there is obstacle and no need to check anything there we simply return 0 as no path possible
+    // check if arr[i][j] == 1 then on that path there is obstacle and no need to check anything there we simply return 0 as no path possible even if we did already our answer of i == m - 1 and j == n - 1
 
     if(arr[i][j] == 1) {
         return 0;
@@ -104,6 +104,9 @@ int uniquePaths2Tab(vector<vector<int>> &arr) {
 
     for(int i = 1; i < m; i++) {
         for(int j = 1; j < n; j++) {
+
+            // if the current element is 1 then there is not safe path to reahc there and hence without any computation we set dp[i][j] = 0 else wecompute from top and left
+
             if(arr[i][j] == 1) {
                 dp[i][j] = 0;
             } else {
@@ -138,7 +141,7 @@ int uniquePaths2Optimal(vector<vector<int>> &arr) {
 
     // initialise our first column as we need its value to find the first element (left + above) and subsequent elements are found from using the newly computed element from left + above using ansRow
 
-    for(int i = 0; i < m; i++) {
+    for(int i = 0; i < m; i++) { 
         if(arr[i][0] == 1) {
             break;
         } else {

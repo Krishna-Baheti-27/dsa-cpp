@@ -38,8 +38,10 @@ int minCostHelper(int index, vector<int> &height, int k) {
 }
 
 int minCostBrute(vector<int> &height, int k) {
+
     return minCostHelper(height.size() - 1, height, k);
-}
+
+} // O(k^n) time but if k >= n then O(2^n) time and O(n) recursion stack space in the worst case since we will call the function atleast n times
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -68,9 +70,11 @@ int memoHelper(int index, vector<int> &height, vector<int> &dp, int k) {
 } // O(N * k) time and O(2N) space
 
 int minCostMemo(vector<int> &height, int k) {
+
     vector<int> dp(height.size(), -1);
     return memoHelper(height.size() - 1, height, dp, k);
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,7 +82,7 @@ int minCostTab(vector<int> &height, int k) {
 
     int n = height.size();
 
-    if(n == 1) {
+    if(n == 1) { // no energy to jump from first stair to first stair
         return 0;
     }
 
@@ -183,6 +187,8 @@ int minCostOptimal(vector<int> &height, int k) {
     return dp.back(); // return the last value, same as dp[n - 1]
 
 } // O(N * k) time and O(k) space (not really optimal if k == N)
+
+// and hence the most optimal solution isnt really optimal since we just fall back to O(N) (if k == N) in worst case and hence not optimal
 
 int main() {
     
