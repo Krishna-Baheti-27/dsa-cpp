@@ -44,13 +44,18 @@ void setParentPointers(Node *root, unordered_map<Node*,Node*> &mpp) {
 
             Node *node = q.front(); q.pop();
 
+            // the parent of node->left is node 
+
             if(node->left) {
                 q.push(node->left);
-                mpp[node->left] = node; // the parent of node->left is node 
+                mpp[node->left] = node; 
             }
+
+            // the parent of node->right is node
+
             if(node->right) {
                 q.push(node->right);
-                mpp[node->right] = node; // the parent of node->right is node
+                mpp[node->right] = node; 
             }
         }
     }
@@ -59,14 +64,19 @@ void setParentPointers(Node *root, unordered_map<Node*,Node*> &mpp) {
 
 vector<int> nodesAtDistanceK(Node *root, Node *target, int k) {
 
+    // to maintain child parent relation, we make mpp[node] now store the location of parent of node
+
     unordered_map<Node*, Node*> mpp; 
     setParentPointers(root, mpp);
-    // to maintain child parent relation, mpp[node] now stores the location of parent of node
+
+    // now we will do BFS from target from level == 0 to level == k
 
     queue<Node*> q;
-    q.push(target); // now we will do BFS from target from level == 0 to level == k
+    q.push(target); 
     
-    unordered_map<Node*, bool> visited; // very important so we know where to go now
+    // very important so we know where to go now
+
+    unordered_map<Node*, bool> visited; 
     visited[target] = true;
 
     int dis = 0;
@@ -80,15 +90,23 @@ vector<int> nodesAtDistanceK(Node *root, Node *target, int k) {
             Node *node = q.front(); 
             q.pop();
 
-            if(node->left && !visited[node->left]) { // visiting left child
+            // visiting left child
+
+            if(node->left && !visited[node->left]) { 
                 q.push(node->left);
                 visited[node->left] = true;
             }
-            if(node->right && !visited[node->right]) { // visiting right child
+
+            // visiting right child
+            
+            if(node->right && !visited[node->right]) { 
                 q.push(node->right);
                 visited[node->right] = true;
             }
-            if(mpp.find(node) != mpp.end() && !visited[mpp[node]]) { // visiting parent
+
+            // visiting parent
+
+            if(mpp.find(node) != mpp.end() && !visited[mpp[node]]) { 
                 q.push(mpp[node]);
                 visited[mpp[node]] = true;
             }
@@ -113,7 +131,77 @@ vector<int> nodesAtDistanceK(Node *root, Node *target, int k) {
 
 } // O(2N) time since O(N) in setting parent pointers and O(N) for traversing nodes at distance k in worst case and O(3N) space for queue and map and visited array
 
+/////////////////////////////////////////////////////////////////////////////////////
 
+// we can also solve this using the dfs traversal and that would save us from extra memory of map and visited array and would only take O(H) recursion stack space
+
+// complete this approach when you have time
+
+class Solution {
+    vector<int> result;
+
+    // Helper: Adds nodes at distance 'k' downwards from 'node'
+    void addSubtreeNodes(Node* node, int k) {
+        if (!node || k < 0) return;
+        
+        // If distance is 0, we found a node!
+        if (k == 0) {
+            result.push_back(node->data);
+            return;
+        }
+
+        addSubtreeNodes(node->left, k - 1);
+        addSubtreeNodes(node->right, k - 1);
+    }
+
+    // Main Recursive Function
+    // Returns distance of target from 'root', or -1 if target not found
+    int solve(Node* root, Node* target, int k) {
+        if (!root) return -1;
+
+        // Case 1: We found the target
+        if (root == target) {
+            addSubtreeNodes(root, k); // Look strictly downwards
+            return 0; // Distance from target to itself is 0
+        }
+
+        // Case 2: Target is in the Left Subtree
+        int dl = solve(root->left, target, k);
+        if (dl != -1) {
+            // Check current ancestor distance
+            if (dl + 1 == k) {
+                result.push_back(root->data);
+            } else {
+                // Target is in Left, so we look in Right subtree
+                // Remaining distance = K - (distance to ancestor) - 1 (to step into right child)
+                addSubtreeNodes(root->right, k - dl - 2);
+            }
+            return dl + 1; // Return distance to parent
+        }
+
+        // Case 3: Target is in the Right Subtree
+        int dr = solve(root->right, target, k);
+        if (dr != -1) {
+            if (dr + 1 == k) {
+                result.push_back(root->data);
+            } else {
+                // Target is in Right, so we look in Left subtree
+                addSubtreeNodes(root->left, k - dr - 2);
+            }
+            return dr + 1;
+        }
+
+        return -1; // Target not found in this branch
+    }
+
+public:
+    vector<int> distanceK(Node* root, Node* target, int k) {
+        result.clear();
+        solve(root, target, k);
+        return result;
+    }
+};
+// Time: O(N), Space: O(H) recursion stack
 
 int main() {
     

@@ -72,6 +72,8 @@ bool canFinishBrute(int numCourses, vector<vector<int>> &prerequisites) {
 
 // but in the optimal solution we still have to create the adjacency list from the graph but we can optimise the process by reducing one pass and finding the indegree while constructing the adjacency list
 
+// but this is not even a considerable optimisation if you think about it
+
 bool canFinishOptimal(int numCourses, vector<vector<int>>& prerequisites) {
     
     vector<vector<int>> graph(numCourses);

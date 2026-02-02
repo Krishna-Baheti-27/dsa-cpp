@@ -122,9 +122,13 @@ int makeConnected(int n, vector<vector<int>> &connections) {
         int u = connections[i][0];
         int v = connections[i][1];
 
+        // for each edge we check if the two nodes are in the same component, if same then we have gotten an extra edge which can be removed since they were already connected and we didnt need this edge
+
+        // if parent not same which means not connected then connect them by union, and for connecting them we dont require an edge they are given to be connected in question so keep that in mind
+
         if(ds.findUltimateParent(u) != ds.findUltimateParent(v)) {
             ds.unionBySize(u, v);
-        } else {
+        } else {    
             extraEdges++;
         }
     }

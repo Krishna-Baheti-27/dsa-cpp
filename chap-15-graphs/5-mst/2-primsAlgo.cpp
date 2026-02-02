@@ -5,6 +5,8 @@ using namespace std;
 
 // the intuition is that we start from a node and put all the adjacents in the min heap and on next iteration we greedily choose the one having min edge weight amongst the nodes inserted and maintain a visited array to make sure we only inserting all the nodes only once and thus taking only min possible weights for all
 
+////////////////////////////////////////////////////////////////////////////////////////
+
 vector<pair<int,int>> spanningTree(int v, vector<vector<pair<int,int>>> &adj) {
 
     vector<pair<int,int>> ans; // to store the edges of our mst
@@ -32,6 +34,8 @@ vector<pair<int,int>> spanningTree(int v, vector<vector<pair<int,int>>> &adj) {
                 ans.push_back({node, parent});
             }
 
+            // mark it visited only when we add it to the mst because we dont want to mark visited when inserting in PQ because we might have a min entry sitting in the PQ and we would want to take that instead of bigger and hence directly insert in PQ and finalize by marking visited only after popping from PQ
+
             visited[node] = true;
             sum += weight;
 
@@ -55,7 +59,7 @@ vector<pair<int,int>> spanningTree(int v, vector<vector<pair<int,int>>> &adj) {
 
 // for dense graphs E = V^2 and hence logE = 2logV and hence O(ElogE) = O(ElogV)
 
-// and here also we are only restricting the re processing of node already using visited but it doesnt mea that we cannot insert the same node multiple times in PQ
+// and here also we are only restricting the re processing of node already using visited but it doesnt mean that we cannot insert the same node multiple times in PQ
 // In our C++ implementation (which is "Lazy Prim's"), we do not check if a node is already in the Priority Queue (PQ) before pushing. We only check if it has been popped and finalized (visited) so in worst case we can push every edge and hence size of PQ is O(E) and each time push pop costs O(logE) and hence O(ElogE)
 
 // the same logic works in case of lazy dijkstra

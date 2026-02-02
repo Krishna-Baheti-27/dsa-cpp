@@ -9,7 +9,7 @@ using namespace std;
 
 // Here the cities refer to the nodes of graph and province refers to a component, so we have to count number of provinces or the number of connected components in graph
 
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 
 void dfs(int node, vector<bool> &vis, vector<int> adjLs[]) {
 
@@ -30,9 +30,13 @@ int numOfProvinces(vector<vector<int>> &adj) {
     vector<int> adjLs[v]; // adjacency list
 
     // to change the adjacency matrix to list
+
     for(int i = 0; i < v; i++) {
         for(int j = 0; j < v; j++) {
-            if(adj[i][j] == 1 && i != j) { // since we cant have an edge from 1 to 1
+
+            // since we cant have an edge from 1 to 1
+
+            if(adj[i][j] == 1 && i != j) { 
 
                 // this alone is sufficient becuase lets say you have edge from 1 - 2 so it will be present in matrix[1][2] and also matrix[2][1] which means we only have to add to either i or j not both and complete traversal of matrix will insert both, else we will be inserting duplicates which increases space and lowers time
 
@@ -45,7 +49,7 @@ int numOfProvinces(vector<vector<int>> &adj) {
     
     // conversion done 
 
-    // our main variable to count number of provinces based on how many times dfs function is being called
+    // our main variable to count number of provinces based on how many times dfs function is being called since each call to dfs completes the traversal for the entire component
 
     int count = 0; 
 
@@ -53,9 +57,10 @@ int numOfProvinces(vector<vector<int>> &adj) {
 
     // our main logic to calculate the number of provinces
 
-    // if this node is note visited then visit it by dfs but how many times dfs is called is exactly the number of provinces since a dfs would traverse entirety of that province and mark everyone there to be visited and hence if it were to be called again it means that a new province is encountered whose nodes have not been traversed yet
+    // if this node is not visited then visit it by dfs but how many times dfs is called is exactly the number of provinces since a dfs would traverse entirety of that province and mark everyone there to be visited and hence if it were to be called again it means that a new province is encountered whose nodes have not been traversed yet
 
     for(int i = 0; i < v; i++) {
+        
         if(!vis[i]) {
             count++; // count the new province
             dfs(i, vis, adjLs);

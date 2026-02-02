@@ -76,6 +76,10 @@ int maxPathSumOptimal(Node *root) {
     return maxPathSum;
 
 } // O(N) time and O(N) space
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// we cant use bfs here because it is starting from level 0 we have no idea whats happening below and hence dfs is better (preferably postorder like in here where we have info from both left and right subtree and then compute our answer)
  
 int main() {
     

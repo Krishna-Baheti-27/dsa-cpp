@@ -14,11 +14,11 @@ using namespace std;
 // Path is route connecting nodes through the edges where any node cannot appear twice
 
 // For undirected graphs only : E is number of edges
-// Degree of undirected graph (sum of individual degrees) is twice the number of edges attached to it, degree = 2*E
+// Degree of undirected graph (sum of individual degrees) is twice the number of edges attached to it, sum of all degrees = 2*E
 
 // For directed graphs only:
 // Here we have both indegree and outdegree where there names are self explanatory
-// Degree of directed graph (sum of individual degrees) is the number of edges attached to it, degree = E (indegree + outdegree)
+// Degree of directed graph (sum of individual degrees) is the number of edges attached to it, degree = E * (indegree + outdegree)
 
 // For graphs where edge weight is not given, it is assumed to be unit weighted
 
@@ -26,6 +26,8 @@ using namespace std;
 // and then we would have m lines representing all edges in the graph if it is an undirected graph then 1 2 is same as 2 1 and it means there is an edge from 1 to 2 and 2 to 1, and for directed graph we will have clear indication of direction
 
 // here the number of edges (m) is not related to number of nodes (n) in any way, we can decrease m or increase m according to our choice, since graph is simply a set of nodes and edges and there is no other constraint
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 // two ways to store => 1) Matrix 2) List
 
@@ -48,6 +50,8 @@ vector<vector<int>> graph() {
     return adj; 
 
 } // O(n^2) space and O(m) time, here we have assumed 1-based graph thats why size is n + 1
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 // adjacency list way
 

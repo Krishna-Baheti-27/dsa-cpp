@@ -21,22 +21,51 @@ void dfsHelper(int node, vector<int> adj[], vector<int> &dfs, vector<bool> &vis)
 
 // O(N + 2E) time for undirected graph as the dfsHelper would be called for exactly N times for N nodes and the inner for loop will run for total of 2E times across the entire traversal to visit all the neighbours and for directed graph we have O(N + E) time
 
-
 // this code only traverses one component of a disconnected graph
 
-vector<int> dfsOfGraph(int v, vector<int> adj[]) {
+vector<int> dfsOfGraph(int src, int v, vector<int> adj[]) {
    
     vector<bool> vis(v, false); // 0 baed graph
     vector<int> dfs;
 
-    int start = 0; // starting node
-
-    dfsHelper(start, adj, dfs, vis);
+    dfsHelper(src, adj, dfs, vis);
 
     return dfs;
 
 } // O(N) space for visited and O(N) recursion stack space in worst case (ignoring the space to return answer and adjacency list)
 // O(N) for initialising visited array + O(N + 2E) or O(N + E) time depending on graph
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// the generalised code for dfs is here
+
+void dfsHelper(int src, vector<bool> &visited, vector<vector<int>> &adj, vector<int> &dfs) {
+
+    dfs.push_back(src);
+    visited[src] = true;
+
+    for(int adjNode : adj[src]) {
+
+        if(!visited[adjNode]) {
+            dfsHelper(adjNode, visited, adj, dfs);       
+        }
+    } 
+}
+
+vector<int> dfsGeneral(int v, vector<vector<int>> &adj) {
+
+    vector<bool> visited(v, false);
+    vector<int> dfs;
+
+    for(int i = 0; i < v; i++) {
+        if(!visited[i]) {
+            dfsHelper(i, visited, adj, dfs);
+        }
+    }
+
+    return dfs;
+
+} // O(N + 2E) time and O(N) space
 
 int main() {
     

@@ -11,6 +11,59 @@ using namespace std;
 
 // if you again see here, we have n nodes at the given locations of [x,y] and we can remove the stone if it has same row or col as another stone that has not already been removed
 
+// so the meaning for a stone have same row or column as another stone is if its connected in the same cluster of stones (connected component) and any traversal algo would be able to traverse all the components of stones
+
+// now in each component we would be able to remove all the stones except the last one since for that we would not have any stone left and hence cant be removed
+
+// so simple solution is number of stones - number of connected components (traversed using simply bfs by going 1 in each direction)
+
+// so build the graph by connecting the nodes as adjancent which are in same row or column and then we would be able to traverse all the connected components
+
+void dfs(int node, vector<bool> &vis, vector<vector<int>> &adj) {
+
+    vis[node] = true;
+
+    for(int adjNode : adj[node]) {
+        if(!vis[adjNode]) {
+            dfs(adjNode, vis, adj);
+        }
+    }
+}
+
+int removeStonesDfs(vector<vector<int>> &stones) {
+
+    int n = stones.size();
+
+    vector<vector<int>> adj(n);
+
+    for(int i = 0; i < n; i++) {
+
+        for(int j = i + 1; j < n; j++) {
+
+            if(stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) {
+                adj[i].push_back(j);
+                adj[j].push_back(i);
+            }
+        }
+    }
+
+    int components = 0;
+
+    vector<bool> vis(n, false);
+
+    for(int i = 0; i < n; i++) {
+        if(!vis[i]) {
+            components++;
+            dfs(i, vis, adj);
+        }
+    }
+
+    return n - components;
+
+} // O(n^2) time and O(n^2) space for adjacency list
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 // so here again the graph is dynamic and changing at each step as we remove stones and hence we use Disjoint set data structure
 
 // if we assume the stone to be nodes in a graph then the stones having either same row or column can be connected together as a same component, and the number of stones which we can remove from each component = component size - 1 (since there would be no stone left to remove the last node in component)

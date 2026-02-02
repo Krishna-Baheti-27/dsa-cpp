@@ -23,8 +23,6 @@ int minEffortPathBrute(vector<vector<int>> &heights) {
     int drow[] = {-1, 0, +1 , 0};
     int dcol[] = {0, 1, 0, -1};
 
-    int minEffort = INT_MAX;
-
     vector<vector<int>> effort(n, vector<int>(m, INT_MAX));
 
     queue<pair<int,int>> q;
@@ -33,7 +31,6 @@ int minEffortPathBrute(vector<vector<int>> &heights) {
     
     while(!q.empty()) {
 
-        
         int row = q.front().first;
         int col = q.front().second;
 
@@ -44,6 +41,8 @@ int minEffortPathBrute(vector<vector<int>> &heights) {
             int nrow = row + drow[i];
             int ncol = col + dcol[i];
 
+            // we calculate effort for each reachable node and if that is lesser than already known effort then we update the effort or shortest path value in our distance array
+
             if(nrow < n && nrow >= 0 && ncol < m && ncol >= 0) {
 
                 int eff = max(effort[row][col], abs(heights[row][col] - heights[nrow][ncol]));
@@ -52,16 +51,13 @@ int minEffortPathBrute(vector<vector<int>> &heights) {
                     effort[nrow][ncol] = eff;
                     q.push({nrow, ncol});
                 }
-
-                if(nrow == n - 1 && ncol == m - 1) {
-                    minEffort = min(minEffort, effort[nrow][ncol]);
-                }
             }
         }
     }
 
-    return minEffort;
+    // we have computed the shortest path for each node and hence the return for the destination node
 
+    return effort[n - 1][m - 1]; 
 } 
 
 // In graph problems on a 2D Matrix (Grid), we treat every cell as a "Vertex" (Node) and every valid movement as an "Edge".
@@ -84,6 +80,8 @@ int minEffortPathBrute(vector<vector<int>> &heights) {
 // Edge weights = 1? Use Queue (BFS).
 // Edge weights vary? Use Priority Queue (Dijkstra).
 
+// so here different to queue we would also store the distance or effort in the pq since that is our main criteria to judge and we always pick the min effort first and then apply lazy dijkstra 
+
 int minEffortPathOptimal1(vector<vector<int>> &heights) {
 
     int n = heights.size();
@@ -100,7 +98,7 @@ int minEffortPathOptimal1(vector<vector<int>> &heights) {
 
     vector<vector<int>> effort(n, vector<int>(m, INT_MAX));
 
-    pq.push({0, {0, 0}});
+    pq.push({0, {0, 0}}); // (dis, row, col)
     effort[0][0] = 0;
 
     while(!pq.empty()) {
@@ -123,6 +121,8 @@ int minEffortPathOptimal1(vector<vector<int>> &heights) {
 
         // since we already have a better answer we dont need to process this and it does happen in PQ that we have both optimal and suboptimal answer sitting in there and we process optimal first due to its min nature but then its also important to skip the suboptimal ones that appear after that (if any)
 
+        // hence apply lazy dijkstra
+
         if(eff > effort[row][col]) {
             continue;
         }
@@ -144,7 +144,7 @@ int minEffortPathOptimal1(vector<vector<int>> &heights) {
         }
     }
 
-    return 0; // will never hit
+    return effort[n - 1][m - 1]; // will never hit
      
 } // O(ElogV) time and O(V + E) space using dijkstra
 // O(nm * log(nm)) time and O(nm) space

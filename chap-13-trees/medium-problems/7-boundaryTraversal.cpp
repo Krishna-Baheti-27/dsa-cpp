@@ -33,7 +33,9 @@ void leftBoundary(Node *root, vector<int> &arr) {
 
         // insert if not leaf since we add leaf nodes separately
 
-        if(!isLeaf(rootLeft)) arr.push_back(rootLeft->data); 
+        if(!isLeaf(rootLeft)) {
+            arr.push_back(rootLeft->data); 
+        }
 
         // since left boundary we try to take left nodes only (as left as possible)
 
@@ -56,7 +58,7 @@ void addLeaves(Node *root, vector<int> &arr) {
         return;
     }
 
-    // we are checking here that if root->left and right->right exists or not because if they dont do no point in trying to call function for them as they cant be leaf node if they are nullptr 
+    // we are checking here that if root->left and right->right exists or not because if they dont do then no point in trying to call function for them as they cant be leaf node if they are nullptr 
 
     if(root->left) {
         addLeaves(root->left, arr); // check for left subtree
@@ -66,6 +68,27 @@ void addLeaves(Node *root, vector<int> &arr) {
         addLeaves(root->right, arr); // check for right subtree
     }
 }
+
+// better way to write addLeaves which avoid this if else checks is to make the null pointer as the base case
+
+void addLeavesBetter(Node *root, vector<int> &arr) {
+    
+    if(root == nullptr) {
+        return;
+    }
+
+    if (isLeaf(root)) {
+        arr.push_back(root->data);
+        return;
+    }
+
+    // no need to check if children exists, the base case handles it
+
+    addLeaves(root->left, arr);
+    addLeaves(root->right, arr);
+}
+
+// also we cant use bfs to add the leaves since it explores level by level which means it will add a shallow right leaf first then adding a deep left leaf and this violates our order or adding leaves from left to right
 
 // same procedure as for calculating leftBoundary
 
@@ -113,11 +136,19 @@ vector<int> boundaryTraversal(Node *root) {
         ans.push_back(root->data); 
     }
 
-    leftBoundary(root, ans); // adding the left boundary, we dont pass root->left but root instead
-    addLeaves(root, ans); // adding the leaves
-    rightBoundary(root, ans); // adding the right boundary, we dont pass root->right but root instead
+    // adding the left boundary, we dont pass root->left but root instead
 
-    return ans; // return our traversal
+    leftBoundary(root, ans); 
+
+    // adding the leaves
+
+    addLeaves(root, ans); 
+
+    // adding the right boundary, we dont pass root->right but root instead
+
+    rightBoundary(root, ans); 
+
+    return ans; 
 
 } // O(N) time and O(N) space for temp array in right boundary and O(N) recursion stack space for addLeaves function, we are not actually traversing all nodes but in worst case we would
 

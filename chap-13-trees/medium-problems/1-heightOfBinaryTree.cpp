@@ -24,7 +24,7 @@ int height(Node *root) {
 
     return 1 + max(height(root->left), height(root->right)); 
     
-} // O(N) time and O(H) recursion stack space
+} // O(N) time and O(N) recursion stack space
 
 int heightAnotherWayToWrite(Node *root) {
 
@@ -69,7 +69,7 @@ int heightIterative(Node *root) {
 
 } // O(N) time and O(N) space in worst case
 
-// in case of full filled binary tree (since last level will have nearly n / 2 nodes)
+// in case of fully filled binary tree (since last level will have nearly n / 2 nodes) and hence O(N/2) or O(N) space
 
 int main() {
     

@@ -7,6 +7,9 @@ using namespace std;
 // inorder, preorder => unique bt
 // postorder, preorder => not unique
 
+// by unique bt we mean that theres only a single tree which satisfies the given inorder and preorder / postorder
+
+// for this construction to be unique all the values of nodes in the bt must be unique
 
 int main() {
     

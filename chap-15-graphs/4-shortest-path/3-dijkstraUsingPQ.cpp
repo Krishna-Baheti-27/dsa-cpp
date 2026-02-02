@@ -2,7 +2,7 @@
 using namespace std;
 
 // here we are using the priority queue or min-heap implementation of the Dijkstra algo
-// we are given the unidirected weighted graph and the source and we have to find the shortest path to all the vertices from the source and it is guaranteed that grpah is connected and does not have any negative edge weights
+// we are given the undirected weighted graph and the source and we have to find the shortest path to all the vertices from the source and it is guaranteed that graph is connected and does not have any negative edge weights
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -26,6 +26,8 @@ vector<int> dijkstra(int v, vector<vector<pair<int,int>>> &adj, int src) {
 
         if(dis > distance[node]) continue;
 
+        // if we pass the above check and end up here means the node is finalized and now there will be no shorter path to it any time in future
+
         for(auto &it : adj[node]) {
 
             int adjNode = it.first;
@@ -40,7 +42,7 @@ vector<int> dijkstra(int v, vector<vector<pair<int,int>>> &adj, int src) {
 
     return distance;
 
-} // O(ElogV)  or O(ElogE) time and but in the worst case we have duplicate insertion problem in PQ (as C++ STL does not have decrease_key for PQ) and hence the space can go up to O(V + E) or O(E) or O(V^2) as E = V^2 for dense graphs
+} // O(ElogV) or O(ElogE) time and but in the worst case we have duplicate insertion problem in PQ (as C++ STL does not have decrease_key for PQ) and hence the space can go up to O(V + E) or O(E) or O(V^2) as E = V^2 for dense graphs
 
 // but if we have Index Priority Queue with decrease_key method then we can have O(V) space implementation
 
@@ -50,7 +52,7 @@ vector<int> dijkstra(int v, vector<vector<pair<int,int>>> &adj, int src) {
 
 // Why does dijkstra does not work for negative weights (answer is not guaranteed to be correct) and definitely does not work for negative weight cycles
 
-// for negative weight we have chance that answer might be incorrect, but here it wont be the case since we are inserting each time even if we already have a better distance (the thing which we dont do in Dijkstra using set) and hence here we will have correct answer but still it is not preferred to use Dijkstra for graph having negative weights
+// for negative weight we have chance that answer might be incorrect, but here it wont be the case since we are inserting each time even if we have a better distance (the thing which we dont do in Dijkstra using set) and hence here we will have correct answer but still it is not preferred to use Dijkstra for graph having negative weights since its loses it O(ElogV) power and there are multiple insertions in PQ
 
 // and in case of negative weight cycle we get stuck in an infinite loop of repeated insertion and popping in min heap thus doesnt work
 

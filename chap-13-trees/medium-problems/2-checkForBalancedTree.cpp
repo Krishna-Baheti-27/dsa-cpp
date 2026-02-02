@@ -25,11 +25,13 @@ bool checkForBalancedTreeBrute(Node *root) {
 
     // a tree having root as nullptr or a single node will always be balanced
 
-    if(root == nullptr) return true; 
+    if(root == nullptr) {
+        return true;
+    } 
     
 
-    int heightLeft = height(root->left);
-    int heightRight = height(root->right);
+    int heightLeft = height(root->left);    // O(N) time
+    int heightRight = height(root->right);  // O(N) time
 
     // check if current tree having 'root' as its root is balanced or not, if not return false right away else check recursively for left and right
 

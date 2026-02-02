@@ -12,19 +12,41 @@ class Node {
     }
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// the min is leftmost node
+
 Node *findMin(Node *root) {
-    // the min will be the left most node in BST
-    if(!root) return nullptr;
-    while(root->left) root = root->left;
+    
+    if(!root) {
+        return nullptr;
+    }
+
+    while(root->left) {
+        root = root->left;
+    }
+
     return root;
-}
+
+} // O(logn) time and O(1) space
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// the max is rightmost node
 
 Node *findMax(Node *root) {
-    // the max will be the right most node in BST
-    if(!root) return nullptr;
-    while(root->right) root = root->right;
+    
+    if(!root) {
+        return nullptr;
+    }
+
+    while(root->right) {
+        root = root->right;
+    }
+
     return root;
-}
+
+} // O(logn) time and O(1) space
 
 int main() {
     

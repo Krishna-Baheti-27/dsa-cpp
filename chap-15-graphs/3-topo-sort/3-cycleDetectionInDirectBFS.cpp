@@ -18,7 +18,7 @@ bool detectCycle(int v, vector<int> adj[]) {
     vector<int> indegree(v, 0);
     queue<int> q; // queue for bfs
 
-    for(int i = 0; i < v; i++) {
+    for(int i = 0; i < v; i++) { 
         for(int adjNode : adj[i]) {
             indegree[adjNode]++;
         }

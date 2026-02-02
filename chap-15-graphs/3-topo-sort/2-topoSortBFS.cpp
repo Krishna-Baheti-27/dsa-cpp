@@ -45,6 +45,7 @@ vector<int> topoSort(int v, vector<int> adj[]) {
         for(int adjNode : adj[node]) {
 
             indegree[adjNode]--;
+            
             if(indegree[adjNode] == 0) {
                 q.push(adjNode);
             }
@@ -62,7 +63,7 @@ vector<int> topoSort(int v, vector<int> adj[]) {
 // Imagine the graph edges are prerequisites. An edge U to V means "You must finish U before you can start V."Indegree represents the number of unmet prerequisites.If Node A has indegree = 3, it means there are 3 other tasks that must finish before A can start.Indegree 0 represents a task that is "Ready to Execute." It has no prerequisites (or all of them are already done).
 
 // 2. The Algorithm: "Peeling the Onion" : 
-// Kahn's algorithm is essentially a simulation of completing tasks in order.Find "Ready" Tasks: At the very beginning, the only tasks you can possibly start are the ones with indegree == 0 (no prereqs).Execute & Remove: When you pick a node from the queue and add it to your topoSort list, you are saying, "I have finished this task."Unlock Neighbors: Once you finish a task (let's say Task A), it no longer blocks its neighbors.If you have an edge $A \to B$, completing A satisfies one of B's requirements.Mathematically, this is indegree[B]--.Check for New Unlocks: If indegree[B] drops to 0, it means all of B's prerequisites are now met. B is now "Ready to Execute," so you push it into the queue.
+// Kahn's algorithm is essentially a simulation of completing tasks in order.Find "Ready" Tasks: At the very beginning, the only tasks you can possibly start are the ones with indegree == 0 (no prereqs).Execute & Remove: When you pick a node from the queue and add it to your topoSort list, you are saying, "I have finished this task."Unlock Neighbors: Once you finish a task (let's say Task A), it no longer blocks its neighbors.If you have an edge A to B, completing A satisfies one of B's requirements.Mathematically, this is  we reduce it as indegree[B]--.Check for New Unlocks: If indegree[B] drops to 0, it means all of B's prerequisites are now met. B is now "Ready to Execute," so you push it into the queue.
 
 int main() {
     

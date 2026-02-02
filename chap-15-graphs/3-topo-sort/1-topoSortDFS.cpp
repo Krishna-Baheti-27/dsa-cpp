@@ -81,7 +81,6 @@ vector<int> topoSortOptimal(int v, vector<int> adj[]) {
 } // O(N) space for visited + O(N) recursion stack space
 // O(N + E) time for directed acyclic graph for dfs and O(N / 2) time for reversal of array
 
-
 int main() {
     
     return 0;

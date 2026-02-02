@@ -51,6 +51,53 @@ vector<int> bfsOfGraph(int v, vector<int> adj[]) {  // v means number of nodes o
 
 // so it is clear that same code will also be working for directed graph since we just did the normal procedure of traversing all nodes without any specific assumption of undirected graph
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+// the generalised bfs code
+
+void bfsHelper(int src, int v, vector<vector<int>> &adj, vector<bool> &visited, vector<int> &bfs) {
+
+    queue<int> q;
+
+    q.push(src);
+    visited[src] = true;
+
+    while(!q.empty()) {
+
+        int node = q.front();
+        q.pop();
+
+        bfs.push_back(node);
+
+        for(int adjNode : adj[node]) {
+
+            if(!visited[adjNode]) {
+                q.push(adjNode);
+                visited[adjNode] = true;
+            }
+        }
+    }
+}
+
+// if we found any node (or component) which has not been traversed then we start from there do our usual bfs 
+
+vector<int> bfsGeneral(int v, vector<vector<int>> &adj) {
+
+    queue<int> q;
+    vector<bool> visited(v, false);
+    vector<int> bfs;
+
+    for(int i = 0; i < v; i++) {
+
+        if(!visited[i]) {
+            bfsHelper(i, v, adj, visited, bfs);
+        }
+    }
+
+    return bfs;
+    
+} // O(N + 2E) time and O(N) space
+
 int main() { 
     
     return 0;

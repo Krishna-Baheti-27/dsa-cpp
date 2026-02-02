@@ -17,11 +17,13 @@ class Node {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-// the most naive solution for finding the diameter would be standing at a node and then calculating its distance from all other nodes and store the maxDistance and then repeat this process for all other nodes but this is extremely time consuming and difficult to implement as we can not traverse up the tree
+// the most naive solution for finding the diameter would be standing at a node and then calculating its distance from all other nodes and store the maxDistance and then repeat this process for all other nodes but this is extremely time consuming and difficult to implement as we can not traverse up the tree and for that we would have make upward connections also
 
 ////////////////////////////////////////////////////////////////////////////////////
 
 // the naive way to find the diameter would be standing at the node, and find the height of the left subtree and right subtree and adding those together, that represents the length of longest path through it
+
+// so we calculate this distance for all nodes that is for all nodes find leftHeight + rightHeight and return the max possible value of this
 
 int height(Node *root) {
     if(root == nullptr) return 0;
@@ -58,7 +60,7 @@ int diameterBrute(Node *root) {
 
 //////////////////////////////////////////////////////////////////////////////////
 
-// now instead of separately calculating the height and then calculating maxDiamter for left and right subtree we can instead calculate maxDiamter while calculating height on the fly so we dont have to recursively check for left and right subtree to find maxDiameter
+// now instead of separately calculating the height and then calculating maxDiameter for left and right subtree we can instead calculate maxDiamter while calculating height on the fly so we dont have to recursively check for left and right subtree to find maxDiameter
 
 int diameterHelperOptimal(Node *root, int &maxDiamter) {
 
@@ -85,6 +87,8 @@ int diameterOfTreeOptimal(Node *root) {
     return maxDiameter;
 
 } // O(N) time, O(N) space
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 // the purely recursive way to do this would be to let the function return both the values of height and maxDiameter using a pair but that kind of seems like cheating so this approach of passing by reference is much better
 

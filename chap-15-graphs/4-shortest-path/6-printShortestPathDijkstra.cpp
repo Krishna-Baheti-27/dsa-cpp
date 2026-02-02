@@ -5,13 +5,15 @@ using namespace std;
 
 // If a path exists, return a list of integers where the first element is the total weight of the shortest path, and the remaining elements are the nodes along that path (from 1 to n). If no path exists, return a list containing only {-1}.
 
-///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 // so we have source = 1 and dest = n and we have to return the path taken from 1 to n and the first element of that array is weight of the path and corresponding elements are the nodes taken from 1 to n (along the shortest path) and if no path exists return the list consisting of only {-1}
 
 // so here we will apply the dijkstra algo to find the shortest path from 1 to n
 
 // but here we will need to sort of memoize to remember where are we coming from and backtrack which means we maintain from which node we got our min distace in the parent array
+
+// and if we can maitain our min distance node for each node then we are done we will simply trace back the path from n to 1 using this once we find min distance parent node for everybody
 
 vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
 
@@ -40,7 +42,7 @@ vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
 
     priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
 
-    pq.push({0, 1});
+    pq.push({0, 1}); // (dist, node)
     distance[1] = 0; 
 
     // so when we are starting from distance = 0 for node = 1, where are we actually coming from, from 1 only i guess and hence the parent[1] is initialised as 1, which means we got the shortest distance for 1 from node = 1
@@ -51,6 +53,10 @@ vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
         int node = pq.top().second;
 
         pq.pop();
+
+        if(dis > distance[node]) {
+            continue;
+        }
 
         for(auto &neighbour: adj[node]) {
 
@@ -67,7 +73,7 @@ vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
         }
     }
 
-    if(distance[n] ==  INT_MAX) {
+    if(distance[n] == INT_MAX) {
         return {-1};
     }
 
@@ -88,7 +94,15 @@ vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
 
 } // O(ElogV) time for dijkstra ignoring construction of adjacency list and last traversal of backtracking to reach the path
 
-// O(V + E) space (same as worst case space for dijkstra)
+// O(N + E) space (same as worst case space for dijkstra)
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// this can also be done without using parent array and simply iterating through each neighbour and checking which neighbour brought me here
+
+// Mathematically, if you are at node v, you look for a neighbor u with weight w such that: distance[u] + w == distance[v]
+
+// but we do take a more time which is O(pathlength * avg degree) and also sacrifice readability and hence not worth it
 
 int main() {
     

@@ -46,7 +46,15 @@ vector<int> dijkstra(int v, vector<vector<pair<int,int>>> &adj, int src) {
 
     return distance;
 
-} // O(ElogV) time and O(2V) space 
+} // O(ElogV) time and O(V) space
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// the only advantage of set over PQ is just the memory which is O(V) for set and upto O(E) or O(V^2) for PQ but in PQ we apply optimisation of lazy dijkstra and hence it only processes shortest entry and avoids redundant entries with bigger distances so run time wise PQ wins big time
+
+// and SPFA performs the worst which is O(VE) time or avg O(kE) time and space wise it is O(V) since we dont push the same node again in the queue by maitaining a visited, only after a node is popped we make its visited false and it is ready to be inserted again if lower distance found
+
+// and if you dont use a visited then it is naive spfa or dijkstra using queue then it is worst in case of both time and space with space being exponential in some cases O(2^V)
 
 int main() {
     

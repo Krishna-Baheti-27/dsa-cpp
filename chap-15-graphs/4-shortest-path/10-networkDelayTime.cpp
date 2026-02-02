@@ -25,7 +25,7 @@ int netWorkDelayTime(vector<vector<int>> &times, int n, int k) {
     priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
 
     minTime[k] = 0;
-    pq.push({0, k});
+    pq.push({0, k});  // (dis, node)
 
     while(!pq.empty()) {
 
@@ -52,6 +52,8 @@ int netWorkDelayTime(vector<vector<int>> &times, int n, int k) {
         }
     }
 
+    // since we have one based array so remove the first element at index 0 which INT_MAX and might hinder our answer we dont need to keep it
+    
     minTime.erase(minTime.begin());
 
     int maxTime = *max_element(minTime.begin(), minTime.end());

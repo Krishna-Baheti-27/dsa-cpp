@@ -15,25 +15,47 @@ class Node {
 // we have to write the code to first serialise or encode the binary tree into a string and then write code to deserialise or decode the binary tree again
 // there can be various approaches and traversals possible for doing this here we are using level order traversal
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+// now how can we uniquely determine the tree using only a single traversal, and hence we also account for null nodes in our serialise function so that we can deserialize it to a unique tree
+
 string serialise(Node *root) {
-    if(!root) return "";
+
+    if(!root) {
+        return "";
+    }
+
     queue<Node*> q;
     q.push(root);
+
     string s = "";
+
     while(!q.empty()) {
+
         Node *node = q.front(); q.pop();
-        if(!node) s += "#,";
-        else {
+
+        if(!node) {
+            s += "#,";
+        } else {
+
             s += to_string(node->data) + ',';
-            q.push(node->left); // push the nodes even if they are null since we are processing them
+
+            // push the nodes even if they are null since we are processing them
+
+            q.push(node->left); 
             q.push(node->right);
         }
     }
+
     return s; // this is the encoded or serialised binary tree
 }
 
 Node *deserialise(string data) {
-    if(data.length() == 0) return nullptr;
+
+    if(data.length() == 0) {
+        return nullptr;
+    }
+
     stringstream s(data);
     string str; // we will use this initialise it again and again with new values
     getline(s, str, ','); // this means get the next guy from the string s which is separated by ',' in the string s and put it into str

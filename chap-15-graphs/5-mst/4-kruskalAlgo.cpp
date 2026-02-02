@@ -7,7 +7,7 @@ using namespace std;
 
 // we are going to use the Disjoint set data structure
 
-// we go from all edges starting from min weight to max and take union if the nodes u and v are not in the same component
+// we go from all edges starting from min weight to max and take union if the nodes u and v are not in the same component and thus we make sure we take min first by sorting and dont take anyone again if its already present in the main component or tree
 
 class DisjointSet {
 

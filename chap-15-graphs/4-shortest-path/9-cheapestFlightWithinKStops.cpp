@@ -78,14 +78,16 @@ using namespace std;
 
 // How about we use a priority_queue prioritising stops instead of cost
 
-// No, you should not use a Priority Queue where stops has higher preference than cost.Here is the breakdown of why that is a bad idea and why the simple Queue is the correct tool.1. If you prioritize stops...If you configure your Priority Queue to sort by {stops, cost, node}, the PQ will pop elements in this order:All paths with 0 stops.All paths with 1 stop.All paths with 2 stops....This is exactly how a normal Queue (BFS) works.A standard Queue inherently processes items in the order they were inserted (Level 0, then Level 1, etc.).Queue Complexity: 1$O(1)$ per push/pop.2Priority Queue Complexity: $O(\log N)$ per push/pop.
+// No, you should not use a Priority Queue where stops has higher preference than cost.Here is the breakdown of why that is a bad idea and why the simple Queue is the correct tool.1. If you prioritize stops...If you configure your Priority Queue to sort by {stops, cost, node}, the PQ will pop elements in this order:All paths with 0 stops.All paths with 1 stop.All paths with 2 stops....This is exactly how a normal Queue (BFS) works.A standard Queue inherently processes items in the order they were inserted (Level 0, then Level 1, etc.).Queue Complexity: 1.O(1) per push/pop.2 Priority Queue Complexity: O(log N) per push/pop.
 
 // only way dijkstra works here is by changing the state
 // Required Dijkstra: minCost[node][stops] (Best cost to reach Node using exactly S stops)
 
-// but This increases the graph size to $N \times K$ and uses much more memory.
+// but This increases the graph size to N times K and uses much more memory.
 
 // hence we prefer the queue approach (since PQ takes logN) and explore all paths with a check of stops <= k and then find the min cost through queue BFS which takes O(V.E) time similar to what we used in minEffort problem
+
+// I don't understand why people find this problem confusing. Sure, it can be solved with a priority queue, but since the number of stops increases by one at each step, using a regular queue can help reduce the time complexity somehow. Another important point is that we're using the number of stops as the main criterion. If you reach a destination with a smaller distance but more stops, it's not useful. Therefore, it's better to prioritize routes with fewer stops first. Even after that, we still check routes with more stops, but only if the number of stops is within the allowed limit (≤ k). In such cases, we store those routes as well.
 
 int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int k) {
 
@@ -137,7 +139,69 @@ int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int
 
 } // O(E * k) time when we relax each edge for all k stops in the path and O(V + E) space for queue in worst case
 
+// here we have time as O(k.E) in opposition to standard bfs of O(V + E) because there we are maintaining visited and inserting each node once but here we keep inserting nodes till we have stops <= k, and in worst case in dense we insert all the nodes (or in other words relax all edges) so total O(k.E) time
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// to get the same optimisation as in PQ where we skip the redundant entrie we can also add the step here in the queue withtout needing to add the overhead of sorting in PQ, this is done so that if we have multiple entries with same stops to avoid processing only min we do this
+
+int findCheapestPriceBetter(int n, vector<vector<int>> &flights, int src, int dst, int k) {
+
+    // convert to adjacency list
+
+    vector<vector<pair<int,int>>> adj(n);
+
+    for(int i = 0; i < flights.size(); i++) {
+        adj[flights[i][0]].push_back({flights[i][1], flights[i][2]}); // {from, weight}
+    }
+
+    queue<pair<int, pair<int,int>>> q; // {stops, cost, node}
+    vector<int> minCost(n, INT_MAX);
+
+    q.push({0, {0, src}});
+    minCost[src] = 0;
+
+    while(!q.empty()) {
+
+        int stops = q.front().first;
+        int cost = q.front().second.first;
+        int node = q.front().second.second;
+
+        q.pop();
+
+        // if stops > k, then in the next iteration we would have more than k + 1 stops to be inserted in queue and we cant allow that
+
+        if(stops > k) {
+            continue; 
+        }
+
+        // optimisation similar to PQ but again pseudo optimisation and strongly depends on the arrival in the queue, like if they come in descending order then we have to process all
+
+        if(cost > minCost[node]) {
+            continue;
+        }
+
+        for(auto &neighbour : adj[node]) {
+
+            int adjNode = neighbour.first;
+            int weight = neighbour.second;
+
+            if(cost + weight < minCost[adjNode]) {
+                minCost[adjNode] = cost + weight;
+                q.push({stops + 1, {minCost[adjNode], adjNode}});
+            }
+        }
+    }
+
+    if(minCost[dst] == INT_MAX) {
+        return -1;
+    }
+
+    return minCost[dst];
+
+} // O(E * k) time when we relax each edge for all k stops in the path and O(V + E) space for queue in worst case
+
 int main() {
-    
+     
     return 0;
 }

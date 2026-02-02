@@ -381,7 +381,57 @@ vector<int> iterativePostorderUsing1StackOptimal(Node *root) {
 
 } // O(N + N/2) time and O(N) space for stack (not considering the space to return the answer)
 
+///////////////////////////////////////////////////////////////////////////////////////
+
+// THE SUMMARY OF ENTIRE ITERATIVE TREE TRAVERSALS
+
+// PRINT THIS SNIPPET IN YOUR BRAIN
+
+// For preorder and inorder, Drive as far left as possible, then backtrack.
+
+// Node* node = root;
+// stack<Node*> st;
+
+// while (node != NULL || !st.empty()) {
+//     if (node != NULL) {
+//         // WE ARE MOVING DOWN (LEFT)
+//         // [Place A]
+//         st.push(node);
+//         node = node->left;
+//     } else {
+//         // WE ARE MOVING UP (BACKTRACKING)
+//         node = st.top(); 
+//         st.pop();
+//         // [Place B]
+//         node = node->right;
+//     }
+// }
+
+// For Preorder (Root -> Left -> Right): You want to print the node as soon as you see it (before going left).
+
+// Action: Insert print(node->data) at [Place A].
+
+// For Inorder (Left -> Root -> Right): You want to print the node after you finish the left side and come back up.
+
+// Action: Insert print(node->data) at [Place B].
+
+// For postorder
+
+// The Logic:
+
+// Postorder is: Left -> Right -> Root
+
+// Reverse of Postorder is: Root -> Right -> Left
+
+// Root -> Right -> Left is just Preorder, but you visit the Right child before the Left child!
+
+// so just modify the preorder to visit the right before left by pushing right later (to maintain LIFO) and then reverse the obtained traversal to get postorder
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
+// THESE ARE TWO COMPLEX CODES BELOW AND NO NEED TO BE WRITTEN IN THE INTERVIEW SETTING, JUST UNDERSTAND, THE ABOVE MENTIONED TEMPLATE IS EASY TO WRITE AND EXPLAIN
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 // the code using single stack and going like we do in recursion that is first all the way till left then print then go right and then again all the left of right, is a bit complex so i refrain from using it
 
@@ -399,8 +449,10 @@ vector<int> iterativePostorderUsing1Stack(Node *root) {
     while(curr != nullptr || !st.empty()) {
 
         if(curr) {
+
             st.push(curr);
             curr = curr->left;
+            
         } else {
 
             temp = st.top()->right;
@@ -446,24 +498,96 @@ vector<vector<int>> allTraversals(Node *root) {
         auto it = st.top(); st.pop();
 
         if(it.second == 1) {
+
+            // this is the first time we are seeing this node since it.second == 1 and hence push into the preorder since in preorder we add the node as soon as we see it 
+
             preorder.push_back(it.first->data);
             it.second++; 
             st.push(it);
-            // this is preorder hence we push left
-            if(it.first->left) st.push({it.first->left, 1});
+
+            // if there is left then go left (to complete seeing all nodes on left, same logic of driving as far left as possible then backtrack)
+
+            if(it.first->left) {
+                st.push({it.first->left, 1});
+            }
+
         } else if(it.second == 2) {
+
             inorder.push_back(it.first->data);
             it.second++;
             st.push(it);
-            // this is inorder and hence we push right
-            if(it.first->right) st.push({it.first->right, 1});
+
+            // this is the second time we are seeing this node and hence add it to the inorder because in inorder we add the node after we traverse its left subtree
+
+            if(it.first->right) {
+                st.push({it.first->right, 1});
+            }
+
         } else {
-            postorder.push_back(it.first->data); // hence at the last we have root and we dont push it anywhere
+
+            // this is the third time we are seeing this node and we have completed both left and right subtree traversals and hence add to the postorder
+
+            postorder.push_back(it.first->data); 
         }
     }
 
     return {preorder, inorder, postorder};
     
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// using this trick of all traversals we find the simplified no reverse way of finding postorder iteratively by keeping the state of when the node was visited and it literally copies the cpu handling of recursion
+
+// The Logic (easy to remember): We store {Node, State} in the stack.
+
+// State 1: First time seeing node. -> Go Left.
+
+// State 2: Second time (coming back from Left). -> Go Right.
+
+// State 3: Third time (coming back from Right). -> Print Root (Postorder) & Pop.
+
+vector<int> iterativePostorder(Node* root) {
+
+    if (!root) return {};
+
+    vector<int> result;
+    stack<pair<Node*, int>> st; // Node and "State"
+
+    st.push({root, 1}); // Start at state 1, every fresh node starts at 1
+
+    while (!st.empty()) {
+
+        // Get reference to modify state without having to pop and insert the updated state by just peeking at the top value and updating its state and we pop only when we are done with the traversal 
+
+        auto& [node, state] = st.top(); 
+
+        if (state == 1) { 
+
+            state++; 
+            if(node->left) {
+                st.push({node->left, 1});
+            }
+
+        } else if(state == 2) {
+
+            state++;
+            if(node->right) {
+                st.push({node->right, 1});
+            }
+
+        } else { 
+
+            result.push_back(node->data); 
+
+            // now delete the node since we are done with its traversal 
+
+            st.pop();
+        }
+    }
+
+    return result;
+
 }
 
 

@@ -44,12 +44,13 @@ void markCoordinates(Node *root, map<int, map<int, multiset<int>>> &mpp) {
             if(node->left) {
                 q.push({node->left, {x - 1, y + 1}}); // if we go left then x - 1
             }
+
             if(node->right) {
                 q.push({node->right, {x + 1, y + 1}}); // if we go right then x + 1
             }
         }
     }
-} // O(NlogN) time since O(logN) to insert in the map
+} // O(NlogN) time since O(logN + logN + logN) to insert in the map of map of multiset
 
  vector<vector<int>> verticalOrderTraversal(Node *root) {
 
@@ -87,6 +88,97 @@ void markCoordinates(Node *root, map<int, map<int, multiset<int>>> &mpp) {
 
 } // if you take a close look we are essentially traversing every single node once when forming this traversal and hence O(NlogN) for marking coordinates + O(N) for creating traversal
 // O(2N) space for queue + map
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+// but this approach is not faster in practice although does work beacause maps are scattered points in memory where memory allocation and deallocation of pointers make it a bit slow on real hardware
+
+// the solution is to use a vector instead of map which is not as complex and extremely fast
+
+// The Logic:
+
+// Traverse the tree (BFS or DFS).
+
+// Store every node as a tuple: {x, y, value}.
+
+// Sort the list using a custom comparator that follows the rules:
+
+// Rule 1: Smallest x first (Left to Right).
+
+// Rule 2: Smallest y first (Top to Bottom).
+
+// Rule 3: Smallest value first (For overlapping nodes).
+
+// the above code is much easier to write and reason about in an interview setting
+
+// now instead of using a vector of pairs (and sort it) we use struct just to make code readable and a comparator but this adds extra lines of code so be careful
+
+struct Point {
+    int x, y, val;
+};
+
+bool comp(Point a, Point b) {
+    
+    if(a.x != b.x) {
+        return a.x < b.x;
+    }
+
+    if(a.y != b.y) {
+        return a.y < b.y;
+    }
+
+    return a.val < b.val;
+}
+
+vector<vector<int>> verticalOrderTraversalReadable(Node *root) {
+
+    if(!root) {
+        return {};
+    }
+
+    // flatten the tree into the list of Points or tuples {x,y,val}
+
+    vector<Point> nodes;
+
+    // use the bfs to store the flattened tree into our list of Points
+    
+    queue<pair<Node*, pair<int,int>>> q;
+    q.push({root, {0,0}});
+
+    while(!q.empty()) {
+
+        auto p = q.front(); q.pop();
+
+        Node *node = p.first;
+        int x = p.second.first, y = p.second.second;
+
+        nodes.push_back({x, y, node->data});
+
+        if(node->left) {
+            q.push({node->left, {x - 1, y + 1}});
+        } 
+
+        if(node->right) {
+            q.push({node->right, {x + 1, y + 1}});
+        }
+    }
+
+    sort(nodes.begin(), nodes.end(), comp);  // O(NlogN) time
+
+    vector<vector<int>> ans;
+
+    for(int i = 0; i < nodes.size(); i++) {
+
+        if(i == 0 || nodes[i].x != nodes[i - 1].x) {
+            ans.push_back({});
+        }
+
+        ans.back().push_back(nodes[i].val);
+    }
+
+    return ans;
+
+} // O(NlogN) time and O(3N) space for queue and O(3N) space for Points array not considering the space to return the answer
 
 int main() {
     

@@ -55,6 +55,49 @@ bool areSameTreesReadable(Node *root1, Node *root2) {
 
 } // O(N) time and O(N) space
 
+////////////////////////////////////////////////////////////////////////////
+
+// if you want to solve it using bfs then use queue with pairs but make sure to check left with left and right with right
+
+// SEE THIS CONCEPT IN GREAT DETAIL IN QUESTION 13 SYMMETRIC TREE
+
+bool areSameTreesIterative(Node *p, Node *q) {
+
+    queue<Node*> qu;
+
+    qu.push(p);
+    qu.push(q);
+
+    while(!qu.empty()) {
+
+        Node *node1 = qu.front(); qu.pop();
+        Node *node2 = qu.front(); qu.pop();
+
+        if(!node1 && !node2) {
+            continue;
+        }
+
+        if(!node1 || !node2) {
+            return false;
+        }
+
+        if(node1->data != node2->data) {
+            return false;
+        }
+
+        // now push children but in order left-left and right-right
+
+        qu.push(node1->left);
+        qu.push(node2->left);
+
+        qu.push(node1->right);
+        qu.push(node2->right);
+    }
+
+    return true;
+
+} // O(N) time and space
+
 int main() {
     
     return 0;

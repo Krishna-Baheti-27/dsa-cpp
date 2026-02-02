@@ -57,6 +57,10 @@ vector<vector<int>> zigZagTraversal(Node *root) {
 
 } // O(N) time and O(N) space
 
+//////////////////////////////////////////////////////////////////////////////////////
+
+// we can also keep track of level starting from level = 0 and if level is even we go from left to right else right to left each time doing level++
+
 int main() {
     
     return 0;

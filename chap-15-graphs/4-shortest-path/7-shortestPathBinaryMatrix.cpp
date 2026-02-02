@@ -25,6 +25,8 @@ int shortestPath(vector<vector<int>> &grid) {
         return -1;
     }
 
+    // since we already checked that grid[0][0] and grid[n-1][n-1] are not 1 and hence simply return 1 since 1 cell in thep path from source to destination
+
     if(n == 1) {
         return 1;
     }
@@ -57,6 +59,8 @@ int shortestPath(vector<vector<int>> &grid) {
             if(nrow == n - 1 && ncol == n - 1) {
                 return dis + 1;
             }
+
+            // this works because we already checked in the beginning that grid[n-1][n-1] is not 1 and hence safely return the distance
 
             if(nrow < n && nrow >= 0 && ncol < n && ncol >= 0 && visited[nrow][ncol] == false && grid[nrow][ncol] == 0) {
 

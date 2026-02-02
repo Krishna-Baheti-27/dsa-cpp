@@ -10,7 +10,7 @@ using namespace std;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// so we will use BFS since a lot of oranges will be rottened simultaneously if they are at same level and only BFS  allows us to go distance by distance, and we have to do it in minTime basically rot the oranges simultaneously (for min time) and we cannot achieve that using dfs since it goes to depth of each node, and that would probably take more time than bfs
+// so we will use BFS since a lot of oranges will be rottened simultaneously if they are at same level and only BFS  allows us to go distance by distance, and we have to do it in minTime basically rote the oranges simultaneously (for min time) and we cannot achieve that using dfs since it goes to depth of each node, and that would probably take more time than bfs
 
 int orangesRotting(vector<vector<int>> &grid) {
 
@@ -83,7 +83,7 @@ int orangesRotting(vector<vector<int>> &grid) {
 
 } // O(2 * n * m) space for visited and queue and O(n * m + 4 * m * n + n * m) time
 
-/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
 // WHY USE BFS INSTEAD OF DFS :
 
@@ -94,6 +94,12 @@ int orangesRotting(vector<vector<int>> &grid) {
 // DFS is used for tasks like finding connectivity, cycles, or just exploring all nodes. It finds a path, not necessarily the shortest one. Using it here is like trying to measure the width of a river with a stopwatch—it's the wrong tool for the job.
 
 // If we are asked to return whether if its possible or not to rotten all oranges then DFS is works there, since probelm changed from shortest path to connectivity, if there is a path from rotten to fresh (a fresh should not be surrounded by empty cell on all 4 directions)
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+// the above problem can also be done without using time as third field in queue but with just using (row, col)
+
+
 
 int main() {
     

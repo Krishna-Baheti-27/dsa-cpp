@@ -3,7 +3,7 @@ using namespace std;
 
 // Disjoint set is one of the most important data structures related to graphs
 
-// it can help us find where the given two nodes are in the same component or not in constant time as opposed to O(N + E) timefor BFS/DFS
+// it can help us find where the given two nodes are in the same component or not in constant time as opposed to O(N + E) timef or BFS/DFS
 
 // it basically exposes two functionalities that are findParent() and Union() by size or rank
 
@@ -66,8 +66,10 @@ class DisjointSet {
 
         if(rank[ultimateParentU] < rank[ultimateParentV]) {
             parent[ultimateParentU] = ultimateParentV; 
+
         } else if(rank[ultimateParentV] < rank[ultimateParentU]) {
             parent[ultimateParentV] = ultimateParentU;
+            
         } else {
 
             // attach whereever you want, here we are attaching u to v and hence rank of v is bound to increase

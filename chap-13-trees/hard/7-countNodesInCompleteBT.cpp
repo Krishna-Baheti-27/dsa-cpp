@@ -29,7 +29,7 @@ int countNodesBrute(Node *root) {
 
     return 1 + leftNodes + rightNodes;
 
-} // O(N) time and O(logn) space since complete tree is always balanced
+} // O(N) time and O(logN) space since complete tree is always balanced
 
 /////////////////////////////////////////////////////////////////////
 
@@ -41,44 +41,57 @@ int countNodesBrute(Node *root) {
 // for complete tree we know that leftHeight == actual height of tree since nodes are filled as left as possible
 // when we have leftHeight == rightHeight we are essentially having height == rightHeight, so we it means we can actually go in right side by height depth which is the max we can go which means there is node at the rightmost edge of tree on last level and since tree is complete we can have all nodesas left as possible it means all the in between nodes are guaranteed to be filled making it a prefect binary tree for which we can return early 
 
-// so kee in mind that this findLeftHeight and findRightHeight are not actual height functions but they simply calculate max possible depth you can go only on left or right but for complete tree leftHeight == actual height of tree by definition of complete tree
+// so keep in mind that this findLeftHeight and findRightHeight are not actual height functions but they simply calculate max possible depth you can go only on left or right but for complete tree leftHeight == actual height of tree by definition of complete tree
 
 int findLeftHeight(Node *node) {
+
     int height = 0;
+
     while(node) {
         node = node->left;
         height++;
     }
+
     return height;
+
 } // O(logn) time in worst case since the height for complete tree cannot exceed that
 
 int findRightHeight(Node *node) {
+
     int height = 0;
+
     while(node) {
         node = node->right;
         height++;
     }
+
     return height;
+
 } // O(logn) time in worst case since the height for complete tree cannot exceed that
 
 int countNodesOptimal(Node *root) {
 
     if(!root) return 0;
 
-    int leftHeight = findLeftHeight(root); // calculate height from current root not children
+    // calculate height from current root not children
+
+    int leftHeight = findLeftHeight(root);
     int rightHeight = findRightHeight(root);
 
-    if(leftHeight == rightHeight) return (1 << leftHeight) - 1; 
     // return early by returning 2^h - 1 nodes for a perfect tree of height h
 
+    if(leftHeight == rightHeight) {
+        return (1 << leftHeight) - 1; 
+    }
+
     // apply this normal formula for trees which are not perfect
+
     return 1 + countNodesOptimal(root->left) + countNodesOptimal(root->right); 
 } 
 
 // for this tree we have total logN levels and on each level we are findining leftHeight and rightHeight which take at max logN time and since its complete binary tree on of the left or right is guranteed to be perfect so we are effectively skipping computation for one of substrees and taking logN for other
 
-// so time complexity = logN levels * (logN + logN + logN) so nearly O((logn) ^ 2) time and O(logn) space
-
+// so time complexity = logN levels * (logN + logN + logN + logN) so nearly O((logn) ^ 2) time and O(logn) space
 
 int main() {
     

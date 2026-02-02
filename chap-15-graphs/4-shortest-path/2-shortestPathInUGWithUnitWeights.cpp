@@ -46,9 +46,13 @@ vector<int> shortestPathBrute(int v, int src, vector<vector<int>> &adj) {
 
 } // O(N + 2E) bfs and O(2N) space for queue and distance
 
+// the above method also works for graphs having different edge weights but performs worse than dijkstra and worst case is O(V.E) time
+
 /////////////////////////////////////////////////////////////////////////////////
 
 // but a more better method is to just store and node and we hzve already have the distance array to store the distance and hence we dont need to store distance for each node
+
+// and also since all edges weights are one it is similar to unweighted graph and (like all edges weights 2, 3 or anything same for all) and hence a simple bfs will help us reach any node in shortest time and the first time we reach it will be our min distance
 
 vector<int> shortestPath(int v, int src, vector<vector<int>> &adj) {
 
@@ -56,7 +60,7 @@ vector<int> shortestPath(int v, int src, vector<vector<int>> &adj) {
     queue<int> q; 
     vector<int> distance(v, INT_MAX);
 
-    q.push(src);
+    q.push(src); 
     distance[src] = 0;
 
     while(!q.empty()) {
@@ -68,6 +72,7 @@ vector<int> shortestPath(int v, int src, vector<vector<int>> &adj) {
             
             // In unit-weight graphs, the first time we reach a node, 
             // it IS the shortest path. We strictly only process unvisited nodes (INT_MAX).
+            // and no need for relaxation logic update directly
 
             if(distance[adjNode] == INT_MAX) {
                 distance[adjNode] = distance[node] + 1;
@@ -83,7 +88,8 @@ vector<int> shortestPath(int v, int src, vector<vector<int>> &adj) {
     }
 
     return distance;
-}
+
+} // O(N + 2E) time and O(N) space
 
 int main() {
     
